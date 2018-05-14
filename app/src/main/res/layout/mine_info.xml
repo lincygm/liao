@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <include layout="@layout/back_title"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/line_height">
+        <TextView
+            android:layout_width="wrap_content"
+            android:gravity="center"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/left_margin"
+            android:text="性别"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:text="女"
+            android:clickable="true"
+            android:id="@+id/male"
+            android:gravity="center"
+            android:layout_marginRight="@dimen/left_margin"
+            android:layout_alignParentRight="true"
+            android:layout_height="match_parent" />
+    </RelativeLayout>
+    <include layout="@layout/line_h_mine_space"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/line_height">
+        <TextView
+            android:layout_width="wrap_content"
+            android:gravity="center"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/left_margin"
+            android:text="年龄"/>
+        <EditText
+            android:layout_width="wrap_content"
+            android:text="21"
+            android:id="@+id/slef_age"
+            android:gravity="center"
+            android:layout_marginRight="@dimen/left_margin"
+            android:layout_alignParentRight="true"
+            android:layout_height="match_parent" />
+    </RelativeLayout>
+        <include layout="@layout/line_h_mine_space"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/line_height">
+        <TextView
+            android:layout_width="wrap_content"
+            android:gravity="center"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/left_margin"
+            android:text="个性签名"/>
+        <EditText
+            android:layout_width="wrap_content"
+            android:text="不个性不签名"
+            android:id="@+id/sign"
+            android:gravity="center"
+            android:layout_marginRight="@dimen/left_margin"
+            android:layout_alignParentRight="true"
+            android:layout_height="match_parent" />
+    </RelativeLayout>
+
+
+</LinearLayout>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include layout="@layout/back_title"/>
+
+<TextView
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/line_height"
+    android:text="@string/user_phone"
+    android:layout_marginLeft="@dimen/left_margin"
+    android:gravity="center_vertical"
+    android:textSize="@dimen/bottom_menu_text_size"
+
+    />
+    <EditText
+        android:layout_width="match_parent"
+        android:id="@+id/user_phone"
+        android:layout_marginLeft="@dimen/left_margin"
+        android:layout_marginRight="@dimen/left_margin"
+        android:maxLines="11"
+        android:layout_height="@dimen/line_height"
+        android:textSize="@dimen/bottom_menu_text_size"/>
+    <include layout="@layout/line_h_mine_space"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/line_height"
+        android:text="@string/user_password"
+        android:layout_marginLeft="@dimen/left_margin"
+        android:gravity="center_vertical"
+        android:textSize="@dimen/bottom_menu_text_size"
+
+        />
+    <EditText
+        android:layout_width="match_parent"
+        android:id="@+id/user_password"
+        android:layout_marginLeft="@dimen/left_margin"
+        android:layout_marginRight="@dimen/left_margin"
+        android:maxLines="20"
+        android:layout_height="@dimen/line_height"
+        android:textSize="@dimen/bottom_menu_text_size"/>
+    <include layout="@layout/line_h_mine_space"/>
+
+    <Button
+        android:id="@+id/user_register_login"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/login"
+        android:layout_margin="20dp"
+        android:textSize="@dimen/title_text_size"
+        android:background="@drawable/btn_login_selector"
+        android:textColor="@color/white"/>
+</LinearLayout>
