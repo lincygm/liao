@@ -25,6 +25,7 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.king.liaoba.App;
+import com.king.liaoba.Constants;
 import com.king.liaoba.bean.Root;
 import com.king.liaoba.http.APIRetrofit;
 import com.king.liaoba.http.APIService;
@@ -39,6 +40,7 @@ import java.io.File;
 import butterknife.BindView;
 import butterknife.OnClick;
 import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Retrofit;
 import rx.Observable;
@@ -385,39 +387,30 @@ public class MineFragment extends SimpleFragment {
                     String cropImagePath = com.king.liaoba.util.FileUtil.getRealFilePathFromUri(getActivity().getApplicationContext(), uri);
                     Log.d("path",cropImagePath);
                     Bitmap bitMap = BitmapFactory.decodeFile(cropImagePath);
-                    //if (type == 1) {
-                        headImage1.setImageBitmap(bitMap);
-                    //} else {
-                       // headImage2.setImageBitmap(bitMap);
-                    //}
-                    //此处后面可以将bitMap转为二进制上传后台网络
-                    //......
-
+                    headImage1.setImageBitmap(bitMap);
                     File file = new File(cropImagePath);
-                    //RequestBody requestBody = RequestBody.create(MediaType.parse("application/octet-stream"), file);
-                    //MultipartBody.Part part = MultipartBody.Part.createFormData("file", file.getName(), reponseBuild(cropImagePath));
-
+                    RequestBody requestBody = RequestBody.create(MediaType.parse("application/octet-stream"), file);
+                    MultipartBody.Part part = MultipartBody.Part.createFormData("file", file.getName(), requestBody);
                     Retrofit retrofit = APIRetrofit.getInstance();
                     APIService service =retrofit.create(APIService.class);
-                    service.uploadImage(reponseBuild(cropImagePath))
+                    service.uploadImage(App.getSharedPreference("chatid"),part)
                             .subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(new Observer<Root>() {
                                 @Override
                                 public void onNext(Root root) {
-                                    Log.d("pic","success");
-
+                                    if(root!=null){
+                                        App.EditSharedPreference("headimage", Constants.BASE_URL+root.getData().getGetdata().get(0).getHeadimg_url().toString());
+                                    }
                                 }
 
                                 @Override
                                 public void onError(Throwable e) {
-
                                     Log.d("pic","error");
                                 }
 
                                 @Override
                                 public void onCompleted() {
-
 
                                 }
                             });
@@ -425,14 +418,6 @@ public class MineFragment extends SimpleFragment {
                 }
                 break;
         }
-    }
-
-
-    private RequestBody reponseBuild(String path){
-        File file = new File(path);
-        RequestBody requestBody1 =
-                RequestBody.create(MediaType.parse("multipart/form-data"), file);
-        return requestBody1;
     }
 
 
