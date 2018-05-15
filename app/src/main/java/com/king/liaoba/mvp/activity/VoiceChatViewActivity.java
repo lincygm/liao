@@ -10,13 +10,16 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.liaoba.R;
 
 import java.util.Locale;
 
+import butterknife.BindView;
 import io.agora.rtc.IRtcEngineEventHandler;
 import io.agora.rtc.RtcEngine;
 
@@ -27,6 +30,8 @@ public class VoiceChatViewActivity extends AppCompatActivity {
     private static final int PERMISSION_REQ_ID_RECORD_AUDIO = 22;
     private String channel = null;
     private RtcEngine mRtcEngine;// Tutorial Step 1
+    @BindView(R.id.callname) TextView tv_callname;
+    @BindView(R.id.time) TextView tv_time;
     private final IRtcEngineEventHandler mRtcEventHandler = new IRtcEngineEventHandler() { // Tutorial Step 1
 
         @Override
@@ -53,8 +58,9 @@ public class VoiceChatViewActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_voice_chat_view);
-        channel = getIntent().getStringExtra("channel");//获取懂啊房间id
+        channel = getIntent().getStringExtra("channel");//获取对方房间id
         if (checkSelfPermission(Manifest.permission.RECORD_AUDIO, PERMISSION_REQ_ID_RECORD_AUDIO)) {
             initAgoraEngineAndJoinChannel();
         }
