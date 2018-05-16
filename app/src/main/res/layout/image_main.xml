@@ -9,20 +9,21 @@
         android:layout_width="match_parent"
         android:id="@+id/iv"
         android:src="@drawable/ym"
-        android:minHeight="100dp"
+        android:minHeight="150dp"
         android:scaleType="centerCrop"
         android:layout_height="match_parent" />
     <LinearLayout
-        android:layout_width="35dp"
-        android:layout_height="20dp"
+        android:layout_width="50dp"
+        android:layout_height="30dp"
         android:layout_marginLeft="@dimen/left_margin"
+        android:layout_marginTop="5dp"
         android:background="@drawable/home_page_voice"
         android:gravity="center"
         android:orientation="horizontal">
         <ImageView
-            android:layout_width="25dp"
+            android:layout_width="15dp"
             android:src="@drawable/home_page_voice_3"
-            android:layout_height="wrap_content" />
+            android:layout_height="15dp" />
     </LinearLayout>
     <ImageView
         android:layout_width="wrap_content"
@@ -57,13 +58,13 @@
         </LinearLayout>
 
         <ImageView
-            android:layout_width="wrap_content"
+            android:layout_width="30dp"
             android:id="@+id/answer"
             android:layout_marginTop="@dimen/left_margin"
             android:layout_marginRight="@dimen/left_margin"
             android:layout_alignParentRight="true"
             android:clickable="true"
-            android:layout_height="wrap_content"
+            android:layout_height="30dp"
             android:src="@drawable/web_call_icon"/>
     </RelativeLayout>
 </FrameLayout>
