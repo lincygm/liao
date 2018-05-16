@@ -1,10 +1,8 @@
 package com.king.liaoba.mvp.activity;
 
 import android.Manifest;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.PorterDuff;
-import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -22,9 +20,7 @@ import com.liaoba.R;
 import java.util.Locale;
 
 import butterknife.BindView;
-import io.agora.AgoraAPI;
 import io.agora.AgoraAPIOnlySignal;
-import io.agora.IAgoraAPI;
 import io.agora.rtc.IRtcEngineEventHandler;
 import io.agora.rtc.RtcEngine;
 
@@ -68,10 +64,11 @@ public class VoiceChatViewActivity extends AppCompatActivity{
         setContentView(R.layout.activity_voice_chat_view);
         channel = getIntent().getStringExtra("channel");//获取对方房间id
         if(channel!=null&&!channel.equals("")){
+            mAgoraAPI = AgoraAPIOnlySignal.getInstance(this,getResources().getString(R.string.agora_app_id));
             mAgoraAPI.channelInviteUser(channel,channel,0);//邀请某人加入通话
             mAgoraAPI.channelJoin(channel);//加入频道
         }else{
-
+        //接收到别人的来电。
         }
         if (checkSelfPermission(Manifest.permission.RECORD_AUDIO, PERMISSION_REQ_ID_RECORD_AUDIO)) {
             initAgoraEngineAndJoinChannel();
