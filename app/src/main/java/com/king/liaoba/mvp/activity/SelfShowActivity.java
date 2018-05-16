@@ -11,9 +11,12 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.hannesdorfmann.mosby.mvp.MvpPresenter;
 import com.jude.easyrecyclerview.EasyRecyclerView;
+import com.jude.easyrecyclerview.adapter.RecyclerArrayAdapter;
 import com.jude.easyrecyclerview.decoration.SpaceDecoration;
+import com.king.liaoba.Constants;
 import com.king.liaoba.bean.Picture;
 import com.king.liaoba.bean.Root;
 import com.king.liaoba.mvp.adapter.ImageAdapter;
@@ -26,7 +29,7 @@ import com.liaoba.R;
 import java.util.ArrayList;
 
 import butterknife.BindView;
-
+import com.king.liaoba.util.uploadimg.CircleImageView;
 /**
  * Created by gaomou on 2018/4/15.
  */
@@ -52,6 +55,9 @@ public class SelfShowActivity extends BaseActivity implements View.OnClickListen
     SelfShowPresenter selfShowPresenter = null;
     private EasyRecyclerView recyclerView;
     private ImageAdapter adapter;
+    CircleImageView circleImageView =null;
+
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -87,6 +93,8 @@ public class SelfShowActivity extends BaseActivity implements View.OnClickListen
         tv_title=(TextView)this.findViewById(R.id.title_name);
         iv_close=(ImageView)this.findViewById(R.id.close_activity);
         iv_close.setClickable(true);
+        circleImageView=(CircleImageView)this.findViewById(R.id.head_image);
+
     }
 
     @Override
@@ -105,6 +113,8 @@ public class SelfShowActivity extends BaseActivity implements View.OnClickListen
         tv_fances.setText(root.getData().getGetdata().get(0).getFanscount().toString()+"\n粉丝");
         tv_chatid.setText("ID "+root.getData().getGetdata().get(0).getChatid().toString());
         tv_title.setText(root.getData().getGetdata().get(0).getChatid().toString());
+        Glide.with(getApplicationContext()).load(Constants.BASE_URL+root.getData().getGetdata().get(0).getHeadimg_url())
+                .placeholder(R.drawable.mine_default_avatar).into(circleImageView);
         pictureWall();
     }
 
@@ -129,7 +139,6 @@ public class SelfShowActivity extends BaseActivity implements View.OnClickListen
     }
 
     private void pictureWall(){
-
         recyclerView = (EasyRecyclerView) findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new StaggeredGridLayoutManager(4,StaggeredGridLayoutManager.VERTICAL));
         recyclerView.setAdapter(adapter = new ImageAdapter(this));
@@ -141,7 +150,7 @@ public class SelfShowActivity extends BaseActivity implements View.OnClickListen
         itemDecoration.setPaddingStart(true);
         itemDecoration.setPaddingHeaderFooter(true);
         recyclerView.addItemDecoration(itemDecoration);
-        /*adapter.setMore(R.layout.view_more, new RecyclerArrayAdapter.OnMoreListener() {
+        adapter.setMore(R.layout.view_more, new RecyclerArrayAdapter.OnMoreListener() {
             @Override
             public void onMoreShow() {
                 addData();
@@ -151,8 +160,8 @@ public class SelfShowActivity extends BaseActivity implements View.OnClickListen
             public void onMoreClick() {
 
             }
-        });*/
-        //adapter.setNoMore(R.layout.view_nomore);
+        });
+        adapter.setNoMore(R.layout.view_nomore);
         recyclerView.setRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
