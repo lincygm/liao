@@ -11,9 +11,7 @@ import com.king.liaoba.dao.greendao.DaoSession;
 import com.king.liaoba.di.component.AppComponent;
 import com.king.liaoba.di.component.DaggerAppComponent;
 import com.king.liaoba.di.module.AppModule;
-import com.king.thread.nevercrash.NeverCrash;
 import com.squareup.leakcanary.LeakCanary;
-import com.tencent.bugly.beta.Beta;
 import com.tencent.bugly.crashreport.CrashReport;
 
 /**
@@ -38,7 +36,7 @@ public class App extends Application {
         super.attachBaseContext(base);
 
         MultiDex.install(base);
-        Beta.installTinker();
+        //Beta.installTinker();
     }
 
     @Override
@@ -52,20 +50,13 @@ public class App extends Application {
         }
         LeakCanary.install(this);
         // Normal app init code...
-    }
+
         // 调试时，将第三个参数改为true
-       // Bugly.init(this,BUGLY_ID,true);
-       // CrashReport.initCrashReport(getApplicationContext());
         CrashReport.initCrashReport(getApplicationContext(), BUGLY_ID, true);
+
         mAppComponent = DaggerAppComponent.builder().appModule(new AppModule(this,Constants.BASE_URL)).build();
         sp = getSharedPreferences("User", Context.MODE_PRIVATE);
 
-        NeverCrash.init(new NeverCrash.CrashHandler() {
-            @Override
-            public void uncaughtException(Thread t, Throwable e) {
-                CrashReport.postCatchedException(e);
-            }
-        });
     }
 
 
@@ -93,6 +84,7 @@ public class App extends Application {
         edit.putString("username",jsonBean.getUsername());
         edit.putString("chatid",jsonBean.getChatid());
         edit.putString("jpush_id",jsonBean.getRegisterationid());
+        edit.putString("headimage_url",jsonBean.getHeadimg_url());
         edit.commit();
     }
     public static void EditSharedPreference(String  key,String values){
