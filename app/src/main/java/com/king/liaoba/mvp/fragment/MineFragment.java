@@ -24,6 +24,7 @@ import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.king.liaoba.App;
 import com.king.liaoba.Constants;
 import com.king.liaoba.bean.Root;
@@ -183,6 +184,8 @@ public class MineFragment extends SimpleFragment {
             btnLogin.setText(App.getSharedPreference("username"));
             btnLogin.setClickable(false);
             Log.d("q",""+App.getSharedPreference("username"));
+            Glide.with(getActivity()).load(Constants.BASE_URL+App.getSharedPreference("headimage_url"))
+                    .placeholder(R.drawable.mine_default_avatar).into(headImage1);
         }else{
             Log.d("q","b");
             btnLogin.setText("登录");
