@@ -154,6 +154,7 @@ public class OnlineService extends Service {
                 Intent intent = new Intent();
                 intent.setClass(OnlineService.this, VoiceChatViewActivity.class);
                 startActivity(intent);
+                //收到通话邀请
             }
 
             /**
