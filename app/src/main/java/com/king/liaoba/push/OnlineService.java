@@ -14,6 +14,7 @@ import com.king.liaoba.bean.Root;
 import com.king.liaoba.http.APIRetrofit;
 import com.king.liaoba.http.APIService;
 
+import com.king.liaoba.mvp.activity.VoiceChatViewActivity;
 import com.liaoba.R;
 
 import java.util.Timer;
@@ -106,10 +107,21 @@ public class OnlineService extends Service {
     private void addSignalingCallback() {
 
         if (mAgoraAPI == null) {
+            Log.d("service","=====3=");
             return;
         }
 
+        Log.d("service","======4===4=");
+        mAgoraAPI.login(this.getResources().getString(R.string.agora_app_id),App.getSharedPreference("chatid"),
+                "_no_need_token",0,null);
         mAgoraAPI.callbackSet(new AgoraAPI.CallBack() {
+
+
+            @Override
+            public void onLoginSuccess(int uid, int fd) {
+                super.onLoginSuccess(uid, fd);
+                Log.d("service","succssful");
+            }
 
             @Override
             public void onLogout(final int i) {
@@ -139,15 +151,9 @@ public class OnlineService extends Service {
             @Override
             public void onInviteReceived(final String channelID, final String account, final int uid, String s2) {
                 Log.i(TAG, "onInviteReceived  channelID = " + channelID + "  account = " + account);
-               /* runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-//                      "status": 0 // Default
-//                      "status": 1 // Busy
-                        mAgoraAPI.channelInviteRefuse(channelID, account, uid, "{\"status\":1}");
-
-                    }
-                });*/
+                Intent intent = new Intent();
+                intent.setClass(OnlineService.this, VoiceChatViewActivity.class);
+                startActivity(intent);
             }
 
             /**
