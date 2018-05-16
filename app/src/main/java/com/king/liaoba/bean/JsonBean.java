@@ -8,46 +8,46 @@ import com.google.gson.annotations.SerializedName;
 
 public class JsonBean {
     @SerializedName("id")
-    private int id;
+    private int id;//chatid
     @SerializedName("username")
-    private String username;
+    private String username;//用户名
     @SerializedName("chatid")
-    private String chatid;
+    private String chatid;//chatid
     @SerializedName("telephone")
-    private String telephone;
+    private String telephone;//手机号码
     @SerializedName("password")
     private String password;
     @SerializedName("followcount")
-    private String followcount;
+    private String followcount;//关注数
     @SerializedName("fanscount")
-    private String fanscount;
+    private String fanscount;//粉丝数量
     @SerializedName("age")
-    private String age;
+    private String age;//年龄
     @SerializedName("sex")
-    private String sex;
+    private String sex;//性别
     @SerializedName("rechargerecord")
     private String rechargerecord;
     @SerializedName("photo")
-    private String photo;
+    private String photo;//照片
     @SerializedName("friends")
-    private String friends;
+    private String friends;//好友
     @SerializedName("userstate")
     private String userstate;
     @SerializedName("chatprice")
-    private String chatprice;
+    private String chatprice;//聊天价格
     @SerializedName("autograph")
     private String autograph;
     @SerializedName("accessrecord")
-    private String accessrecord;
+    private String accessrecord;//访问次数
     @SerializedName("voicelibrary")
-    private String voicelibrary;
+    private String voicelibrary;//语音库
     @SerializedName("registerationid")
     private String registerationid;
-    @SerializedName("channel_id")
+    @SerializedName("channel_id")//频道号
     private String channel_id;
     @SerializedName("heattime")
     private String heattime;
-    @SerializedName("headimg_url")
+    @SerializedName("headimg_url")//头像url
     private String headimg_url;
 
     public String getHeadimg_url() {

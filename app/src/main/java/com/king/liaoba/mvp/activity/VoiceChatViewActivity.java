@@ -1,8 +1,10 @@
 package com.king.liaoba.mvp.activity;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.PorterDuff;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -20,10 +22,13 @@ import com.liaoba.R;
 import java.util.Locale;
 
 import butterknife.BindView;
+import io.agora.AgoraAPI;
+import io.agora.AgoraAPIOnlySignal;
+import io.agora.IAgoraAPI;
 import io.agora.rtc.IRtcEngineEventHandler;
 import io.agora.rtc.RtcEngine;
 
-public class VoiceChatViewActivity extends AppCompatActivity {
+public class VoiceChatViewActivity extends AppCompatActivity{
 
     private static final String LOG_TAG = VoiceChatViewActivity.class.getSimpleName();
 
@@ -32,6 +37,7 @@ public class VoiceChatViewActivity extends AppCompatActivity {
     private RtcEngine mRtcEngine;// Tutorial Step 1
     @BindView(R.id.callname) TextView tv_callname;
     @BindView(R.id.time) TextView tv_time;
+    AgoraAPIOnlySignal mAgoraAPI;
     private final IRtcEngineEventHandler mRtcEventHandler = new IRtcEngineEventHandler() { // Tutorial Step 1
 
         @Override
@@ -61,6 +67,12 @@ public class VoiceChatViewActivity extends AppCompatActivity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_voice_chat_view);
         channel = getIntent().getStringExtra("channel");//获取对方房间id
+        if(channel!=null&&!channel.equals("")){
+            mAgoraAPI.channelInviteUser(channel,channel,0);//邀请某人加入通话
+            mAgoraAPI.channelJoin(channel);//加入频道
+        }else{
+
+        }
         if (checkSelfPermission(Manifest.permission.RECORD_AUDIO, PERMISSION_REQ_ID_RECORD_AUDIO)) {
             initAgoraEngineAndJoinChannel();
         }
@@ -187,4 +199,5 @@ public class VoiceChatViewActivity extends AppCompatActivity {
     private void onRemoteUserVoiceMuted(int uid, boolean muted) {
         showLongToast(String.format(Locale.US, "user %d muted or unmuted %b", (uid & 0xFFFFFFFFL), muted));
     }
+
 }

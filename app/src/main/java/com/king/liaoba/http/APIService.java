@@ -134,7 +134,7 @@ public interface APIService {
 
     /** 上传图片 */
     @Multipart
-    @POST("index.php/Home/Upload/uppic")
-    Observable<Root> uploadImage( @Part("file\"; filename=\"image.png\"")RequestBody imgs);
+    @POST("index.php/Home/Upload/uppic/chatid/{chatid}")
+    Observable<Root> uploadImage( @Path("chatid")String chatid,@Part MultipartBody.Part part);
 
 }

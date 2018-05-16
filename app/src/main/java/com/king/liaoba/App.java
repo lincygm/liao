@@ -12,6 +12,7 @@ import com.king.liaoba.di.component.AppComponent;
 import com.king.liaoba.di.component.DaggerAppComponent;
 import com.king.liaoba.di.module.AppModule;
 import com.king.thread.nevercrash.NeverCrash;
+import com.squareup.leakcanary.LeakCanary;
 import com.tencent.bugly.beta.Beta;
 import com.tencent.bugly.crashreport.CrashReport;
 
@@ -44,6 +45,14 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
         initDatabase();
+        if (LeakCanary.isInAnalyzerProcess(this)) {
+            // This process is dedicated to LeakCanary for heap analysis.
+            // You should not init your app in this process.
+            return;
+        }
+        LeakCanary.install(this);
+        // Normal app init code...
+    }
         // 调试时，将第三个参数改为true
        // Bugly.init(this,BUGLY_ID,true);
        // CrashReport.initCrashReport(getApplicationContext());
@@ -85,7 +94,11 @@ public class App extends Application {
         edit.putString("chatid",jsonBean.getChatid());
         edit.putString("jpush_id",jsonBean.getRegisterationid());
         edit.commit();
-
+    }
+    public static void EditSharedPreference(String  key,String values){
+        SharedPreferences.Editor edit = sp.edit();
+        edit.putString(key,values);
+        edit.commit();
     }
     public static String getSharedPreference(String value){
         return   sp.getString(value,"Null");
