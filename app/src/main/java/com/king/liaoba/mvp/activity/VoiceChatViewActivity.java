@@ -33,6 +33,9 @@ public class VoiceChatViewActivity extends AppCompatActivity{
     private RtcEngine mRtcEngine;// Tutorial Step 1
     @BindView(R.id.callname) TextView tv_callname;
     @BindView(R.id.time) TextView tv_time;
+    @BindView(R.id.btn_mute) ImageView iv_mute;
+    @BindView(R.id.btn_speaker) ImageView iv_speaker;
+    @BindView(R.id.btn_end_call) ImageView iv_endcall;
     AgoraAPIOnlySignal mAgoraAPI;
     private final IRtcEngineEventHandler mRtcEventHandler = new IRtcEngineEventHandler() { // Tutorial Step 1
 
@@ -67,8 +70,12 @@ public class VoiceChatViewActivity extends AppCompatActivity{
             mAgoraAPI = AgoraAPIOnlySignal.getInstance(this,getResources().getString(R.string.agora_app_id));
             mAgoraAPI.channelInviteUser(channel,channel,0);//邀请某人加入通话
             mAgoraAPI.channelJoin(channel);//加入频道
+            iv_speaker.setVisibility(View.VISIBLE);
+            iv_mute.setVisibility(View.VISIBLE);
         }else{
         //接收到别人的来电。
+            iv_speaker.setVisibility(View.GONE);
+            iv_mute.setVisibility(View.GONE);
         }
         if (checkSelfPermission(Manifest.permission.RECORD_AUDIO, PERMISSION_REQ_ID_RECORD_AUDIO)) {
             initAgoraEngineAndJoinChannel();
