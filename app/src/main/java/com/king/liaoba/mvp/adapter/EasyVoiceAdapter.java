@@ -2,13 +2,17 @@ package com.king.liaoba.mvp.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.jude.easyrecyclerview.adapter.BaseViewHolder;
 import com.jude.easyrecyclerview.adapter.RecyclerArrayAdapter;
+import com.king.liaoba.Constants;
 import com.king.liaoba.bean.VoiceListInfo;
 import com.king.liaoba.mvp.activity.SelfShowActivity;
 import com.king.liaoba.mvp.activity.VoiceChatViewActivity;
@@ -60,7 +64,10 @@ public class EasyVoiceAdapter extends RecyclerArrayAdapter <VoiceListInfo>{
         @Override
         public void setData(VoiceListInfo data) {
             super.setData(data);
-            //Glide.with(getContext()).load(data.getThumb()).placeholder(R.mipmap.live_default).error(R.mipmap.live_default).crossFade().centerCrop().diskCacheStrategy(DiskCacheStrategy.SOURCE).into(iv);
+            Log.d("url",""+Constants.BASE_URL+data.getHeadimage_url());
+            Glide.with(getContext()).load(Constants.BASE_URL+data.getHeadimage_url())
+                    .placeholder(R.mipmap.live_default).error(R.mipmap.live_default).
+                    crossFade().centerCrop().diskCacheStrategy(DiskCacheStrategy.SOURCE).into(iv);
             username.setText(data.getChatid());
             charge.setText(data.getCharge()+"聊币/分钟");
             chatid = data.getChatid();
