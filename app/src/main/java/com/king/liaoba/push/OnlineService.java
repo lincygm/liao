@@ -7,13 +7,13 @@ import android.media.MediaPlayer;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
-import android.widget.Toast;
+
 
 import com.king.liaoba.App;
 import com.king.liaoba.bean.Root;
 import com.king.liaoba.http.APIRetrofit;
 import com.king.liaoba.http.APIService;
-import com.king.liaoba.mvp.activity.VoiceChatViewActivity;
+
 import com.liaoba.R;
 
 import java.util.Timer;
