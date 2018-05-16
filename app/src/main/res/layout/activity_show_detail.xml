@@ -2,153 +2,162 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
+    android:orientation="vertical"
     android:layout_height="match_parent">
-    <include layout="@layout/back_title"/>
-<ScrollView
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <RelativeLayout
+    <include layout="@layout/back_title"
+        android:layout_height="40dp"
+        android:layout_width="match_parent"/>
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <com.jude.easyrecyclerview.EasyRecyclerView
-        android:id="@+id/recyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_progress="@layout/view_progress"
-        />
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_below="@+id/recyclerView"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/left_margin"
-        android:orientation="horizontal">
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/ivAvatar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/mine_default_avatar"
-            android:scaleType="centerCrop"
-            android:layout_below="@+id/ivLeft"
-            android:clickable="true"
-            android:layout_centerHorizontal="true"
-            android:padding="10dp"
-            app:civ_border_width="2dp"
-            app:civ_border_color="@color/white"/>
+        android:layout_height="wrap_content">
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:orientation="vertical"
-            android:layout_height="match_parent">
-            <TextView
-                android:layout_width="wrap_content"
-                android:id="@+id/name"
-                android:gravity="center"
-                android:text="高谋"
-                android:layout_weight="1"
-                android:layout_height="0dp" />
+            android:layout_height="wrap_content">
+            <com.jude.easyrecyclerview.EasyRecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_progress="@layout/view_progress"
+                />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/left_margin"
+                    android:orientation="horizontal">
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/ivAvatar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/mine_default_avatar"
+                        android:scaleType="centerCrop"
+                        android:layout_below="@+id/head_image"
+                        android:clickable="true"
+                        android:layout_centerHorizontal="true"
+                        android:padding="10dp"
+                        app:civ_border_width="2dp"
+                        app:civ_border_color="@color/white"/>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_height="match_parent">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:id="@+id/name"
+                            android:gravity="center"
+                            android:text="高谋"
+                            android:layout_weight="1"
+                            android:layout_height="0dp" />
 
-            <TextView
-                android:id="@+id/age"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="25" />
+                        <TextView
+                            android:id="@+id/age"
+                            android:layout_width="wrap_content"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="25" />
 
-            <TextView
-                android:id="@+id/chatid"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="3435454" />
+                        <TextView
+                            android:id="@+id/chatid"
+                            android:layout_width="wrap_content"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="3435454" />
+                    </LinearLayout>
+
+                </LinearLayout>
+                <include layout="@layout/line_h_mine_space"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:layout_marginLeft="@dimen/left_margin"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:id="@+id/focus"
+                        android:gravity="center"
+                        android:fontFamily="bold"
+                        android:text="100"
+                        android:layout_weight="1"
+                        android:layout_height="match_parent" />
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_marginBottom="2dp"
+                        android:layout_marginTop="2dp"
+                        android:background="@drawable/web_call_icon"
+                        android:layout_height="match_parent"/>
+                    <TextView
+                        android:layout_width="0dp"
+                        android:id="@+id/fances"
+                        android:gravity="center"
+                        android:fontFamily="bold"
+                        android:text="200"
+                        android:layout_weight="1"
+                        android:layout_height="match_parent" />
+                </LinearLayout>
+                <include layout="@layout/line_h_mine_space"/>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_marginLeft="@dimen/left_margin"
+                    android:layout_height="@dimen/line_height"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:text="地区"
+                        android:gravity="center_vertical"
+                        android:layout_height="match_parent" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_marginRight="@dimen/left_margin"
+                        android:id="@+id/district"
+                        android:gravity="center"
+                        android:layout_alignParentRight="true"
+                        android:text="保密"
+                        android:layout_height="match_parent" />
+                </RelativeLayout>
+                <include layout="@layout/line_h_mine_space"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_marginLeft="@dimen/left_margin"
+                    android:layout_height="@dimen/line_height"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:gravity="center_vertical"
+                        android:layout_width="wrap_content"
+                        android:text="个性签名"
+                        android:layout_height="match_parent" />
+                    <TextView
+                        android:id="@+id/sign"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent" />
+                </LinearLayout>
+                <include layout="@layout/line_h_mine_space"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/line_height"
+                    android:layout_marginLeft="@dimen/left_margin"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent" />
+                </LinearLayout>
+            </LinearLayout>
         </LinearLayout>
+    </ScrollView>
 
-    </LinearLayout>
-    <include layout="@layout/line_h_mine_space"/>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_marginLeft="@dimen/left_margin"
-        android:orientation="horizontal">
-        <TextView
-            android:layout_width="0dp"
-            android:id="@+id/focus"
-            android:gravity="center"
-            android:fontFamily="bold"
-            android:text="100"
-            android:layout_weight="1"
-            android:layout_height="match_parent" />
-        <View
-            android:layout_width="1dp"
-            android:layout_marginBottom="2dp"
-            android:layout_marginTop="2dp"
-            android:background="@drawable/web_call_icon"
-            android:layout_height="match_parent"/>
-        <TextView
-            android:layout_width="0dp"
-            android:id="@+id/fances"
-            android:gravity="center"
-            android:fontFamily="bold"
-            android:text="200"
-            android:layout_weight="1"
-            android:layout_height="match_parent" />
-    </LinearLayout>
-    <include layout="@layout/line_h_mine_space"/>
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_marginLeft="@dimen/left_margin"
-        android:layout_height="@dimen/line_height"
-        android:orientation="horizontal">
-        <TextView
-            android:layout_width="wrap_content"
-            android:text="地区"
-            android:gravity="center_vertical"
-            android:layout_height="match_parent" />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_marginRight="@dimen/left_margin"
-            android:id="@+id/district"
-            android:gravity="center"
-            android:layout_alignParentRight="true"
-            android:text="保密"
-            android:layout_height="match_parent" />
-    </RelativeLayout>
-    <include layout="@layout/line_h_mine_space"/>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_marginLeft="@dimen/left_margin"
-        android:layout_height="@dimen/line_height"
-        android:orientation="horizontal">
-        <TextView
-            android:gravity="center_vertical"
-            android:layout_width="wrap_content"
-            android:text="个性签名"
-            android:layout_height="match_parent" />
-        <TextView
-            android:id="@+id/sign"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent" />
-    </LinearLayout>
-    <include layout="@layout/line_h_mine_space"/>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/line_height"
-        android:layout_marginLeft="@dimen/left_margin"
-        android:orientation="horizontal">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent" />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent" />
-    </LinearLayout>
-    </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_alignParentBottom="true"
@@ -180,6 +189,4 @@
             android:layout_height="match_parent"
             android:text="送礼"/>
     </LinearLayout>
-    </RelativeLayout>
-</ScrollView>
 </RelativeLayout>
