@@ -26,8 +26,8 @@ android {
             storePassword key_storePassword*/
         }
     }
-    compileSdkVersion 26
-    buildToolsVersion "27.0.1"
+    compileSdkVersion 27
+    buildToolsVersion "27.0.3"
     defaultConfig {
         applicationId "com.liaoba"
         minSdkVersion 16
@@ -55,7 +55,7 @@ android {
     }
     sourceSets {
         main {
-            jniLibs.srcDirs = ['../../../libs']
+            jniLibs.srcDirs = ['src/main/jnilibs']
         }
     }
 }
@@ -67,40 +67,40 @@ greendao{
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support:appcompat-v7:26.0.+'
-    compile 'com.android.support:design:26.0.+'
-    compile 'com.android.support:cardview-v7:26.0.+'
-    testCompile 'junit:junit:4.12'
-    compile 'com.hannesdorfmann.mosby:mvp:2.0.1'
-    compile 'com.hannesdorfmann.mosby:viewstate:2.0.1'
-    compile 'com.squareup.retrofit2:retrofit:2.1.0'
-    compile 'com.squareup.retrofit2:converter-gson:2.1.0'
-    compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
-    compile 'io.reactivex:rxandroid:1.2.1'
-    compile 'io.reactivex:rxjava:1.1.6'
-    compile 'com.jude:easyrecyclerview:4.3.7'
-    compile 'jp.wasabeef:glide-transformations:2.0.1'
-    compile 'com.jakewharton:butterknife:8.5.1'
+    implementation 'com.android.support:appcompat-v7:27.0.+'
+    implementation 'com.android.support:design:27.0.+'
+    implementation 'com.android.support:cardview-v7:27.0.+'
+    testImplementation 'junit:junit:4.12'
+    implementation 'com.hannesdorfmann.mosby:mvp:2.0.1'
+    implementation 'com.hannesdorfmann.mosby:viewstate:2.0.1'
+    implementation 'com.squareup.retrofit2:retrofit:2.1.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.1.0'
+    implementation 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
+    implementation 'io.reactivex:rxandroid:1.2.1'
+    implementation 'io.reactivex:rxjava:1.1.6'
+    implementation 'com.jude:easyrecyclerview:4.3.7'
+    implementation 'jp.wasabeef:glide-transformations:2.0.1'
+    implementation 'com.jakewharton:butterknife:8.5.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
-    compile 'com.google.dagger:dagger:2.9'
+    implementation 'com.google.dagger:dagger:2.9'
     //    annotationProcessor 'com.google.dagger:dagger-compiler:2.9'
     annotationProcessor 'com.google.dagger:dagger-compiler:2.9'
-    provided 'org.glassfish:javax.annotation:10.0-b28'
-    compile 'org.greenrobot:greendao:3.2.0'
-    provided 'org.greenrobot:greendao-generator:3.2.0'
-    compile 'de.hdodenhof:circleimageview:2.1.0'
-    compile 'com.king.base:base:2.0'
-    compile 'com.king.view:flutteringlayout:1.1.0'
-    compile 'com.king.thread:nevercrash:1.0.0'
-    compile 'com.bigkoo:convenientbanner:2.0.5'
-    compile 'com.qiniu:happy-dns:0.2.+'
-    compile 'com.squareup.okhttp3:logging-interceptor:3.3.1'
-    compile 'cn.jiguang.sdk:jpush:3.1.1'  // 此处以JPush 3.1.1 版本为例。
-    compile 'cn.jiguang.sdk:jcore:1.1.9'  // 此处以JCore 1.1.9 版本为例。
+    compileOnly 'org.glassfish:javax.annotation:10.0-b28'
+    implementation 'org.greenrobot:greendao:3.2.0'
+    compileOnly 'org.greenrobot:greendao-generator:3.2.0'
+    implementation 'de.hdodenhof:circleimageview:2.1.0'
+    implementation 'com.king.base:base:2.0'
+    implementation 'com.king.view:flutteringlayout:1.1.0'
+    implementation 'com.king.thread:nevercrash:1.0.0'
+    implementation 'com.bigkoo:convenientbanner:2.0.5'
+    implementation 'com.qiniu:happy-dns:0.2.+'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.3.1'
+    implementation 'cn.jiguang.sdk:jpush:3.1.1'  // 此处以JPush 3.1.1 版本为例。
+    implementation 'cn.jiguang.sdk:jcore:1.1.9'  // 此处以JCore 1.1.9 版本为例。
 
     //optional, help to generate the final applicatio
 
@@ -110,19 +110,20 @@ dependencies {
 
     //    compile 'com.tencent.tinker:tinker-android-lib:1.7.7'
     // 多dex配置
-    compile 'com.android.support:multidex:1.0.1'
+    implementation 'com.android.support:multidex:1.0.1'
     //sdk
-    compile 'com.tencent.bugly:crashreport_upgrade:latest.release'
+    implementation 'com.tencent.bugly:crashreport_upgrade:latest.release'
     //ndk
-    compile 'com.tencent.bugly:nativecrashreport:latest.release'
+    implementation 'com.tencent.bugly:nativecrashreport:latest.release'
 
-    compile fileTree(dir:'../../../libs',include:['*.jar'])
-    compile 'io.agora.rtc:voice-sdk:2.1.0'
-    api 'com.github.bumptech.glide:glide:3.6.1'
-    api 'jp.wasabeef:glide-transformations:1.3.1'
-    api 'com.jude:rollviewpager:1.2.9'
-    api 'com.github.clans:fab:1.6.0'
-    api 'com.jude:easyrecyclerview:4.4.2'
-
+    implementation fileTree(dir:'../../../libs',include:['*.jar'])
+    implementation 'io.agora.rtc:voice-sdk:2.1.0'
+    implementation 'com.github.bumptech.glide:glide:3.6.1'
+    implementation 'jp.wasabeef:glide-transformations:1.3.1'
+    implementation 'com.jude:rollviewpager:1.2.9'
+    implementation 'com.github.clans:fab:1.6.0'
+    implementation 'com.jude:easyrecyclerview:4.4.2'
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.5.4'
+   // releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
 }
 
