@@ -4,9 +4,10 @@ buildscript {
     repositories {
         jcenter()
 
+        google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.0.1'
+        classpath 'com.android.tools.build:gradle:3.1.2'
         classpath 'org.greenrobot:greendao-gradle-plugin:3.2.1'
         //classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
 //        classpath 'com.tencent.tinker:tinker-patch-gradle-plugin:1.7.7'
@@ -21,7 +22,7 @@ allprojects {
     repositories {
         jcenter()
         maven { url 'https://dl.bintray.com/jenly/maven' }
-
+        google()
     }
 }
 
