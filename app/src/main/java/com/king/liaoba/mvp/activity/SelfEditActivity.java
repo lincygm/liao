@@ -3,9 +3,11 @@ package com.king.liaoba.mvp.activity;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -15,6 +17,7 @@ import com.king.liaoba.mvp.presenter.SelfEditPresenter;
 import com.king.liaoba.mvp.view.ISelfEditView;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
@@ -32,13 +35,15 @@ public class SelfEditActivity extends Activity implements View.OnClickListener{
     @BindView(R.id.title_name)
     TextView window_title;
     TextView save;
-
+    @BindView(R.id.photowalls)
+    Button btn;
     ISelfEditView editView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.mine_info);
+        ButterKnife.bind(this);
         tv=(TextView)this.findViewById(R.id.male);
         window_title =(TextView)this.findViewById(R.id.title_name);
         et_ege =(EditText)this.findViewById(R.id.slef_age);
@@ -52,7 +57,7 @@ public class SelfEditActivity extends Activity implements View.OnClickListener{
     }
 
     @Override
-    @OnClick({R.id.male})
+    @OnClick({R.id.male,R.id.save,R.id.photowalls})
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.male:
@@ -64,6 +69,11 @@ public class SelfEditActivity extends Activity implements View.OnClickListener{
                          et_ege.getText().toString(),
                          et_sign.getText().toString());
 
+                break;
+            case R.id.photowalls:
+                Intent  intent = new Intent();
+                intent.setClass(this,PhotoWallActivity.class);
+                startActivity(intent);
                 break;
             default:
                 break;
