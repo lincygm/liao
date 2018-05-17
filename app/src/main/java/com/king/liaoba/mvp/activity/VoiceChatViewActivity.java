@@ -20,6 +20,7 @@ import com.liaoba.R;
 import java.util.Locale;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import io.agora.AgoraAPIOnlySignal;
 import io.agora.rtc.IRtcEngineEventHandler;
 import io.agora.rtc.RtcEngine;
@@ -31,11 +32,16 @@ public class VoiceChatViewActivity extends AppCompatActivity{
     private static final int PERMISSION_REQ_ID_RECORD_AUDIO = 22;
     private String channel = null;
     private RtcEngine mRtcEngine;// Tutorial Step 1
-    @BindView(R.id.callname) TextView tv_callname;
-    @BindView(R.id.time) TextView tv_time;
-    @BindView(R.id.btn_mute) ImageView iv_mute;
-    @BindView(R.id.btn_speaker) ImageView iv_speaker;
-    @BindView(R.id.btn_end_call) ImageView iv_endcall;
+    @BindView(R.id.callname)
+    TextView tv_callname;
+    @BindView(R.id.time)
+    TextView tv_time;
+    @BindView(R.id.btn_mute)
+    ImageView iv_mute;
+    @BindView(R.id.btn_speaker)
+    ImageView iv_speaker;
+    @BindView(R.id.btn_end_call)
+    ImageView iv_endcall;
     AgoraAPIOnlySignal mAgoraAPI;
     private final IRtcEngineEventHandler mRtcEventHandler = new IRtcEngineEventHandler() { // Tutorial Step 1
 
@@ -65,6 +71,10 @@ public class VoiceChatViewActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_voice_chat_view);
+        tv_callname =(TextView)this.findViewById(R.id.callname);
+        iv_mute =(ImageView)this.findViewById(R.id.btn_mute);
+        iv_endcall =(ImageView)this.findViewById(R.id.btn_end_call);
+        iv_speaker=(ImageView)this.findViewById(R.id.btn_speaker);
         channel = getIntent().getStringExtra("channel");//获取对方房间id
         if(channel!=null&&!channel.equals("")){
             mAgoraAPI = AgoraAPIOnlySignal.getInstance(this,getResources().getString(R.string.agora_app_id));
