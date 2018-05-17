@@ -9,6 +9,7 @@
         android:layout_width="match_parent"/>
     <ScrollView
         android:layout_width="match_parent"
+        android:layout_marginTop="40dp"
         android:layout_height="wrap_content">
         <LinearLayout
             android:layout_width="match_parent"
@@ -29,13 +30,12 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/left_margin"
                     android:orientation="horizontal">
-                    <de.hdodenhof.circleimageview.CircleImageView
-                        android:id="@+id/ivAvatar"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                    <com.king.liaoba.util.uploadimg.CircleImageView
+                        android:id="@+id/head_image_d"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
                         android:src="@drawable/mine_default_avatar"
                         android:scaleType="centerCrop"
-                        android:layout_below="@+id/head_image"
                         android:clickable="true"
                         android:layout_centerHorizontal="true"
                         android:padding="10dp"
