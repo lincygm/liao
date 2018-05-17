@@ -1,24 +1,33 @@
 package com.king.liaoba.mvp.activity;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.hannesdorfmann.mosby.mvp.MvpPresenter;
 import com.jude.easyrecyclerview.EasyRecyclerView;
 import com.jude.easyrecyclerview.adapter.RecyclerArrayAdapter;
 import com.jude.easyrecyclerview.decoration.SpaceDecoration;
+import com.jude.rollviewpager.RollPagerView;
+import com.jude.rollviewpager.hintview.ColorPointHintView;
+import com.king.liaoba.App;
 import com.king.liaoba.Constants;
-import com.king.liaoba.bean.Picture;
 import com.king.liaoba.bean.Root;
+import com.king.liaoba.http.APIRetrofit;
+import com.king.liaoba.http.APIService;
+import com.king.liaoba.mvp.adapter.BannerAdapter;
 import com.king.liaoba.mvp.adapter.ImageAdapter;
 import com.king.liaoba.mvp.base.BaseActivity;
 import com.king.liaoba.mvp.presenter.SelfShowPresenter;
@@ -26,9 +35,13 @@ import com.king.liaoba.mvp.view.ISelfShowView;
 import com.king.liaoba.util.RecycleViewUtils;
 import com.liaoba.R;
 
-import java.util.ArrayList;
-
 import butterknife.BindView;
+import butterknife.OnClick;
+import retrofit2.Retrofit;
+import rx.Observer;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
+
 import com.king.liaoba.util.uploadimg.CircleImageView;
 /**
  * Created by gaomou on 2018/4/15.
@@ -51,18 +64,21 @@ public class SelfShowActivity extends BaseActivity implements View.OnClickListen
     @BindView(R.id.save)
     TextView tv_save;
     TextView tv_title;
+    @BindView(R.id.addfocus)
+    TextView tv_addfocus;
     ImageView iv_close;
     SelfShowPresenter selfShowPresenter = null;
     private EasyRecyclerView recyclerView;
     private ImageAdapter adapter;
     CircleImageView circleImageView =null;
-
+    private String chatid = null;
 
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getDetails(getIntent().getStringExtra("chatid"));
+        chatid = getIntent().getStringExtra("chatid");
+        getDetails(chatid);
     }
 
     private void getDetails(String chatid) {
@@ -93,19 +109,22 @@ public class SelfShowActivity extends BaseActivity implements View.OnClickListen
         tv_title=(TextView)this.findViewById(R.id.title_name);
         iv_close=(ImageView)this.findViewById(R.id.close_activity);
         iv_close.setClickable(true);
-        circleImageView=(CircleImageView)this.findViewById(R.id.head_image);
+        circleImageView=(CircleImageView)this.findViewById(R.id.head_image_d);
 
     }
 
+    @OnClick({R.id.addfocus})
     @Override
     public void onClick(View view) {
         if(view.getId()==R.id.close_activity){
             this.finish();
+        }else if(view.getId()==R.id.addfocus){
+            addFocus();
         }
     }
 
     @Override
-    public void showData(Root root) {
+    public void showData(final Root root) {
         if(root==null)return;
         Log.d("data","==="+root.getData().getGetdata().get(0).getAge().toString());
         tv_age.setText(root.getData().getGetdata().get(0).getAge().toString()+"岁");
@@ -113,8 +132,15 @@ public class SelfShowActivity extends BaseActivity implements View.OnClickListen
         tv_fances.setText(root.getData().getGetdata().get(0).getFanscount().toString()+"\n粉丝");
         tv_chatid.setText("ID "+root.getData().getGetdata().get(0).getChatid().toString());
         tv_title.setText(root.getData().getGetdata().get(0).getChatid().toString());
-        Glide.with(getApplicationContext()).load(Constants.BASE_URL+root.getData().getGetdata().get(0).getHeadimg_url())
-                .placeholder(R.drawable.mine_default_avatar).into(circleImageView);
+        Log.d(">>>>",""+Constants.BASE_URL+root.getData().getGetdata().get(0).getHeadimg_url());
+        this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Glide.with(getApplicationContext()).load(Constants.BASE_URL+root.getData().getGetdata().get(0).
+                        getHeadimg_url()).diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                        .into(circleImageView);
+            }
+        });
         pictureWall();
     }
 
@@ -138,52 +164,63 @@ public class SelfShowActivity extends BaseActivity implements View.OnClickListen
 
     }
 
-    private void pictureWall(){
+    private void pictureWall() {
+
         recyclerView = (EasyRecyclerView) findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(4,StaggeredGridLayoutManager.VERTICAL));
+        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         recyclerView.setAdapter(adapter = new ImageAdapter(this));
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(this,4);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 4);
         gridLayoutManager.setSpanSizeLookup(adapter.obtainGridSpanSizeLookUp(4));
         recyclerView.setLayoutManager(gridLayoutManager);
-        SpaceDecoration itemDecoration = new SpaceDecoration((int) RecycleViewUtils.convertDpToPixel(8,this));
+        SpaceDecoration itemDecoration = new SpaceDecoration((int) RecycleViewUtils.convertDpToPixel(8, this));
         itemDecoration.setPaddingEdgeSide(true);
         itemDecoration.setPaddingStart(true);
         itemDecoration.setPaddingHeaderFooter(true);
         recyclerView.addItemDecoration(itemDecoration);
-        adapter.setMore(R.layout.view_more, new RecyclerArrayAdapter.OnMoreListener() {
+        adapter.addHeader(new RecyclerArrayAdapter.ItemView() {
             @Override
-            public void onMoreShow() {
-                addData();
+            public View onCreateView(ViewGroup parent) {
+                RollPagerView header = new RollPagerView(SelfShowActivity.this);
+                header.setHintView(new ColorPointHintView(SelfShowActivity.this, Color.YELLOW, Color.GRAY));
+                header.setHintPadding(0, 0, 0, (int) RecycleViewUtils.convertDpToPixel(8, SelfShowActivity.this));
+                //header.setPlayDelay(2000);
+                header.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                        (int) RecycleViewUtils.convertDpToPixel(200, SelfShowActivity.this)));
+                header.setAdapter(new BannerAdapter(SelfShowActivity.this));
+                return header;
             }
 
             @Override
-            public void onMoreClick() {
+            public void onBindView(View headerView) {
 
-            }
-        });
-        adapter.setNoMore(R.layout.view_nomore);
-        recyclerView.setRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                recyclerView.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        adapter.clear();
-                        adapter.addAll(addData());
-                    }
-                },1000);
             }
         });
     }
-    private ArrayList<Picture> addData(){
-        ArrayList<Picture> arrayList = new ArrayList<>();
-        arrayList.add(new Picture(566,800,"http://o84n5syhk.bkt.clouddn.com/57154327_p0.png"));
-        arrayList.add(new Picture(550,778,"http://o84n5syhk.bkt.clouddn.com/57166531_p0.jpg"));
-        arrayList.add(new Picture(1142,800,"http://o84n5syhk.bkt.clouddn.com/57174070_p0.jpg"));
-        arrayList.add(new Picture(1920,938,"http://o84n5syhk.bkt.clouddn.com/57174564_p0.jpg"));
-        arrayList.add(new Picture(1024,683,"http://o84n5syhk.bkt.clouddn.com/57156832_p0.jpg"));
-        arrayList.add(new Picture(2000,1667,"http://o84n5syhk.bkt.clouddn.com/57156623_p0.png"));
 
-        return arrayList;
+    private void addFocus(){
+        Toast.makeText(this,"tt",Toast.LENGTH_LONG).show();
+        Retrofit retrofit = APIRetrofit.getInstance();
+        APIService service = retrofit.create(APIService.class);
+        service.focus(App.getSharedPreference("chatid"),chatid)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<Root>() {
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.d("aa","error");
+                    }
+
+                    @Override
+                    public void onCompleted() {
+                        Log.d("aa","onCompleted");
+
+                    }
+
+                    @Override
+                    public void onNext(Root root) {
+                        Log.d("aa","onNext");
+
+                    }
+                });
     }
 }
