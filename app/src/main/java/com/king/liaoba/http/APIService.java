@@ -137,4 +137,17 @@ public interface APIService {
     @POST("index.php/Home/Upload/uppic/chatid/{chatid}")
     Observable<Root> uploadImage( @Path("chatid")String chatid,@Part MultipartBody.Part part);
 
+    /** 上传生活照 */
+    @Multipart
+    @POST("index.php/Home/Upload/upblo/chatid/{chatid}")
+    Observable<Root> uploadPictures( @Path("chatid")String chatid,@Part MultipartBody.Part part);
+
+    /** 关注 */
+    @POST("index.php/Home/User/searchFollowsAndFocus/chatid/{chatid}/foucschatid/{focus_chatid}")
+    Observable<Root> focus( @Path("chatid")String chatid,@Path("focus_chatid")String chatid2);
+
+    /** 获取关注列表 */
+    @POST("index.php/Home/User/getFocusList/chatid/{chatid}")
+    Observable<Root> focusList( @Path("chatid")String chatid);
+
 }
