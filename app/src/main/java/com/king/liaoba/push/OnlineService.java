@@ -15,7 +15,10 @@ import com.king.liaoba.http.APIRetrofit;
 import com.king.liaoba.http.APIService;
 
 import com.king.liaoba.mvp.activity.VoiceChatViewActivity;
+import com.king.liaoba.util.MessageEvent;
 import com.liaoba.R;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -192,6 +195,7 @@ public class OnlineService extends Service {
                         //mCallTitle.setVisibility(View.GONE);
                     }
                 });*/
+                EventBus.getDefault().post(new MessageEvent("startcounttime"));
 
             }
 
