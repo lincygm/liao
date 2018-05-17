@@ -15,9 +15,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.king.liaoba.util.MessageEvent;
 import com.liaoba.R;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -43,6 +50,7 @@ public class VoiceChatViewActivity extends AppCompatActivity{
     @BindView(R.id.btn_end_call)
     ImageView iv_endcall;
     AgoraAPIOnlySignal mAgoraAPI;
+    private int time;
     private final IRtcEngineEventHandler mRtcEventHandler = new IRtcEngineEventHandler() { // Tutorial Step 1
 
         @Override
@@ -65,6 +73,42 @@ public class VoiceChatViewActivity extends AppCompatActivity{
             });
         }
     };
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMessage(MessageEvent messageEvent) {
+        if (messageEvent.equals("startcounttime")) {
+            Timer timer = new Timer(true);
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    time++;
+                    timeshow(time);
+                }
+            }, 0, 1000);
+        }
+
+    }
+
+    private void timeshow(int t){
+
+        int h = t/3600;
+        int m = t%3600/60;
+        int s = t%3600%60;
+        tv_time.setText(h+m+s);
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
