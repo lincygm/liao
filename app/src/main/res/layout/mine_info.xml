@@ -80,6 +80,15 @@
             android:layout_alignParentRight="true"
             android:layout_height="match_parent" />
     </RelativeLayout>
+        <Button
+            android:layout_width="wrap_content"
+            android:gravity="center_vertical"
+            android:clickable="true"
 
+            android:background="@null"
+            android:id="@+id/photowalls"
+            android:layout_height="@dimen/line_height"
+            android:layout_marginLeft="@dimen/left_margin"
+            android:text="照片墙"/>
 
 </LinearLayout>
