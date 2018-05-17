@@ -117,8 +117,6 @@ public class PhotoWallActivity extends Activity implements View.OnClickListener{
                 } else {
                     //跳转到调用系统相机
                     gotoCamera();
-                    Log.d("xxxx","b");
-
                 }
                 popupWindow.dismiss();
             }
