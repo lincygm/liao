@@ -79,10 +79,13 @@ public class LiveListPresenter extends BasePresenter<ILiveListView> {
 
 
     private void getUserInfoByChatid(){
-
+        if(isViewAttached()){
+            getView().showProgress();
+        }
                 if(chatidList == null ||chatidList.size()==0){
                     return ;
                 }
+
                 userinfoList.clear();
                 for(int i=0;i<chatidList.size();i++){
                     Retrofit retrofit = APIRetrofit.getInstance();
@@ -97,6 +100,9 @@ public class LiveListPresenter extends BasePresenter<ILiveListView> {
                                         getView().onCompleted();
                                     Log.d("list",">>"+userinfoList.size());
                                     getView().onGetLiveList(userinfoList);
+                                    if(isViewAttached()){
+                                        getView().onCompleted();
+                                    }
                                 }
 
                                 @Override
