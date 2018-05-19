@@ -168,7 +168,7 @@ public class SelfShowActivity extends BaseActivity implements View.OnClickListen
 
         recyclerView = (EasyRecyclerView) findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
-        recyclerView.setAdapter(adapter = new ImageAdapter(this));
+        recyclerView.setAdapter(adapter = new ImageAdapter(this,null));
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 4);
         gridLayoutManager.setSpanSizeLookup(adapter.obtainGridSpanSizeLookUp(4));
         recyclerView.setLayoutManager(gridLayoutManager);
