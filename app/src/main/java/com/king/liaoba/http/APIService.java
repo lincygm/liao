@@ -5,6 +5,7 @@ import android.service.media.MediaBrowserService.Result;
 import com.king.liaoba.bean.AppStart;
 import com.king.liaoba.bean.LiveCategory;
 import com.king.liaoba.bean.LiveListResult;
+import com.king.liaoba.bean.PictureRoot;
 import com.king.liaoba.bean.Recommend;
 import com.king.liaoba.bean.Room;
 import com.king.liaoba.bean.Root;
@@ -149,5 +150,13 @@ public interface APIService {
     /** 获取关注列表 */
     @POST("index.php/Home/User/getFocusList/chatid/{chatid}")
     Observable<Root> focusList( @Path("chatid")String chatid);
+
+    /**删除图片**/
+    @POST("index.php/Home/User/deletePicture/chatid/{chatid}/id/{id}")
+    Observable<Root> deletePic(@Path("chatid") String chatid,@Path("id") String id);
+
+    /**获取图片列表**/
+    @POST("index.php/Home/User/getImageList/chatid/{chatid}")
+    Observable<PictureRoot> getImageList(@Path("chatid")String chatid);
 
 }
