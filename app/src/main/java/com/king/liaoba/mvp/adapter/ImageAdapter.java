@@ -7,10 +7,13 @@ import android.view.ViewGroup;
 import com.jude.easyrecyclerview.adapter.BaseViewHolder;
 import com.jude.easyrecyclerview.adapter.RecyclerArrayAdapter;
 import com.king.liaoba.bean.Picture;
+import com.king.liaoba.bean.PictureList;
 
-public class ImageAdapter extends RecyclerArrayAdapter<Picture> {
-    public ImageAdapter(Context context) {
-        super(context);
+import java.util.List;
+
+public class ImageAdapter extends RecyclerArrayAdapter<PictureList> {
+    public ImageAdapter(Context context, List<PictureList> list) {
+        super(context,list);
     }
 
     @Override
