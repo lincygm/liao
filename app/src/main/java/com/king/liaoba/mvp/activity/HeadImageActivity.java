@@ -119,7 +119,8 @@ public class HeadImageActivity extends AppCompatActivity implements View.OnClick
                 if (ContextCompat.checkSelfPermission(HeadImageActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                         != PackageManager.PERMISSION_GRANTED) {
                     //申请WRITE_EXTERNAL_STORAGE权限
-                    ActivityCompat.requestPermissions(HeadImageActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    ActivityCompat.requestPermissions(HeadImageActivity.this, new String[]{
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.CAMERA},
                             WRITE_EXTERNAL_STORAGE_REQUEST_CODE);
                 } else {
                     //跳转到调用系统相机
