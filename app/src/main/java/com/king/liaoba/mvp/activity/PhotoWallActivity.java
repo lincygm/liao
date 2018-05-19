@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -12,6 +13,9 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -22,16 +26,30 @@ import android.widget.Button;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import com.jude.easyrecyclerview.EasyRecyclerView;
+import com.jude.easyrecyclerview.adapter.RecyclerArrayAdapter;
+import com.jude.easyrecyclerview.decoration.SpaceDecoration;
+import com.jude.rollviewpager.RollPagerView;
+import com.jude.rollviewpager.hintview.ColorPointHintView;
 import com.king.liaoba.App;
 import com.king.liaoba.Constants;
+import com.king.liaoba.bean.PictureBean;
+import com.king.liaoba.bean.PictureList;
+import com.king.liaoba.bean.PictureRoot;
 import com.king.liaoba.bean.Root;
+import com.king.liaoba.bean.VoiceListInfo;
 import com.king.liaoba.http.APIRetrofit;
 import com.king.liaoba.http.APIService;
+import com.king.liaoba.mvp.adapter.BannerAdapter;
+import com.king.liaoba.mvp.adapter.ImageAdapter;
+import com.king.liaoba.util.RecycleViewUtils;
 import com.king.liaoba.util.uploadimg.ClipImageActivity;
 import com.liaoba.BuildConfig;
 import com.liaoba.R;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -64,11 +82,15 @@ public class PhotoWallActivity extends Activity implements View.OnClickListener{
     private static final int READ_EXTERNAL_STORAGE_REQUEST_CODE = 103;
     //请求写入外部存储
     private static final int WRITE_EXTERNAL_STORAGE_REQUEST_CODE = 104;
+    List<PictureList> list = null;
+    private EasyRecyclerView recyclerView;
+    private ImageAdapter adapter;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.photowall);
         ButterKnife.bind(this);
+
     }
     @OnClick({R.id.add_pic})
     @Override
@@ -78,11 +100,62 @@ public class PhotoWallActivity extends Activity implements View.OnClickListener{
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getPicture();
+    }
+
+    private void getPicture(){
+        Retrofit retrofit = APIRetrofit.getInstance();
+        APIService service =retrofit.create(APIService.class);
+        service.getImageList(App.getSharedPreference("chatid"))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<PictureRoot>() {
+                    @Override
+                    public void onCompleted() {
+                        pictureWall();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext( PictureRoot jsonBean) {
+                        if(jsonBean!=null){
+                            list = null;
+                            list = new ArrayList<>();
+                            list=jsonBean.getData().getGetdata();
+                            Log.d("====>>",jsonBean.getData().getGetdata().get(0).getPicurl());
+                        }
+                    }
+                });
+    }
+    private void pictureWall() {
+        if(list==null)return;
+        recyclerView = (EasyRecyclerView) findViewById(R.id.photowall_recyclerView);
+        //recyclerView.setLayoutManager(new StaggeredGridLayoutManager(4, StaggeredGridLayoutManager.VERTICAL));
+        recyclerView.setAdapter(adapter = new ImageAdapter(this,list));
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
+        //gridLayoutManager.setSpanSizeLookup(adapter.obtainGridSpanSizeLookUp(2));
+        recyclerView.setLayoutManager(gridLayoutManager);
+        SpaceDecoration itemDecoration = new SpaceDecoration((int) RecycleViewUtils.convertDpToPixel(8, this));
+        itemDecoration.setPaddingEdgeSide(true);
+        itemDecoration.setPaddingStart(true);
+        //itemDecoration.setPaddingHeaderFooter(true);
+        recyclerView.addItemDecoration(itemDecoration);
+
+
+    }
+
+
     /**
      * 上传头像
      */
     private void uploadHeadImage(View parent) {
-
         View view = LayoutInflater.from(this.getApplication()).inflate(R.layout.layout_popupwindow, null);
         TextView btnCarema = (TextView) view.findViewById(R.id.btn_camera);
         TextView btnPhoto = (TextView) view.findViewById(R.id.btn_photo);
@@ -199,6 +272,7 @@ public class PhotoWallActivity extends Activity implements View.OnClickListener{
                     MultipartBody.Part part = MultipartBody.Part.createFormData("file", file.getName(), requestBody);
                     Retrofit retrofit = APIRetrofit.getInstance();
                     APIService service =retrofit.create(APIService.class);
+                    Log.d("pic",""+App.getSharedPreference("chatid"));
                     service.uploadPictures(App.getSharedPreference("chatid"),part)
                             .subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread())
@@ -217,7 +291,7 @@ public class PhotoWallActivity extends Activity implements View.OnClickListener{
 
                                 @Override
                                 public void onCompleted() {
-
+                                    pictureWall();
                                 }
                             });
 
