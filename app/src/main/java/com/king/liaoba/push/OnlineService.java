@@ -115,6 +115,7 @@ public class OnlineService extends Service {
         }
 
         Log.d("service","======4===4=");
+        mAgoraAPI.logout();
         mAgoraAPI.login(this.getResources().getString(R.string.agora_app_id),App.getSharedPreference("chatid"),
                 "_no_need_token",0,null);
         mAgoraAPI.callbackSet(new AgoraAPI.CallBack() {
@@ -156,6 +157,7 @@ public class OnlineService extends Service {
                 Log.i(TAG, "onInviteReceived  channelID = " + channelID + "  account = " + account);
                 Intent intent = new Intent();
                 intent.setClass(OnlineService.this, VoiceChatViewActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
                 //收到通话邀请
             }
@@ -175,6 +177,7 @@ public class OnlineService extends Service {
                         //  mCallTitle.setText(String.format(Locale.US, "%s is being called ...", mSubscriber));
                     }
                 });*/
+                EventBus.getDefault().post(new MessageEvent("startcounttime",null));
             }
 
             /**
@@ -195,7 +198,8 @@ public class OnlineService extends Service {
                         //mCallTitle.setVisibility(View.GONE);
                     }
                 });*/
-                EventBus.getDefault().post(new MessageEvent("startcounttime"));
+                Log.d("time","start");
+                EventBus.getDefault().post(new MessageEvent("startcounttime",null));
 
             }
 
@@ -225,6 +229,7 @@ public class OnlineService extends Service {
                         //onEncCallClicked();
                     }
                 });*/
+                EventBus.getDefault().post(new MessageEvent("stop.activity",null));
             }
 
 
@@ -247,6 +252,8 @@ public class OnlineService extends Service {
 
                     }
                 });*/
+                EventBus.getDefault().post(new MessageEvent("stop.activity",null));
+
             }
 
             /**
@@ -264,6 +271,8 @@ public class OnlineService extends Service {
                         //onEncCallClicked();
                     }
                 });*/
+                EventBus.getDefault().post(new MessageEvent("stop.activity",null));
+
             }
         });
     }
