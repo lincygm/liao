@@ -42,10 +42,15 @@ import com.king.liaoba.http.APIRetrofit;
 import com.king.liaoba.http.APIService;
 import com.king.liaoba.mvp.adapter.BannerAdapter;
 import com.king.liaoba.mvp.adapter.ImageAdapter;
+import com.king.liaoba.util.DensityUtil;
+import com.king.liaoba.util.MessageEvent;
 import com.king.liaoba.util.RecycleViewUtils;
 import com.king.liaoba.util.uploadimg.ClipImageActivity;
 import com.liaoba.BuildConfig;
 import com.liaoba.R;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -82,7 +87,7 @@ public class PhotoWallActivity extends Activity implements View.OnClickListener{
     private static final int READ_EXTERNAL_STORAGE_REQUEST_CODE = 103;
     //请求写入外部存储
     private static final int WRITE_EXTERNAL_STORAGE_REQUEST_CODE = 104;
-    List<PictureList> list = null;
+    List<PictureList> list  = new ArrayList<>();
     private EasyRecyclerView recyclerView;
     private ImageAdapter adapter;
     @Override
@@ -90,8 +95,33 @@ public class PhotoWallActivity extends Activity implements View.OnClickListener{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.photowall);
         ButterKnife.bind(this);
+        getPicture();
+    }
+
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe
+    public void onEventresult(MessageEvent messageEvent){
+
+        if(messageEvent.getMessage().equals("deleteresult")){
+            Log.d("pic","==result");
+            getPicture();
+        }
+    }
+
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+    EventBus.getDefault().register(this);
 
     }
+
     @OnClick({R.id.add_pic})
     @Override
     public void onClick(View v) {
@@ -100,10 +130,12 @@ public class PhotoWallActivity extends Activity implements View.OnClickListener{
         }
     }
 
+
+
     @Override
     protected void onResume() {
         super.onResume();
-        getPicture();
+        //Log.d("pic","onresume");
     }
 
     private void getPicture(){
@@ -116,6 +148,7 @@ public class PhotoWallActivity extends Activity implements View.OnClickListener{
                     @Override
                     public void onCompleted() {
                         pictureWall();
+                        Log.d("pic","fetch");
                     }
 
                     @Override
@@ -125,10 +158,9 @@ public class PhotoWallActivity extends Activity implements View.OnClickListener{
 
                     @Override
                     public void onNext( PictureRoot jsonBean) {
+                        list.clear();
                         if(jsonBean!=null){
-                            list = null;
-                            list = new ArrayList<>();
-                            list=jsonBean.getData().getGetdata();
+                            list = jsonBean.getData().getGetdata();
                             Log.d("====>>",jsonBean.getData().getGetdata().get(0).getPicurl());
                         }
                     }
@@ -136,18 +168,20 @@ public class PhotoWallActivity extends Activity implements View.OnClickListener{
     }
     private void pictureWall() {
         if(list==null)return;
-        recyclerView = (EasyRecyclerView) findViewById(R.id.photowall_recyclerView);
-        //recyclerView.setLayoutManager(new StaggeredGridLayoutManager(4, StaggeredGridLayoutManager.VERTICAL));
-        recyclerView.setAdapter(adapter = new ImageAdapter(this,list));
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
-        //gridLayoutManager.setSpanSizeLookup(adapter.obtainGridSpanSizeLookUp(2));
-        recyclerView.setLayoutManager(gridLayoutManager);
-        SpaceDecoration itemDecoration = new SpaceDecoration((int) RecycleViewUtils.convertDpToPixel(8, this));
-        itemDecoration.setPaddingEdgeSide(true);
-        itemDecoration.setPaddingStart(true);
-        //itemDecoration.setPaddingHeaderFooter(true);
-        recyclerView.addItemDecoration(itemDecoration);
-
+        if(recyclerView==null) {
+            recyclerView = (EasyRecyclerView) findViewById(R.id.photowall_recyclerView);
+            //recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+            recyclerView.setAdapter(adapter = new ImageAdapter(this, list));
+            GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
+            gridLayoutManager.setSpanSizeLookup(adapter.obtainGridSpanSizeLookUp(2));
+            recyclerView.setLayoutManager(gridLayoutManager);
+            SpaceDecoration itemDecoration = new SpaceDecoration(DensityUtil.dp2px(this, 6));
+            //itemDecoration.setPaddingEdgeSide(true);
+            //itemDecoration.setPaddingStart(true);
+            //itemDecoration.setPaddingHeaderFooter(true);
+            recyclerView.addItemDecoration(itemDecoration);
+        }
+        adapter.notifyDataSetChanged();
 
     }
 
@@ -271,7 +305,7 @@ public class PhotoWallActivity extends Activity implements View.OnClickListener{
                     RequestBody requestBody = RequestBody.create(MediaType.parse("application/octet-stream"), file);
                     MultipartBody.Part part = MultipartBody.Part.createFormData("file", file.getName(), requestBody);
                     Retrofit retrofit = APIRetrofit.getInstance();
-                    APIService service =retrofit.create(APIService.class);
+                    APIService service = retrofit.create(APIService.class);
                     Log.d("pic",""+App.getSharedPreference("chatid"));
                     service.uploadPictures(App.getSharedPreference("chatid"),part)
                             .subscribeOn(Schedulers.io())
@@ -286,12 +320,13 @@ public class PhotoWallActivity extends Activity implements View.OnClickListener{
 
                                 @Override
                                 public void onError(Throwable e) {
-                                    Log.d("pic","error");
+                                    Log.d("pic","error"+e.getMessage());
                                 }
 
                                 @Override
                                 public void onCompleted() {
-                                    pictureWall();
+                                    Log.d("pic","up suc");
+                                    getPicture();
                                 }
                             });
 
