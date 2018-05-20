@@ -1,6 +1,7 @@
 package com.king.liaoba.mvp.fragment;
 
 import android.os.Bundle;
+import android.os.Message;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -8,11 +9,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.king.base.model.EventMessage;
 import com.king.base.util.ToastUtils;
 import com.king.liaoba.mvp.base.BaseFragment;
 import com.king.liaoba.mvp.presenter.LoginPresenter;
 import com.king.liaoba.mvp.view.ILoginView;
+import com.king.liaoba.util.MessageEvent;
 import com.liaoba.R;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -49,9 +55,7 @@ public class LoginFragment extends BaseFragment<ILoginView, LoginPresenter> impl
 
 
     public static LoginFragment newInstance() {
-        
         Bundle args = new Bundle();
-        
         LoginFragment fragment = new LoginFragment();
         fragment.setArguments(args);
         return fragment;
@@ -59,7 +63,17 @@ public class LoginFragment extends BaseFragment<ILoginView, LoginPresenter> impl
 
     @Override
     public LoginPresenter createPresenter() {
+        EventBus.getDefault().register(this);
         return new LoginPresenter(getApp());
+    }
+
+    @Subscribe
+    public void onEventLogin(MessageEvent messageEvent){
+        if(messageEvent.equals("loginresult")){
+            if((boolean)messageEvent.getData()){
+                finish();
+            }
+        }
     }
 
     @Override
@@ -84,18 +98,11 @@ public class LoginFragment extends BaseFragment<ILoginView, LoginPresenter> impl
                 finish();
                 break;
             case R.id.tvRight:
-                //ToastUtils.showToast(context,R.string.signup);
                 break;
             case R.id.btnLogin:
-                if(login(etUsername.getText().toString(),etPassword.getText().toString())){
-                    ToastUtils.showToast(context,"cc");
-                    finish();
-                }else{
-                    Toast.makeText(getContext(),"登录失败!用户名或密码错误!",Toast.LENGTH_LONG).show();
-                }
+                login(etUsername.getText().toString(),etPassword.getText().toString());
                 break;
             case R.id.tvForgetPwd:
-                //ToastUtils.showToast(context,R.string.forget_password);
                 break;
             case R.id.ivQQ:
                 break;
@@ -117,6 +124,13 @@ public class LoginFragment extends BaseFragment<ILoginView, LoginPresenter> impl
     }
 
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+
+    }
+
+    @Override
     public boolean login(String username, String password) {
 
         return getPresenter().login(username,password);
@@ -134,6 +148,7 @@ public class LoginFragment extends BaseFragment<ILoginView, LoginPresenter> impl
 
     @Override
     public void showProgress() {
+
 
     }
 }
