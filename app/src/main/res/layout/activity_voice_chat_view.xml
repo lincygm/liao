@@ -14,8 +14,8 @@
 
         <com.king.liaoba.util.uploadimg.CircleImageView
             android:id="@+id/ivAvatar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="50dp"
             android:src="@drawable/mine_default_avatar"
@@ -30,7 +30,9 @@
             android:layout_height="wrap_content" />
         <TextView
             android:layout_width="wrap_content"
+            android:layout_gravity="center_horizontal"
             android:id="@+id/time"
+            android:textSize="20sp"
             android:layout_height="wrap_content" />
     </LinearLayout>
 
@@ -38,7 +40,9 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_alignParentBottom="true"
+            android:id="@+id/call_send"
             android:layout_marginBottom="20dp"
+            android:visibility="gone"
             android:orientation="horizontal">
 
             <ImageView
@@ -69,4 +73,29 @@
                 android:src="@drawable/btn_end_call" />
 
         </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/call_receive"
+        android:layout_marginBottom="20dp"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="20"
+            android:onClick="onLocalAudioMuteClicked"
+            android:id="@+id/btn_answer"
+            android:scaleType="centerInside"
+            android:src="@drawable/answer_icon" />
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="20"
+            android:id="@+id/btn_end_call2"
+            android:scaleType="centerInside"
+            android:src="@drawable/btn_end_call" />
+
+    </LinearLayout>
 </RelativeLayout>
