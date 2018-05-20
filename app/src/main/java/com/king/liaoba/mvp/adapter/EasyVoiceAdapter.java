@@ -12,6 +12,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.jude.easyrecyclerview.adapter.BaseViewHolder;
 import com.jude.easyrecyclerview.adapter.RecyclerArrayAdapter;
+import com.king.liaoba.App;
 import com.king.liaoba.Constants;
 import com.king.liaoba.bean.VoiceListInfo;
 import com.king.liaoba.mvp.activity.SelfShowActivity;
@@ -55,7 +56,6 @@ public class EasyVoiceAdapter extends RecyclerArrayAdapter <VoiceListInfo>{
             super(parent, R.layout.image_main);
             charge =$(R.id.charge);
             iv = $(R.id.iv);
-            //tvTitle = $(R.id.tvTitle);
             username = $(R.id.username);
             answer=$(R.id.answer);
 
