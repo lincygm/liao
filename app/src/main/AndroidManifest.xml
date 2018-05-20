@@ -90,6 +90,10 @@
             android:windowSoftInputMode="stateHidden|stateUnchanged" />
         <activity android:name="com.king.liaoba.mvp.activity.VoiceChatViewActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
+            android:launchMode="singleInstance"
+            android:windowSoftInputMode="stateHidden|stateUnchanged" />
+        <activity android:name="com.king.liaoba.mvp.activity.PhotoWallActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:windowSoftInputMode="stateHidden|stateUnchanged" />
         <service android:name="com.king.liaoba.push.OnlineService">
             <intent-filter>
