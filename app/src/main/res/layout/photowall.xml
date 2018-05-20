@@ -9,7 +9,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_progress="@layout/view_progress"
+        app:recyclerPadding="8dp"
+        app:recyclerPaddingTop="8dp"
+        app:recyclerPaddingBottom="8dp"
+        app:recyclerPaddingLeft="8dp"
+        app:scrollbarStyle="insideOverlay"
+        app:scrollbars="none" />
+        app:recyclerPaddingRight="8dp"
         />
+
     <Button
         android:layout_width="match_parent"
         android:text="添加图片"
