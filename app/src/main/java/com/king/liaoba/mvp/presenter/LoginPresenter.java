@@ -8,6 +8,9 @@ import com.king.liaoba.http.APIRetrofit;
 import com.king.liaoba.http.APIService;
 import com.king.liaoba.mvp.base.BasePresenter;
 import com.king.liaoba.mvp.view.ILoginView;
+import com.king.liaoba.util.MessageEvent;
+
+import org.greenrobot.eventbus.EventBus;
 
 import cn.jpush.android.api.JPushInterface;
 import retrofit2.Retrofit;
@@ -32,17 +35,18 @@ public class LoginPresenter extends BasePresenter<ILoginView> {
          if(isViewAttached()){
             getView().showProgress();
          }
+         App.clearSharedPreference();
          Retrofit retrofit = APIRetrofit.getInstance();
          APIService service =retrofit.create(APIService.class);
          service.login(username,password)
                  .subscribeOn(Schedulers.io())
-                 .observeOn(AndroidSchedulers.mainThread())
+                 .subscribeOn(Schedulers.io())
                  .subscribe(new Observer<Root>() {
                      @Override
                      public void onCompleted() {
                          if(isViewAttached())
                              getView().onCompleted();
-                         Log.d("com","==");
+                            Log.d("login","onCompleted");
 
                      }
 
@@ -55,11 +59,11 @@ public class LoginPresenter extends BasePresenter<ILoginView> {
 
                      @Override
                      public void onNext( Root jsonBean) {
-                         Log.d("a",""+jsonBean.getStatus());
-                         App.clearSharedPreference();
+                         Log.d("login","next");
                          if(jsonBean.getStatus() ==1){
                              login = true;
                              App.EditSharedPreference(jsonBean.getData().getGetdata().get(0));
+
                              JPushInterface.setAlias(getApp().getApplicationContext(),0,
                                      App.getSharedPreference(jsonBean.getData().getGetdata().get(0).getRegisterationid().toString()));
 
@@ -70,7 +74,10 @@ public class LoginPresenter extends BasePresenter<ILoginView> {
                  });
                 if(login){
                     Log.d("qq","1");
+                    EventBus.getDefault().post(new MessageEvent<>("loginresult",true));
                 }else{
+                    EventBus.getDefault().post(new MessageEvent<>("loginresult",false));
+
                     Log.d("qq","2");
                 }
         return login;
