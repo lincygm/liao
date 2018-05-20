@@ -149,7 +149,7 @@ public interface APIService {
 
     /** 获取关注列表 */
     @POST("index.php/Home/User/getFocusList/chatid/{chatid}")
-    Observable<Root> focusList( @Path("chatid")String chatid);
+    Observable<Root> getFocusList( @Path("chatid")String chatid);
 
     /**删除图片**/
     @POST("index.php/Home/User/deletePicture/chatid/{chatid}/id/{id}")
