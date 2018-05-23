@@ -44,7 +44,7 @@ public class ImageViewHolder extends BaseViewHolder<PictureList> {
 
     @Override
     public void setData(final PictureList data) {
-
+            if(data==null)return;
         Glide.with(getContext())
                 .load(Constants.BASE_URL+data.getPicurl())
                 .into(imgPicture);

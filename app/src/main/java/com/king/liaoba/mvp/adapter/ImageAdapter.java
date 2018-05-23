@@ -15,7 +15,9 @@ public class ImageAdapter extends RecyclerArrayAdapter<PictureList> {
     public ImageAdapter(Context context, List<PictureList> list) {
         super(context,list);
     }
-
+    public ImageAdapter(Context context) {
+        super(context);
+    }
     @Override
     public BaseViewHolder OnCreateViewHolder(ViewGroup parent, int viewType) {
         return new ImageViewHolder(parent);
