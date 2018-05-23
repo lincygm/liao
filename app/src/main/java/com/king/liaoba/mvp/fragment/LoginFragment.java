@@ -133,7 +133,7 @@ public class LoginFragment extends BaseFragment<ILoginView, LoginPresenter> impl
     @Override
     public boolean login(String username, String password) {
 
-        return getPresenter().login(username,password);
+        return getPresenter().login(username,password,getActivity());
     }
 
     @Override
