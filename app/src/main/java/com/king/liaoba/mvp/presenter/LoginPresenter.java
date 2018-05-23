@@ -24,7 +24,7 @@ import rx.schedulers.Schedulers;
  * Created by gaomou on 2018/4/15.
  */
 
-public class LoginPresenter extends BasePresenter<ILoginView> {
+public class LoginPresenter extends BasePresenter<ILoginView>  {
 
     boolean login = false;
     private Context ctx;
@@ -33,7 +33,7 @@ public class LoginPresenter extends BasePresenter<ILoginView> {
         this.ctx=app;
     }
 
-     public boolean login(String username, String password, final Context context){
+     public boolean login(String username, String password, final Context context,LoginPresenter.Result result){
 
          if(isViewAttached()){
             getView().showProgress();
@@ -43,7 +43,7 @@ public class LoginPresenter extends BasePresenter<ILoginView> {
          APIService service =retrofit.create(APIService.class);
          service.login(username,password)
                  .subscribeOn(Schedulers.io())
-                 .subscribeOn(Schedulers.io())
+                 .observeOn(AndroidSchedulers.mainThread())
                  .subscribe(new Observer<Root>() {
                      @Override
                      public void onCompleted() {
@@ -68,6 +68,7 @@ public class LoginPresenter extends BasePresenter<ILoginView> {
                              Constants.EditSharedPreference(jsonBean.getData().getGetdata().get(0));
                              JPushInterface.setAlias(getApp().getApplicationContext(),0,
                                      Constants.getSharedPreference(jsonBean.getData().getGetdata().get(0).getRegisterationid().toString(),context));
+
                          }else{
                              login = false;
                          }
@@ -82,6 +83,10 @@ public class LoginPresenter extends BasePresenter<ILoginView> {
                     Log.d("qq","2");
                 }
         return login;
+     }
+
+     public interface  Result{
+        void onComplete();
      }
 
    /**
@@ -118,7 +123,6 @@ public class LoginPresenter extends BasePresenter<ILoginView> {
      }
 
      public boolean verifyPhone(int phone,int code){
-
          return false;
      }
 }
