@@ -88,8 +88,6 @@ public class MineFragment extends SimpleFragment {
     TextView tvLevel;
     @BindView(R.id.tvTask)
     TextView tvTask;
-    @BindView(R.id.tvGame)
-    TextView tvGame;
     @BindView(R.id.tvSetting)
     TextView tvSetting;
     @BindView(R.id.srl)
@@ -98,6 +96,8 @@ public class MineFragment extends SimpleFragment {
     View fab;
     @BindView(R.id.parent)
     View parent;
+    @BindView(R.id.mine_logout)
+    TextView tv_logout;
 
 
     //请求相机
@@ -197,7 +197,10 @@ public class MineFragment extends SimpleFragment {
 
     }
 
-    @OnClick({R.id.ivLeft, R.id.ivRight, R.id.ivAvatar, R.id.tvFollow, R.id.tvFans, R.id.tvRecharge, R.id.tvStarLight, R.id.tvContribution, R.id.tvWatch, R.id.tvLevel, R.id.tvTask, R.id.tvGame, R.id.tvSetting, R.id.fab})
+    @OnClick({R.id.ivLeft, R.id.ivRight, R.id.ivAvatar,
+            R.id.tvFollow, R.id.tvFans, R.id.tvRecharge,
+            R.id.tvStarLight, R.id.tvContribution, R.id.tvWatch, R.id.tvLevel,
+            R.id.tvTask, R.id.tvSetting, R.id.fab,R.id.mine_logout})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ivLeft:
@@ -229,12 +232,13 @@ public class MineFragment extends SimpleFragment {
                 break;
             case R.id.tvTask:
                 break;
-            case R.id.tvGame:
-                break;
             case R.id.tvSetting:
                 break;
             case R.id.fab:
                 startAbout();
+                break;
+            case R.id.mine_logout:
+                Constants.clearSharedPreference();
                 break;
         }
     }

@@ -11,6 +11,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.king.liaoba.Constants;
+import com.king.liaoba.bean.Root;
+import com.king.liaoba.http.APIRetrofit;
+import com.king.liaoba.http.APIService;
 import com.king.liaoba.mvp.base.BaseActivity;
 import com.king.liaoba.mvp.presenter.LoginPresenter;
 import com.king.liaoba.mvp.view.ILoginView;
@@ -23,6 +27,11 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import cn.jpush.android.api.JPushInterface;
+import retrofit2.Retrofit;
+import rx.Observer;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * @author Jenly <a href="mailto:jenly1314@gmail.com">Jenly</a>
@@ -96,7 +105,6 @@ public class LoginFragment extends BaseActivity<ILoginView, LoginPresenter> impl
             case R.id.tvRight:
                 break;
             case R.id.btnLogin:
-                //finish();
                 login(etUsername.getText().toString(),etPassword.getText().toString());
                 break;
             case R.id.tvForgetPwd:
@@ -124,11 +132,50 @@ public class LoginFragment extends BaseActivity<ILoginView, LoginPresenter> impl
         super.onDestroy();
         EventBus.getDefault().unregister(this);
     }
+    boolean login =false;
 
     @Override
     public boolean login(String username, String password) {
 
-        return getPresenter().login(username,password,this, this);
+        Constants.clearSharedPreference();
+        Retrofit retrofit = APIRetrofit.getInstance();
+        APIService service =retrofit.create(APIService.class);
+        service.login(username,password)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<Root>() {
+                    @Override
+                    public void onCompleted() {
+
+                        Log.d("login","onCompleted");
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        login = false;
+                    }
+
+                    @Override
+                    public void onNext( Root jsonBean) {
+                        Log.d("login","next");
+                        if(jsonBean.getStatus() ==1){
+                            login = true;
+                            Constants.EditSharedPreference(jsonBean.getData().getGetdata().get(0));
+                            JPushInterface.setAlias(getApp().getApplicationContext(),0,
+                                    Constants.getSharedPreference(jsonBean.getData().getGetdata().get(0).getRegisterationid().toString(),getApplicationContext()));
+
+                        }else{
+                            login = false;
+                        }
+                    }
+                });
+        if(login){
+            Log.d("qq","1");
+            finish();
+        }else{
+            Log.d("qq","2");
+        }
+        return login;
     }
 
     @Override
