@@ -162,8 +162,7 @@ public abstract class BaseFragment<V extends BaseView, P extends BasePresenter<V
     }
 
     protected void startLogin(){
-        Intent intent = getFragmentIntent(Constants.LOGIN_FRAGMENT);
-        startActivity(intent);
+
     }
 
 
