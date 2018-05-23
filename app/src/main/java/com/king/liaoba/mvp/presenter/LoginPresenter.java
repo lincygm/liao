@@ -1,8 +1,10 @@
 package com.king.liaoba.mvp.presenter;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.king.liaoba.App;
+import com.king.liaoba.Constants;
 import com.king.liaoba.bean.Root;
 import com.king.liaoba.http.APIRetrofit;
 import com.king.liaoba.http.APIService;
@@ -25,17 +27,18 @@ import rx.schedulers.Schedulers;
 public class LoginPresenter extends BasePresenter<ILoginView> {
 
     boolean login = false;
-
+    private Context ctx;
     public LoginPresenter(App app) {
         super(app);
+        this.ctx=app;
     }
 
-     public boolean login(String username,String password){
+     public boolean login(String username, String password, final Context context){
 
          if(isViewAttached()){
             getView().showProgress();
          }
-         App.clearSharedPreference();
+         Constants.clearSharedPreference();
          Retrofit retrofit = APIRetrofit.getInstance();
          APIService service =retrofit.create(APIService.class);
          service.login(username,password)
@@ -62,11 +65,9 @@ public class LoginPresenter extends BasePresenter<ILoginView> {
                          Log.d("login","next");
                          if(jsonBean.getStatus() ==1){
                              login = true;
-                             App.EditSharedPreference(jsonBean.getData().getGetdata().get(0));
-
+                             Constants.EditSharedPreference(jsonBean.getData().getGetdata().get(0));
                              JPushInterface.setAlias(getApp().getApplicationContext(),0,
-                                     App.getSharedPreference(jsonBean.getData().getGetdata().get(0).getRegisterationid().toString()));
-
+                                     Constants.getSharedPreference(jsonBean.getData().getGetdata().get(0).getRegisterationid().toString(),context));
                          }else{
                              login = false;
                          }
