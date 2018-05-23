@@ -65,9 +65,8 @@ public class ImageViewHolder extends BaseViewHolder<PictureList> {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 Retrofit retrofit = APIRetrofit.getInstance();
-
                                 APIService service =retrofit.create(APIService.class);
-                                service.deletePic(App.getSharedPreference("chatid"),data.getId().toString())
+                                service.deletePic(Constants.getSharedPreference("chatid",getContext()),data.getId().toString())
                                         .subscribeOn(Schedulers.io())
                                         .observeOn(AndroidSchedulers.mainThread())
                                         .subscribe(new Observer<Root>() {
