@@ -32,6 +32,7 @@ import com.king.liaoba.mvp.adapter.ImageAdapter;
 import com.king.liaoba.mvp.base.BaseActivity;
 import com.king.liaoba.mvp.presenter.SelfShowPresenter;
 import com.king.liaoba.mvp.view.ISelfShowView;
+import com.king.liaoba.push.OnlineService;
 import com.king.liaoba.util.RecycleViewUtils;
 import com.liaoba.R;
 
@@ -163,6 +164,9 @@ public class SelfShowActivity extends BaseActivity implements View.OnClickListen
     public void onCompleted() {
 
     }
+    private void getPicture(){
+
+    }
 
     private void pictureWall() {
 
@@ -201,7 +205,7 @@ public class SelfShowActivity extends BaseActivity implements View.OnClickListen
         Toast.makeText(this,"tt",Toast.LENGTH_LONG).show();
         Retrofit retrofit = APIRetrofit.getInstance();
         APIService service = retrofit.create(APIService.class);
-        service.focus(App.getSharedPreference("chatid"),chatid)
+        service.focus(Constants.getSharedPreference("chatid",this),chatid)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<Root>() {
