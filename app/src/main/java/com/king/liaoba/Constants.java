@@ -1,5 +1,10 @@
 package com.king.liaoba;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+
+import com.king.liaoba.bean.JsonBean;
+
 /**
  * @author Jenly <a href="mailto:jenly1314@gmail.com">Jenly</a>
  * @since 2017/3/8
@@ -41,5 +46,29 @@ public final class Constants {
     public static final int ABOUT_FRAGMENT = 0X05;
     public static final int FULL_ROOM_FRAGMENT = 0X06;
     public static final int SEARCH_FRAGMENT = 0X07;
+    public static SharedPreferences sp = null;
 
+    public static void EditSharedPreference(String  key,String values){
+        SharedPreferences.Editor edit = sp.edit();
+        edit.putString(key,values);
+        edit.commit();
+    }
+    public static String getSharedPreference(String value,Context mcontext){
+        if(sp==null)
+            sp = mcontext.getSharedPreferences("User",Context.MODE_PRIVATE);
+        return   sp.getString(value,"Null");
+    }
+    public static void EditSharedPreference(JsonBean jsonBean){
+
+        SharedPreferences.Editor edit = sp.edit();
+        edit.putString("age",jsonBean.getAge());
+        edit.putString("username",jsonBean.getUsername());
+        edit.putString("chatid",jsonBean.getChatid());
+        edit.putString("jpush_id",jsonBean.getRegisterationid());
+        edit.putString("headimage_url",jsonBean.getHeadimg_url());
+        edit.commit();
+    }
+    public static void clearSharedPreference(){
+        sp.edit().clear();
+    }
 }

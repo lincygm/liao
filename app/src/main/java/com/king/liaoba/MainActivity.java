@@ -59,10 +59,10 @@ public class MainActivity extends PureActivity {
         JPushInterface.init(this);     		// 初始化 JPush
         Intent service = new Intent(this,OnlineService.class);
         startService(service);
-        Log.d("jpushid",App.getSharedPreference("jpush_id"));
+      //  Log.d("jpushid",App.getSharedPreference("jpush_id"));
         JPushInterface.stopPush(getApplicationContext());
-        JPushInterface.setAlias(getApp().getApplicationContext(),0,
-                App.getSharedPreference("jpush_id"));
+        JPushInterface.setAlias(getApplicationContext(),0,
+                Constants.getSharedPreference("jpush_id",this));
         JPushInterface.resumePush(getApplicationContext());
     }
 

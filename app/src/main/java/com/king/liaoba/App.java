@@ -2,16 +2,13 @@ package com.king.liaoba;
 
 import android.app.Application;
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.support.multidex.MultiDex;
-
-import com.king.liaoba.bean.JsonBean;
 import com.king.liaoba.dao.greendao.DaoMaster;
 import com.king.liaoba.dao.greendao.DaoSession;
 import com.king.liaoba.di.component.AppComponent;
 import com.king.liaoba.di.component.DaggerAppComponent;
 import com.king.liaoba.di.module.AppModule;
 import com.squareup.leakcanary.LeakCanary;
+import com.tencent.bugly.beta.Beta;
 import com.tencent.bugly.crashreport.CrashReport;
 
 /**
@@ -29,14 +26,15 @@ public class App extends Application {
 
     private AppComponent mAppComponent;
 
-    public static SharedPreferences sp = null;
+
+    private static Context mContext = null;
 
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
-
-        MultiDex.install(base);
-        //Beta.installTinker();
+        this.mContext = base;
+        //MultiDex.install(base);
+//        Beta.installTinker();
     }
 
     @Override
@@ -44,18 +42,11 @@ public class App extends Application {
         super.onCreate();
         initDatabase();
         if (LeakCanary.isInAnalyzerProcess(this)) {
-            // This process is dedicated to LeakCanary for heap analysis.
-            // You should not init your app in this process.
             return;
         }
         LeakCanary.install(this);
-        // Normal app init code...
-
-        // 调试时，将第三个参数改为true
         CrashReport.initCrashReport(getApplicationContext(), BUGLY_ID, true);
-
         mAppComponent = DaggerAppComponent.builder().appModule(new AppModule(this,Constants.BASE_URL)).build();
-        sp = getSharedPreferences("User", Context.MODE_PRIVATE);
 
     }
 
@@ -63,9 +54,7 @@ public class App extends Application {
 
     public void initDatabase(){
         mHelper = new DaoMaster.DevOpenHelper(this,"tv-db",null);
-
         DaoMaster daoMaster = new DaoMaster(mHelper.getWritableDatabase());
-
         mDaoSession = daoMaster.newSession();
     }
 
@@ -77,26 +66,7 @@ public class App extends Application {
         return mDaoSession;
     }
 
-    public static void EditSharedPreference(JsonBean jsonBean){
 
-        SharedPreferences.Editor edit = sp.edit();
-        edit.putString("age",jsonBean.getAge());
-        edit.putString("username",jsonBean.getUsername());
-        edit.putString("chatid",jsonBean.getChatid());
-        edit.putString("jpush_id",jsonBean.getRegisterationid());
-        edit.putString("headimage_url",jsonBean.getHeadimg_url());
-        edit.commit();
-    }
-    public static void EditSharedPreference(String  key,String values){
-        SharedPreferences.Editor edit = sp.edit();
-        edit.putString(key,values);
-        edit.commit();
-    }
-    public static String getSharedPreference(String value){
-        return   sp.getString(value,"Null");
-    }
-    public static void clearSharedPreference(){
-        sp.edit().clear();
-    }
+
 
 }
