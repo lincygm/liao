@@ -2,6 +2,7 @@ package com.king.liaoba.mvp.fragment;
 
 import android.os.Bundle;
 import android.os.Message;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -28,7 +29,7 @@ import butterknife.OnClick;
  * @since 2017/3/21
  */
 
-public class LoginFragment extends BaseActivity<ILoginView, LoginPresenter> implements ILoginView {
+public class LoginFragment extends BaseActivity<ILoginView, LoginPresenter> implements ILoginView,LoginPresenter.Result {
 
     @BindView(R.id.ivLeft)
     ImageView ivLeft;
@@ -56,12 +57,12 @@ public class LoginFragment extends BaseActivity<ILoginView, LoginPresenter> impl
         return new LoginPresenter(getApp());
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
+   @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventLogin(MessageEvent messageEvent){
         if(messageEvent.equals("loginresult")){
-            if((boolean)messageEvent.getData()){
-               this.finish();
-            }
+         //   if((boolean)messageEvent.getData()){
+               //this.finish();
+          //  }
         }
     }
 
@@ -116,7 +117,6 @@ public class LoginFragment extends BaseActivity<ILoginView, LoginPresenter> impl
 
     @Override
     public void onCompleted() {
-
     }
 
     @Override
@@ -128,7 +128,7 @@ public class LoginFragment extends BaseActivity<ILoginView, LoginPresenter> impl
     @Override
     public boolean login(String username, String password) {
 
-        return getPresenter().login(username,password,this);
+        return getPresenter().login(username,password,this, this);
     }
 
     @Override
@@ -144,6 +144,11 @@ public class LoginFragment extends BaseActivity<ILoginView, LoginPresenter> impl
     @Override
     public void showProgress() {
 
+    }
 
+    @Override
+    public void onComplete() {
+        Log.d("DDS","==");
+        finish();
     }
 }
