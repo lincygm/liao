@@ -170,17 +170,19 @@ public class PhotoWallActivity extends Activity implements View.OnClickListener{
         if(list==null)return;
         if(recyclerView==null) {
             recyclerView = (EasyRecyclerView) findViewById(R.id.photowall_recyclerView);
-            //recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
-            recyclerView.setAdapter(adapter = new ImageAdapter(this, list));
-            GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
+            //recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL));
+            recyclerView.setAdapter(adapter = new ImageAdapter(this,list));
+            GridLayoutManager gridLayoutManager = new GridLayoutManager(this,2);
             gridLayoutManager.setSpanSizeLookup(adapter.obtainGridSpanSizeLookUp(2));
-            recyclerView.setLayoutManager(gridLayoutManager);
-            SpaceDecoration itemDecoration = new SpaceDecoration(DensityUtil.dp2px(this, 6));
-            //itemDecoration.setPaddingEdgeSide(true);
-            //itemDecoration.setPaddingStart(true);
-            //itemDecoration.setPaddingHeaderFooter(true);
+            recyclerView.setLayoutManager(new GridLayoutManager(this,2));
+            SpaceDecoration itemDecoration = new SpaceDecoration((int) RecycleViewUtils.convertDpToPixel(8,this));
+            itemDecoration.setPaddingEdgeSide(true);
+            itemDecoration.setPaddingStart(true);
+            itemDecoration.setPaddingHeaderFooter(false);
             recyclerView.addItemDecoration(itemDecoration);
+
         }
+
         adapter.notifyDataSetChanged();
 
     }
