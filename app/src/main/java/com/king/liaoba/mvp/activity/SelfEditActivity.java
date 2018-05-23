@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.king.liaoba.App;
+import com.king.liaoba.Constants;
 import com.liaoba.R;
 import com.king.liaoba.mvp.presenter.SelfEditPresenter;
 import com.king.liaoba.mvp.view.ISelfEditView;
@@ -65,7 +66,7 @@ public class SelfEditActivity extends Activity implements View.OnClickListener{
                 break;
             case R.id.save:
                  editView = new SelfEditPresenter();
-                 editView.save(App.getSharedPreference("username"),sex(tv.getText().toString())+"",
+                 editView.save(Constants.getSharedPreference("username",this),sex(tv.getText().toString())+"",
                          et_ege.getText().toString(),
                          et_sign.getText().toString());
 
