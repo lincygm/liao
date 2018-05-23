@@ -11,13 +11,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.king.liaoba.App;
+import com.king.liaoba.Constants;
 import com.king.liaoba.util.MessageEvent;
 import com.king.liaoba.util.uploadimg.CircleImageView;
 import com.liaoba.R;
@@ -165,8 +165,8 @@ public class VoiceChatViewActivity extends AppCompatActivity implements View.OnC
         }
         if(channel!=null&&!channel.equals("")){
             mAgoraAPI = AgoraAPIOnlySignal.getInstance(this,getResources().getString(R.string.agora_app_id));
-            mAgoraAPI.channelJoin(App.getSharedPreference("chatid"));//加入频道
-            mAgoraAPI.channelInviteUser(App.getSharedPreference("chatid"),channel,0);//邀请某人加入通话
+            mAgoraAPI.channelJoin(Constants.getSharedPreference("chatid",this));//加入频道
+            mAgoraAPI.channelInviteUser(Constants.getSharedPreference("chatid",this),channel,0);//邀请某人加入通话
             call_send.setVisibility(View.VISIBLE);
             call_receive.setVisibility(View.GONE);
             joinChannel();
