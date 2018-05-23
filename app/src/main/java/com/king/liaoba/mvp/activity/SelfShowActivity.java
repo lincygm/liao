@@ -24,6 +24,8 @@ import com.jude.rollviewpager.RollPagerView;
 import com.jude.rollviewpager.hintview.ColorPointHintView;
 import com.king.liaoba.App;
 import com.king.liaoba.Constants;
+import com.king.liaoba.bean.PictureList;
+import com.king.liaoba.bean.PictureRoot;
 import com.king.liaoba.bean.Root;
 import com.king.liaoba.http.APIRetrofit;
 import com.king.liaoba.http.APIService;
@@ -44,6 +46,10 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 import com.king.liaoba.util.uploadimg.CircleImageView;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by gaomou on 2018/4/15.
  */
@@ -73,6 +79,7 @@ public class SelfShowActivity extends BaseActivity implements View.OnClickListen
     private ImageAdapter adapter;
     CircleImageView circleImageView =null;
     private String chatid = null;
+    List<PictureList> list  = new ArrayList<>();
 
 
     @Override
@@ -94,6 +101,7 @@ public class SelfShowActivity extends BaseActivity implements View.OnClickListen
 
     public void initData() {
         initUI();
+        getPicture();
     }
 
     @NonNull
@@ -142,7 +150,6 @@ public class SelfShowActivity extends BaseActivity implements View.OnClickListen
                         .into(circleImageView);
             }
         });
-        pictureWall();
     }
 
     @Override
@@ -152,6 +159,7 @@ public class SelfShowActivity extends BaseActivity implements View.OnClickListen
 
     @Override
     public void showProgress() {
+
 
     }
 
@@ -165,14 +173,41 @@ public class SelfShowActivity extends BaseActivity implements View.OnClickListen
 
     }
     private void getPicture(){
+        Retrofit retrofit = APIRetrofit.getInstance();
+        APIService service =retrofit.create(APIService.class);
+        service.getImageList(Constants.getSharedPreference("chatid",this))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<PictureRoot>() {
+                    @Override
+                    public void onCompleted() {
+                        pictureWall();
+                        Log.d("pic","fetch");
+                        adapter.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext( PictureRoot jsonBean) {
+                        list.clear();
+                        if(jsonBean!=null){
+                            list = jsonBean.getData().getGetdata();
+                            Log.d("====>>",jsonBean.getData().getGetdata().get(0).getPicurl());
+                        }
+                    }
+                });
 
     }
 
     private void pictureWall() {
 
         recyclerView = (EasyRecyclerView) findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
-        recyclerView.setAdapter(adapter = new ImageAdapter(this,null));
+        //recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+        recyclerView.setAdapter(adapter = new ImageAdapter(this));
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 4);
         gridLayoutManager.setSpanSizeLookup(adapter.obtainGridSpanSizeLookUp(4));
         recyclerView.setLayoutManager(gridLayoutManager);
@@ -190,7 +225,7 @@ public class SelfShowActivity extends BaseActivity implements View.OnClickListen
                 //header.setPlayDelay(2000);
                 header.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                         (int) RecycleViewUtils.convertDpToPixel(200, SelfShowActivity.this)));
-                header.setAdapter(new BannerAdapter(SelfShowActivity.this));
+                header.setAdapter(new BannerAdapter(SelfShowActivity.this,list));
                 return header;
             }
 
@@ -202,7 +237,6 @@ public class SelfShowActivity extends BaseActivity implements View.OnClickListen
     }
 
     private void addFocus(){
-        Toast.makeText(this,"tt",Toast.LENGTH_LONG).show();
         Retrofit retrofit = APIRetrofit.getInstance();
         APIService service = retrofit.create(APIService.class);
         service.focus(Constants.getSharedPreference("chatid",this),chatid)
