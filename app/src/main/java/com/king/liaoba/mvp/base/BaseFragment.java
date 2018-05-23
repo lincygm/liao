@@ -49,7 +49,7 @@ public abstract class BaseFragment<V extends BaseView, P extends BasePresenter<V
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         context = getActivity();
-        rootView = inflater.inflate(getRootViewId(),container,false);
+        rootView = inflater.inflate(getRootViewId(),null);
         mUnbinder = ButterKnife.bind(this,rootView);
         LogUtils.d("onCreateView");
         initUI();
