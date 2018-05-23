@@ -10,6 +10,7 @@ import android.util.Log;
 
 
 import com.king.liaoba.App;
+import com.king.liaoba.Constants;
 import com.king.liaoba.bean.Root;
 import com.king.liaoba.http.APIRetrofit;
 import com.king.liaoba.http.APIService;
@@ -41,7 +42,7 @@ public class OnlineService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d("service","====1===");
         mAgoraAPI = AgoraAPIOnlySignal.getInstance(this, this.getResources().getString(R.string.agora_app_id));
-        addSignalingCallback();
+//        addSignalingCallback();
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -66,12 +67,12 @@ public class OnlineService extends Service {
                         Log.d("service","run===");
                         status = true;
                         while(status){
-                            if(App.getSharedPreference("chatid").equals("Null")||App.getSharedPreference("chatid")==null){
+                            if(Constants.getSharedPreference("chatid",OnlineService.this).equals("Null")||Constants.getSharedPreference("chatid",OnlineService.this)==null){
                                 return;
                             }
                             Retrofit retrofit = APIRetrofit.getInstance();
                             APIService service =retrofit.create(APIService.class);
-                            service.sendHeart(App.getSharedPreference("chatid"))
+                            service.sendHeart(Constants.getSharedPreference("chatid",OnlineService.this))
                                     .observeOn(AndroidSchedulers.mainThread())
                                     .subscribe(new Observer<Root>() {
                                         @Override
@@ -116,8 +117,11 @@ public class OnlineService extends Service {
 
         Log.d("service","======4===4=");
         mAgoraAPI.logout();
-        mAgoraAPI.login(this.getResources().getString(R.string.agora_app_id),App.getSharedPreference("chatid"),
-                "_no_need_token",0,null);
+        if(!Constants.getSharedPreference("chatid",OnlineService.this).equals("Null")||Constants.getSharedPreference("chatid",OnlineService.this)!=null){
+            mAgoraAPI.login(this.getResources().getString(R.string.agora_app_id),Constants.getSharedPreference("chatid",OnlineService.this),
+                    "_no_need_token",0,null);
+        }
+
         mAgoraAPI.callbackSet(new AgoraAPI.CallBack() {
 
 
