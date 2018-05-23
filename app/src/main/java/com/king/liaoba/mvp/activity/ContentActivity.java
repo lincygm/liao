@@ -51,7 +51,7 @@ public class ContentActivity extends AppCompatActivity {
                 replaceFragment(WebFragment.newInstance(url, title));
                 break;
             }case Constants.LOGIN_FRAGMENT:
-                replaceFragment(LoginFragment.newInstance());
+               // replaceFragment(LoginFragment.newInstance());
                 break;
             case Constants.ABOUT_FRAGMENT:
                 replaceFragment(AboutFragment.newInstance());
