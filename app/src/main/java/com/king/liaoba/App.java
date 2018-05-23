@@ -8,7 +8,6 @@ import com.king.liaoba.di.component.AppComponent;
 import com.king.liaoba.di.component.DaggerAppComponent;
 import com.king.liaoba.di.module.AppModule;
 import com.squareup.leakcanary.LeakCanary;
-import com.tencent.bugly.beta.Beta;
 import com.tencent.bugly.crashreport.CrashReport;
 
 /**
