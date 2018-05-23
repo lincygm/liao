@@ -179,13 +179,13 @@ public class MineFragment extends SimpleFragment {
     @Override
     public void onResume() {
         super.onResume();
-        Log.d("mine","aa"+App.getSharedPreference("username"));
-        if(App.getSharedPreference("username")!=""&&App.getSharedPreference("username")!=null
-                &&!App.getSharedPreference("username").equals("Null")){
-            btnLogin.setText(App.getSharedPreference("username"));
+        Log.d("mine","aa"+Constants.getSharedPreference("username",getActivity()));
+        if(Constants.getSharedPreference("username",getActivity())!=""&&Constants.getSharedPreference("username",getActivity())!=null
+                &&!Constants.getSharedPreference("username",getActivity()).equals("Null")){
+            btnLogin.setText(Constants.getSharedPreference("username",getActivity()));
             btnLogin.setClickable(false);
-            Log.d("q",""+App.getSharedPreference("username"));
-            Glide.with(getActivity()).load(Constants.BASE_URL+App.getSharedPreference("headimage_url"))
+            Log.d("q",""+Constants.getSharedPreference("username",getActivity()));
+            Glide.with(getActivity()).load(Constants.BASE_URL+Constants.getSharedPreference("headimage_url",getActivity()))
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE).into(headImage1);
         }else{
             Log.d("q","b");
@@ -397,14 +397,14 @@ public class MineFragment extends SimpleFragment {
                     MultipartBody.Part part = MultipartBody.Part.createFormData("file", file.getName(), requestBody);
                     Retrofit retrofit = APIRetrofit.getInstance();
                     APIService service =retrofit.create(APIService.class);
-                    service.uploadImage(App.getSharedPreference("chatid"),part)
+                    service.uploadImage(Constants.getSharedPreference("chatid",getActivity()),part)
                             .subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(new Observer<Root>() {
                                 @Override
                                 public void onNext(Root root) {
                                     if(root!=null){
-                                        App.EditSharedPreference("headimage", Constants.BASE_URL+root.getData().getGetdata().get(0).getHeadimg_url().toString());
+                                        Constants.EditSharedPreference("headimage", Constants.BASE_URL+root.getData().getGetdata().get(0).getHeadimg_url().toString());
                                     }
                                 }
 
