@@ -141,7 +141,7 @@ public class PhotoWallActivity extends Activity implements View.OnClickListener{
     private void getPicture(){
         Retrofit retrofit = APIRetrofit.getInstance();
         APIService service =retrofit.create(APIService.class);
-        service.getImageList(App.getSharedPreference("chatid"))
+        service.getImageList(Constants.getSharedPreference("chatid",this))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<PictureRoot>() {
@@ -306,15 +306,15 @@ public class PhotoWallActivity extends Activity implements View.OnClickListener{
                     MultipartBody.Part part = MultipartBody.Part.createFormData("file", file.getName(), requestBody);
                     Retrofit retrofit = APIRetrofit.getInstance();
                     APIService service = retrofit.create(APIService.class);
-                    Log.d("pic",""+App.getSharedPreference("chatid"));
-                    service.uploadPictures(App.getSharedPreference("chatid"),part)
+                    Log.d("pic",""+Constants.getSharedPreference("chatid",this));
+                    service.uploadPictures(Constants.getSharedPreference("chatid",this),part)
                             .subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(new Observer<Root>() {
                                 @Override
                                 public void onNext(Root root) {
                                     if(root!=null){
-                                        App.EditSharedPreference("headimage", Constants.BASE_URL+root.getData().getGetdata().get(0).getHeadimg_url().toString());
+                                        Constants.EditSharedPreference("headimage", Constants.BASE_URL+root.getData().getGetdata().get(0).getHeadimg_url().toString());
                                     }
                                 }
 
