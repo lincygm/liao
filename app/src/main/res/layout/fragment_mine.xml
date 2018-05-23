@@ -273,15 +273,16 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="16dp">
                 <TextView
-                    android:id="@+id/tvGame"
+                    android:id="@+id/mine_logout"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:drawablePadding="6dp"
+                    android:clickable="true"
                     android:gravity="center_vertical"
                     android:padding="16dp"
                     android:background="?android:attr/selectableItemBackground"
                     android:drawableRight="@drawable/ic_triangle"
-                    android:text="@string/mine_game"
+                    android:text="退出"
                     android:drawableLeft="@drawable/mine_game"/>
                 <include layout="@layout/line_h_mine_space"/>
                 <TextView
