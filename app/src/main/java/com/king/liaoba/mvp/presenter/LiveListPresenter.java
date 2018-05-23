@@ -88,9 +88,7 @@ public class LiveListPresenter extends BasePresenter<ILiveListView> {
 
                 userinfoList.clear();
                 for(int i=0;i<chatidList.size();i++){
-                    Retrofit retrofit = APIRetrofit.getInstance();
-                    APIService service =retrofit.create(APIService.class);
-                    service.getUserInfoByChatid(chatidList.get(i).getChatid().toString())
+                    getAppComponent().getAPIService().getUserInfoByChatid(chatidList.get(i).getChatid().toString())
                             .subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(new Observer<Root>() {
