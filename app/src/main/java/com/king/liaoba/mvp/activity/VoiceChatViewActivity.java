@@ -171,7 +171,7 @@ public class VoiceChatViewActivity extends AppCompatActivity implements View.OnC
             call_receive.setVisibility(View.GONE);
             joinChannel();
         }else{
-        //接收到别人的来电。
+            //接收到别人的来电。
             call_send.setVisibility(View.GONE);
             call_receive.setVisibility(View.VISIBLE);
             btn_accept.setVisibility(View.VISIBLE);
