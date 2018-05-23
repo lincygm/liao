@@ -79,7 +79,7 @@ public class FollowFragment extends SimpleFragment {
 
         Retrofit retrofit = APIRetrofit.getInstance();
         APIService service =retrofit.create(APIService.class);
-        service.getFocusList(App.getSharedPreference("chatid"))
+        service.getFocusList(Constants.getSharedPreference("chatid",getActivity()))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<Root>() {
