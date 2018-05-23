@@ -9,9 +9,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.king.base.model.EventMessage;
-import com.king.base.util.ToastUtils;
-import com.king.liaoba.mvp.base.BaseFragment;
+
+import com.king.liaoba.mvp.base.BaseActivity;
 import com.king.liaoba.mvp.presenter.LoginPresenter;
 import com.king.liaoba.mvp.view.ILoginView;
 import com.king.liaoba.util.MessageEvent;
@@ -19,6 +18,7 @@ import com.liaoba.R;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -28,8 +28,7 @@ import butterknife.OnClick;
  * @since 2017/3/21
  */
 
-public class LoginFragment extends BaseFragment<ILoginView, LoginPresenter> implements ILoginView {
-
+public class LoginFragment extends BaseActivity<ILoginView, LoginPresenter> implements ILoginView {
 
     @BindView(R.id.ivLeft)
     ImageView ivLeft;
@@ -52,28 +51,24 @@ public class LoginFragment extends BaseFragment<ILoginView, LoginPresenter> impl
     @BindView(R.id.ivWeixin)
     ImageView ivWeixin;
 
-
-
-    public static LoginFragment newInstance() {
-        Bundle args = new Bundle();
-        LoginFragment fragment = new LoginFragment();
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     public LoginPresenter createPresenter() {
-        EventBus.getDefault().register(this);
         return new LoginPresenter(getApp());
     }
 
-    @Subscribe
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventLogin(MessageEvent messageEvent){
         if(messageEvent.equals("loginresult")){
             if((boolean)messageEvent.getData()){
-                finish();
+               this.finish();
             }
         }
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
     }
 
     @Override
@@ -100,6 +95,7 @@ public class LoginFragment extends BaseFragment<ILoginView, LoginPresenter> impl
             case R.id.tvRight:
                 break;
             case R.id.btnLogin:
+                //finish();
                 login(etUsername.getText().toString(),etPassword.getText().toString());
                 break;
             case R.id.tvForgetPwd:
@@ -127,13 +123,12 @@ public class LoginFragment extends BaseFragment<ILoginView, LoginPresenter> impl
     public void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
-
     }
 
     @Override
     public boolean login(String username, String password) {
 
-        return getPresenter().login(username,password,getActivity());
+        return getPresenter().login(username,password,this);
     }
 
     @Override

@@ -88,7 +88,7 @@
             android:onClick="onLocalAudioMuteClicked"
             android:id="@+id/btn_answer"
             android:scaleType="centerInside"
-            android:src="@drawable/answer_icon" />
+           />
         <ImageView
             android:layout_width="0dp"
             android:layout_height="match_parent"

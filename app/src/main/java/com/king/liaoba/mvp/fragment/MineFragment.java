@@ -148,7 +148,9 @@ public class MineFragment extends SimpleFragment {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startLogin();
+                //startLogin();
+                Intent intent = new Intent(MineFragment.this.getContext(),LoginFragment.class);
+                startActivity(intent);
             }
         });
     }

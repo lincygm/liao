@@ -94,6 +94,9 @@
         <activity android:name="com.king.liaoba.mvp.activity.PhotoWallActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:windowSoftInputMode="stateHidden|stateUnchanged" />
+        <activity android:name="com.king.liaoba.mvp.fragment.LoginFragment"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:windowSoftInputMode="stateHidden|stateUnchanged" />
         <service android:name="com.king.liaoba.push.OnlineService">
             <intent-filter>
                 <action android:name="com.liaoba.service" />
