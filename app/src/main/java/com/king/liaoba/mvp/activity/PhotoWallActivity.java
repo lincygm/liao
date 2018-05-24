@@ -51,6 +51,7 @@ import com.liaoba.R;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -105,9 +106,8 @@ public class PhotoWallActivity extends Activity implements View.OnClickListener{
         EventBus.getDefault().unregister(this);
     }
 
-    @Subscribe
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventresult(MessageEvent messageEvent){
-
         if(messageEvent.getMessage().equals("deleteresult")){
             Log.d("pic","==result");
             getPicture();
@@ -170,8 +170,8 @@ public class PhotoWallActivity extends Activity implements View.OnClickListener{
         if(list==null)return;
         if(recyclerView==null) {
             recyclerView = (EasyRecyclerView) findViewById(R.id.photowall_recyclerView);
-            //recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL));
-            recyclerView.setAdapter(adapter = new ImageAdapter(this,list));
+            recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL));
+            recyclerView.setAdapter(adapter = new ImageAdapter(this,list,myItemOnClickListener));
             GridLayoutManager gridLayoutManager = new GridLayoutManager(this,2);
             gridLayoutManager.setSpanSizeLookup(adapter.obtainGridSpanSizeLookUp(2));
             recyclerView.setLayoutManager(new GridLayoutManager(this,2));
@@ -317,6 +317,9 @@ public class PhotoWallActivity extends Activity implements View.OnClickListener{
                                 public void onNext(Root root) {
                                     if(root!=null){
                                         Constants.EditSharedPreference("headimage", Constants.BASE_URL+root.getData().getGetdata().get(0).getHeadimg_url().toString());
+                                        PictureList pictureList = new PictureList();
+                                        //pictureList.setId(root.getData().getGetdata().get(0).getId());
+                                       // adapter.insert();
                                     }
                                 }
 
@@ -364,4 +367,16 @@ public class PhotoWallActivity extends Activity implements View.OnClickListener{
         }
         startActivityForResult(intent, REQUEST_CAPTURE);
     }
+
+    public interface MyItemOnClickListener {
+        public void onItemOnClick(View view,int postion);
+    }
+    MyItemOnClickListener myItemOnClickListener = new MyItemOnClickListener() {
+        @Override
+        public void onItemOnClick(View view, int postion) {
+        Log.d("DDS","delte");
+        adapter.remove(postion);
+        }
+    };
+
 }

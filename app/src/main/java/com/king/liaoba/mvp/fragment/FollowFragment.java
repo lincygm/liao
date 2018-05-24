@@ -1,22 +1,31 @@
 package com.king.liaoba.mvp.fragment;
 
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jude.easyrecyclerview.EasyRecyclerView;
+import com.jude.easyrecyclerview.decoration.DividerDecoration;
 import com.jude.easyrecyclerview.decoration.SpaceDecoration;
+import com.jude.rollviewpager.Util;
 import com.king.liaoba.App;
 import com.king.liaoba.Constants;
+import com.king.liaoba.bean.Person;
 import com.king.liaoba.bean.Root;
 import com.king.liaoba.http.APIRetrofit;
 import com.king.liaoba.http.APIService;
 import com.king.liaoba.mvp.adapter.ImageAdapter;
+import com.king.liaoba.mvp.adapter.PersonAdapter;
 import com.king.liaoba.util.DensityUtil;
 import com.liaoba.R;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -38,7 +47,7 @@ public class FollowFragment extends SimpleFragment {
     TextView tvTitle;
     @BindView(R.id.ivRight)
     ImageView ivRight;
-
+    PersonAdapter adapter = null;
     EasyRecyclerView recyclerView = null;
 
     public static FollowFragment newInstance() {
@@ -61,17 +70,15 @@ public class FollowFragment extends SimpleFragment {
     }
 
     private void adapter(){
-        recyclerView = (EasyRecyclerView) getActivity().findViewById(R.id.photowall_recyclerView);
-        //recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
-        //recyclerView.setAdapter(adapter = new ImageAdapter(this, list));
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
-        //gridLayoutManager.setSpanSizeLookup(adapter.obtainGridSpanSizeLookUp(2));
-        recyclerView.setLayoutManager(gridLayoutManager);
-        SpaceDecoration itemDecoration = new SpaceDecoration(DensityUtil.dp2px(getContext(), 6));
-        //itemDecoration.setPaddingEdgeSide(true);
-        //itemDecoration.setPaddingStart(true);
-        //itemDecoration.setPaddingHeaderFooter(true);
+        recyclerView = (EasyRecyclerView) getActivity().findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        DividerDecoration itemDecoration = new DividerDecoration(Color.GRAY, Util.dip2px(getActivity(), 0.5f), Util.dip2px(getActivity(), 72), 0);
+        itemDecoration.setDrawLastItem(false);
         recyclerView.addItemDecoration(itemDecoration);
+        recyclerView.setAdapterWithProgress(adapter = new PersonAdapter(getActivity()));
+      //  List<Person> persons = DataProvider.getPersonList(0);
+       // adapter.addAll(persons.subList(0, 3));
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
     }
 
     @Override

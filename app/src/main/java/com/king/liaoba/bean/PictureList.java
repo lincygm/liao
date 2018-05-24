@@ -6,7 +6,6 @@ package com.king.liaoba.bean;
 
 public class PictureList {
 
-
         private String id;
         private String chatid;
         private String picurl;
