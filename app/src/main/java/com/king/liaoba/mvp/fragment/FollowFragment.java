@@ -2,30 +2,23 @@ package com.king.liaoba.mvp.fragment;
 
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
-import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jude.easyrecyclerview.EasyRecyclerView;
 import com.jude.easyrecyclerview.decoration.DividerDecoration;
-import com.jude.easyrecyclerview.decoration.SpaceDecoration;
 import com.jude.rollviewpager.Util;
-import com.king.liaoba.App;
 import com.king.liaoba.Constants;
-import com.king.liaoba.bean.Person;
 import com.king.liaoba.bean.Root;
 import com.king.liaoba.http.APIRetrofit;
 import com.king.liaoba.http.APIService;
-import com.king.liaoba.mvp.adapter.ImageAdapter;
 import com.king.liaoba.mvp.adapter.PersonAdapter;
-import com.king.liaoba.util.DensityUtil;
+import com.king.liaoba.mvp.adapter.PersonWithAdAdapter;
 import com.liaoba.R;
 
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -41,14 +34,21 @@ import rx.schedulers.Schedulers;
 
 public class FollowFragment extends SimpleFragment {
 
+
+    @BindView(R.id.foll_fans)
+    Button btn_fans;
+    @BindView(R.id.foll_focus)
+    Button btn_focus;
     @BindView(R.id.ivLeft)
     ImageView ivLeft;
     @BindView(R.id.tvTitle)
     TextView tvTitle;
     @BindView(R.id.ivRight)
     ImageView ivRight;
-    PersonAdapter adapter = null;
-    EasyRecyclerView recyclerView = null;
+    PersonWithAdAdapter adapter;
+    EasyRecyclerView recyclerView_fans = null;
+    EasyRecyclerView recyclerView_focus = null;
+
 
     public static FollowFragment newInstance() {
 
@@ -70,15 +70,14 @@ public class FollowFragment extends SimpleFragment {
     }
 
     private void adapter(){
-        recyclerView = (EasyRecyclerView) getActivity().findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        DividerDecoration itemDecoration = new DividerDecoration(Color.GRAY, Util.dip2px(getActivity(), 0.5f), Util.dip2px(getActivity(), 72), 0);
-        itemDecoration.setDrawLastItem(false);
-        recyclerView.addItemDecoration(itemDecoration);
-        recyclerView.setAdapterWithProgress(adapter = new PersonAdapter(getActivity()));
-      //  List<Person> persons = DataProvider.getPersonList(0);
-       // adapter.addAll(persons.subList(0, 3));
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView_focus = (EasyRecyclerView) getActivity().findViewById(R.id.recyclerView);
+        recyclerView_focus.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView_focus.setProgressView(R.layout.view_progress);
+        DividerDecoration itemDecoration = new DividerDecoration(Color.GRAY, Util.dip2px(getActivity(),0.5f), Util.dip2px(getActivity(),72),0);
+        recyclerView_focus.addItemDecoration(itemDecoration);
+        adapter = new PersonWithAdAdapter(getActivity());
+        //adapter.addAll(DataProvider.getPersonWithAds(0));
+        recyclerView_focus.setAdapterWithProgress(adapter);
     }
 
     @Override
@@ -107,7 +106,7 @@ public class FollowFragment extends SimpleFragment {
 
     }
 
-    @OnClick({R.id.ivLeft, R.id.ivRight})
+    @OnClick({R.id.ivLeft, R.id.ivRight,R.id.foll_focus,R.id.foll_fans})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ivLeft:
@@ -116,7 +115,12 @@ public class FollowFragment extends SimpleFragment {
             case R.id.ivRight:
                 startLogin();
                 break;
-
+            case R.id.foll_fans:
+                break;
+            case R.id.foll_focus:
+                break;
+                default:
+                    break;
         }
     }
 }
