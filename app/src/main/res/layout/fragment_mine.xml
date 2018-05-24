@@ -263,6 +263,20 @@
                     android:drawableRight="@drawable/ic_triangle"
                     android:text="@string/mine_setvalue"
                     android:drawableLeft="@drawable/mine_task"/>
+                <include layout="@layout/line_h_mine_space"/>
+
+                <TextView
+                    android:id="@+id/mine_record"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:drawablePadding="6dp"
+                    android:gravity="center_vertical"
+                    android:padding="16dp"
+                    android:clickable="true"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:drawableRight="@drawable/ic_triangle"
+                    android:text="录音"
+                    android:drawableLeft="@drawable/mine_task"/>
             </LinearLayout>
             <include layout="@layout/line_h_mine"/>
             <LinearLayout
