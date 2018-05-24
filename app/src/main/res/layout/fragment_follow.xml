@@ -6,6 +6,22 @@
     <include layout="@layout/top_text_title_bar"/>
     <include layout="@layout/line_h_mine"/>
     <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:text="关注"
+            android:id="@+id/foll_focus"
+            android:layout_height="wrap_content" />
+        <Button
+            android:layout_width="wrap_content"
+            android:id="@+id/foll_fans"
+            android:text="粉丝"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+    <LinearLayout
         android:id="@+id/content"
         android:orientation="vertical"
         android:layout_width="match_parent"
@@ -14,7 +30,7 @@
         android:gravity="center">
 
         <com.jude.easyrecyclerview.EasyRecyclerView
-            android:id="@+id/photowall_recyclerView"
+            android:id="@+id/foll_fans_recycleview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_progress="@layout/view_progress"
@@ -22,10 +38,21 @@
             app:recyclerPaddingTop="8dp"
             app:recyclerPaddingBottom="8dp"
             app:recyclerPaddingLeft="8dp"
+            app:recyclerPaddingRight="8dp"
             app:scrollbarStyle="insideOverlay"
             app:scrollbars="none" />
-        app:recyclerPaddingRight="8dp"
-        />
+        <com.jude.easyrecyclerview.EasyRecyclerView
+            android:id="@+id/foll_focus_recycleview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_progress="@layout/view_progress"
+            app:recyclerPadding="8dp"
+            app:recyclerPaddingTop="8dp"
+            app:recyclerPaddingBottom="8dp"
+            app:recyclerPaddingLeft="8dp"
+            app:recyclerPaddingRight="8dp"
+            app:scrollbarStyle="insideOverlay"
+            app:scrollbars="none" />
     </LinearLayout>
 
 </LinearLayout>
