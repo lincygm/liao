@@ -103,23 +103,11 @@ public class PhotoWallActivity extends Activity implements View.OnClickListener{
     @Override
     protected void onStop() {
         super.onStop();
-        EventBus.getDefault().unregister(this);
     }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onEventresult(MessageEvent messageEvent){
-        if(messageEvent.getMessage().equals("deleteresult")){
-            Log.d("pic","==result");
-            getPicture();
-        }
-    }
-
 
     @Override
     protected void onStart() {
         super.onStart();
-    EventBus.getDefault().register(this);
-
     }
 
     @OnClick({R.id.add_pic})
@@ -130,12 +118,10 @@ public class PhotoWallActivity extends Activity implements View.OnClickListener{
         }
     }
 
-
-
     @Override
     protected void onResume() {
         super.onResume();
-        //Log.d("pic","onresume");
+        getPicture();
     }
 
     private void getPicture(){
@@ -153,12 +139,10 @@ public class PhotoWallActivity extends Activity implements View.OnClickListener{
 
                     @Override
                     public void onError(Throwable e) {
-
                     }
 
                     @Override
                     public void onNext( PictureRoot jsonBean) {
-                        list.clear();
                         if(jsonBean!=null){
                             list = jsonBean.getData().getGetdata();
                             Log.d("====>>",jsonBean.getData().getGetdata().get(0).getPicurl());
@@ -167,6 +151,7 @@ public class PhotoWallActivity extends Activity implements View.OnClickListener{
                 });
     }
     private void pictureWall() {
+
         if(list==null)return;
         if(recyclerView==null) {
             recyclerView = (EasyRecyclerView) findViewById(R.id.photowall_recyclerView);
@@ -317,9 +302,8 @@ public class PhotoWallActivity extends Activity implements View.OnClickListener{
                                 public void onNext(Root root) {
                                     if(root!=null){
                                         Constants.EditSharedPreference("headimage", Constants.BASE_URL+root.getData().getGetdata().get(0).getHeadimg_url().toString());
-                                        PictureList pictureList = new PictureList();
-                                        //pictureList.setId(root.getData().getGetdata().get(0).getId());
                                        // adapter.insert();
+
                                     }
                                 }
 
@@ -331,7 +315,6 @@ public class PhotoWallActivity extends Activity implements View.OnClickListener{
                                 @Override
                                 public void onCompleted() {
                                     Log.d("pic","up suc");
-                                    getPicture();
                                 }
                             });
 
