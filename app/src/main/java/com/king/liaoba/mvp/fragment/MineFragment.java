@@ -31,6 +31,7 @@ import com.king.liaoba.Constants;
 import com.king.liaoba.bean.Root;
 import com.king.liaoba.http.APIRetrofit;
 import com.king.liaoba.http.APIService;
+import com.king.liaoba.mvp.activity.RecordActivity;
 import com.king.liaoba.mvp.activity.SelfEditActivity;
 import com.king.liaoba.util.uploadimg.CircleImageView;
 import com.king.liaoba.util.uploadimg.ClipImageActivity;
@@ -41,6 +42,7 @@ import java.io.File;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import cn.jpush.android.api.JPushInterface;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -98,6 +100,8 @@ public class MineFragment extends SimpleFragment {
     View parent;
     @BindView(R.id.mine_logout)
     TextView tv_logout;
+    @BindView(R.id.mine_record)
+    TextView tv_record;
 
 
     //请求相机
@@ -153,6 +157,8 @@ public class MineFragment extends SimpleFragment {
                 startActivity(intent);
             }
         });
+        getFocus();
+        getFans();
     }
 
     public void updateRefreshStatus(){
@@ -200,7 +206,7 @@ public class MineFragment extends SimpleFragment {
     @OnClick({R.id.ivLeft, R.id.ivRight, R.id.ivAvatar,
             R.id.tvFollow, R.id.tvFans, R.id.tvRecharge,
             R.id.tvStarLight, R.id.tvContribution, R.id.tvWatch, R.id.tvLevel,
-            R.id.tvTask, R.id.tvSetting, R.id.fab,R.id.mine_logout})
+            R.id.tvTask, R.id.tvSetting, R.id.fab,R.id.mine_logout,R.id.mine_record})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ivLeft:
@@ -240,8 +246,70 @@ public class MineFragment extends SimpleFragment {
             case R.id.mine_logout:
                 Constants.clearSharedPreference();
                 break;
+            case R.id.mine_record:
+                Intent  intent = new Intent(getActivity(), RecordActivity.class);
+                startActivity(intent);
+                break;
         }
     }
+
+    private void getFans(){
+
+        Retrofit retrofit = APIRetrofit.getInstance();
+        APIService service = retrofit.create(APIService.class);
+        service.getFans(Constants.getSharedPreference("chatid", getActivity()))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<Root>() {
+                    @Override
+                    public void onCompleted() {
+                        Log.d("getFans", "onCompleted");
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                    }
+
+                    @Override
+                    public void onNext(Root jsonBean) {
+                        Log.d("getFans", "next");
+                        if(jsonBean!=null){
+                            Constants.EditSharedPreference("fans",jsonBean.getData().getInfo());
+                        }
+                    }
+                });
+
+
+    }
+
+
+
+    private void getFocus() {
+        Retrofit retrofit = APIRetrofit.getInstance();
+        APIService service = retrofit.create(APIService.class);
+        service.getFocus(Constants.getSharedPreference("chatid", getActivity()))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<Root>() {
+                    @Override
+                    public void onCompleted() {
+                        Log.d("getFocus", "onCompleted");
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                    }
+
+                    @Override
+                    public void onNext(Root jsonBean) {
+                        Log.d("getFocus", "next");
+                        if(jsonBean!=null){
+                            Constants.EditSharedPreference("focus",jsonBean.getData().getInfo());
+                        }
+                    }
+                });
+    }
+
 
     /**
      * 上传头像
