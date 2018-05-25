@@ -16,7 +16,9 @@ public class Player implements MediaPlayer.OnBufferingUpdateListener, MediaPlaye
     public MediaPlayer mediaPlayer; // 媒体播放器
     private SeekBar seekBar; // 拖动条
     private Timer mTimer = new Timer(); // 计时器
+    public Player() {
 
+    }
     // 初始化播放器
     public Player(SeekBar seekBar) {
         super();
