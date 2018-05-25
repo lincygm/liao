@@ -18,6 +18,8 @@
         android:layout_marginLeft="@dimen/left_margin"
         android:layout_marginTop="5dp"
         android:background="@drawable/home_page_voice"
+        android:clickable="true"
+        android:id="@+id/live_voice"
         android:gravity="center"
         android:orientation="horizontal">
         <ImageView
