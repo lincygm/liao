@@ -94,12 +94,6 @@ public interface APIService {
     @POST("index.php/Home/User/updateUser/sex/{sex}/age/{age}/sign/{sign}/username/{username}")
     Observable<Root> saveuserinfo(@Path("sex") String sex, @Path("age") String age,@Path("sign") String sign,@Path("username") String username);
 
-    /**
-     * 上传头像
-     */
-    @Multipart
-    @POST("/index.php/Home/User/uploadMemberIcon")
-    Observable<Result<String>> uploadMemberIcon(@Part List<MultipartBody.Part> partList);
 
     /**
      * @心跳链接
