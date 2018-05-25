@@ -195,7 +195,8 @@ public class RecordActivity extends Activity implements View.OnClickListener{
                     @Override
                     public void onNext(Root root) {
                         if(root!=null){
-                            Constants.EditSharedPreference("headimage", Constants.BASE_URL+root.getData().getGetdata().get(0).getHeadimg_url().toString());
+                            Constants.EditSharedPreference("voicelibrary",
+                                    Constants.BASE_URL+root.getData().getInfo());
                         }
                     }
 
