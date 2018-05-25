@@ -38,6 +38,7 @@
             app:recyclerPaddingTop="8dp"
             app:recyclerPaddingBottom="8dp"
             app:recyclerPaddingLeft="8dp"
+            android:visibility="gone"
             app:recyclerPaddingRight="8dp"
             app:scrollbarStyle="insideOverlay"
             app:scrollbars="none" />
