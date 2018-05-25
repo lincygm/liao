@@ -53,7 +53,6 @@ public class FollowFragment extends SimpleFragment {
     public static FollowFragment newInstance() {
 
         Bundle args = new Bundle();
-
         FollowFragment fragment = new FollowFragment();
         fragment.setArguments(args);
         return fragment;
