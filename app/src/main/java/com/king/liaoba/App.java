@@ -7,8 +7,11 @@ import com.king.liaoba.dao.greendao.DaoSession;
 import com.king.liaoba.di.component.AppComponent;
 import com.king.liaoba.di.component.DaggerAppComponent;
 import com.king.liaoba.di.module.AppModule;
+import com.liaoba.R;
 import com.squareup.leakcanary.LeakCanary;
 import com.tencent.bugly.crashreport.CrashReport;
+
+import io.agora.AgoraAPIOnlySignal;
 
 /**
  * @author Jenly <a href="mailto:jenly1314@gmail.com">Jenly</a>
@@ -46,6 +49,20 @@ public class App extends Application {
         LeakCanary.install(this);
         CrashReport.initCrashReport(getApplicationContext(), BUGLY_ID, true);
         mAppComponent = DaggerAppComponent.builder().appModule(new AppModule(this,Constants.BASE_URL)).build();
+        loginAI();
+    }
+
+    /**
+     * 登录声网
+     * */
+    private void loginAI(){
+
+        if(!Constants.getSharedPreference("chatid",getApplicationContext()).equals("Null")
+                &&Constants.getSharedPreference("chatid",getApplicationContext()).equals("")){
+            AgoraAPIOnlySignal mAgoraAPI = AgoraAPIOnlySignal.getInstance(this,getResources().getString(R.string.agora_app_id));
+            mAgoraAPI.login(getResources().getString(R.string.agora_app_id),
+                    Constants.getSharedPreference("chatid",getApplicationContext()),"_no_need_token",0,null);
+        }
 
     }
 
