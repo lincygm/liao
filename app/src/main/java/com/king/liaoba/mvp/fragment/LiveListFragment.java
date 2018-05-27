@@ -47,7 +47,6 @@ public class LiveListFragment extends BaseFragment<ILiveListView, LiveListPresen
     EasyLiveAdapter easyLiveAdapter;
     EasyVoiceAdapter easyVoiceAdapter;
 
-    //List<LiveInfo> listData;
     List<VoiceListInfo>  rootList;
 
     private String slug;
