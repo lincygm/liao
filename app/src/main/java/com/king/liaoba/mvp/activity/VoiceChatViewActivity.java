@@ -16,6 +16,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.king.liaoba.App;
 import com.king.liaoba.Constants;
 import com.king.liaoba.util.MessageEvent;
@@ -62,7 +64,10 @@ public class VoiceChatViewActivity extends AppCompatActivity implements View.OnC
     @BindView(R.id.btn_answer) ImageView btn_accept;
     @BindView(R.id.btn_end_call2)  ImageView btn_end2;
      CircleImageView circleImageView;
+     @BindView(R.id.calling)
+     TextView tv_callinfo;
     private int time;
+    private String url;
     private final IRtcEngineEventHandler mRtcEventHandler = new IRtcEngineEventHandler() { // Tutorial Step 1
 
         @Override
@@ -160,6 +165,14 @@ public class VoiceChatViewActivity extends AppCompatActivity implements View.OnC
         iv_endcall =(ImageView)this.findViewById(R.id.btn_end_call);
         iv_speaker=(ImageView)this.findViewById(R.id.btn_speaker);
         channel = getIntent().getStringExtra("channel");//获取对方房间id
+        url=getIntent().getStringExtra("head_url");
+        Log.d("gm","url"+url);
+
+        if(url!=null){
+            Glide.with(this).load(Constants.BASE_URL+url)
+                    .placeholder(R.mipmap.live_default).error(R.mipmap.live_default).
+                    crossFade().centerCrop().diskCacheStrategy(DiskCacheStrategy.SOURCE).into(circleImageView);
+        }
         if (checkSelfPermission(Manifest.permission.RECORD_AUDIO, PERMISSION_REQ_ID_RECORD_AUDIO)) {
             initAgoraEngineAndJoinChannel();
         }
@@ -169,12 +182,15 @@ public class VoiceChatViewActivity extends AppCompatActivity implements View.OnC
             mAgoraAPI.channelInviteUser(Constants.getSharedPreference("chatid",this),channel,0);//邀请某人加入通话
             call_send.setVisibility(View.VISIBLE);
             call_receive.setVisibility(View.GONE);
+            tv_callinfo.setVisibility(View.VISIBLE);
             joinChannel();
         }else{
             //接收到别人的来电。
             call_send.setVisibility(View.GONE);
             call_receive.setVisibility(View.VISIBLE);
             btn_accept.setVisibility(View.VISIBLE);
+            tv_callinfo.setVisibility(View.GONE);
+
         }
 
     }
