@@ -15,7 +15,6 @@ import com.king.liaoba.Constants;
 import com.king.liaoba.bean.Root;
 import com.king.liaoba.http.APIRetrofit;
 import com.king.liaoba.http.APIService;
-import com.king.liaoba.mvp.adapter.PersonAdapter;
 import com.king.liaoba.mvp.adapter.PersonWithAdAdapter;
 import com.liaoba.R;
 
