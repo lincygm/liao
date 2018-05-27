@@ -2,6 +2,7 @@ package com.king.liaoba.mvp.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,7 @@ import com.king.liaoba.mvp.activity.SelfShowActivity;
 import com.king.liaoba.mvp.activity.VoiceChatViewActivity;
 import com.liaoba.R;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -64,7 +66,7 @@ public class EasyVoiceAdapter extends RecyclerArrayAdapter <VoiceListInfo>{
         }
 
         @Override
-        public void setData(VoiceListInfo data) {
+        public void setData(final VoiceListInfo data) {
             super.setData(data);
             Log.d("url",""+Constants.BASE_URL+data.getHeadimage_url());
             Glide.with(getContext()).load(Constants.BASE_URL+data.getHeadimage_url())
@@ -79,23 +81,45 @@ public class EasyVoiceAdapter extends RecyclerArrayAdapter <VoiceListInfo>{
                     Intent intent = new Intent();
                     intent.setClass(mContext, VoiceChatViewActivity.class);
                     intent.putExtra("channel",chatid);
+                    intent.putExtra("head_url",data.getHeadimage_url());
+                    Log.d("url",">>"+data.getHeadimage_url());
                     mContext.startActivity(intent);
                 }
             });
             iv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    //Toast.makeText(mContext,"qq",Toast.LENGTH_LONG).show();
                     Intent intent = new Intent();
                     intent.setClass(mContext, SelfShowActivity.class);
                     intent.putExtra("chatid",chatid);
+
                     mContext.startActivity(intent);
                 }
             });
+
             voice.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(mContext,"qq", Toast.LENGTH_LONG).show();
+                        //1 初始化mediaplayer
+                        final MediaPlayer mediaPlayer = new MediaPlayer();
+                        //2 设置到播放的资源位置 path 可以是网络 路径 也可以是本地路径
+
+                        try {
+                            mediaPlayer.setDataSource(Constants.BASE_URL+Constants.getSharedPreference("voicelibrary",mContext));
+                            //3 准备播放
+                            mediaPlayer.prepareAsync();
+                            //3.1 设置一个准备完成的监听
+                            mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                                @Override
+                                public void onPrepared(MediaPlayer mp) {
+                                    // 4 开始播放
+                                    mediaPlayer.start();
+                                }
+                            });
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+
                 }
             });
         }
