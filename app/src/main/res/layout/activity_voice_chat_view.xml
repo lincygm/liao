@@ -34,6 +34,13 @@
             android:id="@+id/time"
             android:textSize="20sp"
             android:layout_height="wrap_content" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:id="@+id/calling"
+            android:textSize="20sp"
+            android:text="正在呼叫对方..."
+            android:layout_height="wrap_content" />
     </LinearLayout>
 
         <LinearLayout
