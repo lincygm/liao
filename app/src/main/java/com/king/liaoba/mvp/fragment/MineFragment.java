@@ -74,8 +74,6 @@ public class MineFragment extends SimpleFragment {
     TextView tvFollow;
     @BindView(R.id.tvFans)
     TextView tvFans;
-    @BindView(R.id.tvNiuBi)
-    TextView tvNiuBi;
     @BindView(R.id.tvSeed)
     TextView tvSeed;
     @BindView(R.id.tvRecharge)
