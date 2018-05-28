@@ -115,8 +115,7 @@ public class LiveListPresenter extends BasePresenter<ILiveListView> {
                                         return;
                                     }
                                     for(int i=0;i<jsonBean.getData().getGetdata().size();i++){
-                                        //if(jsonBean.getData().getGetdata().get(i).getChatid()==App.getSharedPreference("chatid"))
-                                           // continue;
+
                                         VoiceListInfo voiceListInfo = new VoiceListInfo();
                                         voiceListInfo.setChatid(jsonBean.getData().getGetdata().
                                                 get(i).getChatid().toString());
