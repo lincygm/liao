@@ -15,6 +15,9 @@ import android.view.View;
 import android.widget.RadioButton;
 
 import com.king.base.util.ToastUtils;
+import com.king.liaoba.bean.Root;
+import com.king.liaoba.http.APIRetrofit;
+import com.king.liaoba.http.APIService;
 import com.king.liaoba.mvp.base.PureActivity;
 import com.king.liaoba.mvp.fragment.FollowFragment;
 import com.king.liaoba.mvp.fragment.HomeFragment;
@@ -32,6 +35,10 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.jpush.android.api.JPushInterface;
 import io.agora.AgoraAPIOnlySignal;
+import retrofit2.Retrofit;
+import rx.Observer;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 
 public class MainActivity extends PureActivity {
@@ -72,6 +79,33 @@ public class MainActivity extends PureActivity {
         requestPermissions();
         loginAI();
     }
+
+    private void getUserInfo(){
+
+        Retrofit retrofit = APIRetrofit.getInstance();
+        APIService service =retrofit.create(APIService.class);
+        service.getUserInfoByChatid(Constants.getSharedPreference("chatid",this))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<Root>() {
+                    @Override
+                    public void onCompleted() {
+                        Log.d("login","onCompleted");
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext( Root jsonBean) {
+                            Constants.EditSharedPreference(jsonBean.getData().getGetdata().get(0));
+
+                    }
+                });
+    }
+
     /**
      * 登录声网
      * */
