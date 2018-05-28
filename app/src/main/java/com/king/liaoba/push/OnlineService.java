@@ -23,6 +23,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -116,18 +117,29 @@ public class OnlineService extends Service {
 
     @Subscribe(threadMode = ThreadMode.BACKGROUND)
     public void onEventMedia(MessageEvent messageEvent){
-        Log.d("voice","aaa");
         if(messageEvent.getMessage().equals("play")){
-
             Log.d("voice","bb");
 
-            if(player==null){
-                 player = new Player();
-            }else{
-                player.stop();
+            //1 初始化mediaplayer
+             mPlayer = new MediaPlayer();
+            //2 设置到播放的资源位置 path 可以是网络 路径 也可以是本地路径
+
+            try {
+                mPlayer.setDataSource(messageEvent.getData().toString());
+                //3 准备播放
+                mPlayer.prepareAsync();
+                //3.1 设置一个准备完成的监听
+                mPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                    @Override
+                    public void onPrepared(MediaPlayer mp) {
+                        // 4 开始播放
+                        mPlayer.start();
+                    }
+                });
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-            player.playUrl("http://219.138.125.22/myweb/mp3/CMP3/JH19.MP3");
-           // player.play();
+
         }
     }
 
