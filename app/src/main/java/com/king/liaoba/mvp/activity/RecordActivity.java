@@ -62,8 +62,14 @@ public class RecordActivity extends Activity implements View.OnClickListener,Vie
     Button btn_save;
     @BindView(R.id.record_play)
     Button btn_play;
+    @BindView(R.id.button)
+    Button btn_button;
+    @BindView(R.id.button2)
+    Button btn_button2;
+    @BindView(R.id.recordView)
+     RecordView mRecorfView;
 
-    private RecordView mRecorfView;
+
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -121,16 +127,9 @@ public class RecordActivity extends Activity implements View.OnClickListener,Vie
         return false;
     }
 
-    @OnClick({R.id.record_start,R.id.record_stop,R.id.record_save,R.id.record_play})
+    @OnClick({R.id.record_start,R.id.record_stop,R.id.record_save,R.id.record_play,R.id.recordView,R.id.button,R.id.button2})
     @Override
     public void onClick(View v) {
-        if(nowModel == MODEL_PLAY){
-            mRecorfView.setModel(RecordView.MODEL_RECORD);
-            nowModel = RecordView.MODEL_RECORD;
-        }else{
-            mRecorfView.setModel(RecordView.MODEL_PLAY);
-            nowModel = RecordView.MODEL_PLAY;
-        }
         switch (v.getId()){
             case R.id.record_save:
                 upload(audioFile);
@@ -172,6 +171,15 @@ public class RecordActivity extends Activity implements View.OnClickListener,Vie
                     }
                 }
                     break;
+            case R.id.recordView:
+                if(nowModel == MODEL_PLAY){
+                    mRecorfView.setModel(RecordView.MODEL_RECORD);
+                    nowModel = RecordView.MODEL_RECORD;
+                }else{
+                    mRecorfView.setModel(RecordView.MODEL_PLAY);
+                    nowModel = RecordView.MODEL_PLAY;
+                }
+                break;
                 default:
                     break;
         }
