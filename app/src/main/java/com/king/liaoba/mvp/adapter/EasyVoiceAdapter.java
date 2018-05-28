@@ -1,5 +1,6 @@
 package com.king.liaoba.mvp.adapter;
 
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
@@ -83,8 +84,10 @@ public class EasyVoiceAdapter extends RecyclerArrayAdapter <VoiceListInfo>{
                 public void onClick(View view) {
                     Intent intent = new Intent();
                     intent.setClass(mContext, VoiceChatViewActivity.class);
-                    intent.putExtra("channel",chatid);
+                    intent.putExtra("channel",Constants.getSharedPreference("chatid",mContext));
+                    intent.putExtra("user",data.getChatid());
                     intent.putExtra("head_url",data.getHeadimage_url());
+                    intent.putExtra("call_head_url",Constants.getSharedPreference("head_url",mContext));
                     Log.d("url",">>"+data.getHeadimage_url());
                     mContext.startActivity(intent);
                 }
@@ -103,10 +106,11 @@ public class EasyVoiceAdapter extends RecyclerArrayAdapter <VoiceListInfo>{
             voice.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
-                    Log.d("voice",Constants.BASE_URL+Constants.getSharedPreference("voicelibrary",mContext));
-
-                    EventBus.getDefault().post(new MessageEvent<>("play",""));
+                   // Log.d("voice",Constants.BASE_URL+Constants.getSharedPreference("voicelibrary",mContext));
+                    EventBus.getDefault().post(new MessageEvent<>("play",
+                            Constants.BASE_URL+data.getVoice_url()));
+                    Toast.makeText(mContext,
+                            data.getVoice_url(),Toast.LENGTH_LONG).show();
 
                 }
             });
