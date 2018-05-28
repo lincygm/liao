@@ -32,6 +32,7 @@
                     android:id="@+id/ivRight"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:visibility="gone"
                     android:src="@drawable/mine_chat_message"
                     android:layout_alignParentRight="true"
                     android:padding="10dp"/>
@@ -54,6 +55,7 @@
                     android:text="@string/btn_click_login"
                     android:textColor="@color/white"
                     android:clickable="true"
+                    android:textSize="20dp"
                     android:background="@null"
                     android:layout_below="@+id/ivAvatar"
                     android:layout_centerHorizontal="true"/>
@@ -61,12 +63,13 @@
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
                     android:layout_below="@+id/btnLogin"
                     android:background="@color/mine_follower_bg"
                     android:padding="6dp"
                     android:gravity="center_vertical">
                     <LinearLayout
-                        android:orientation="vertical"
+                        android:orientation="horizontal"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -77,6 +80,7 @@
                             android:layout_height="wrap_content"
                             android:text="0"
                             android:paddingBottom="2dp"
+                            android:textStyle="bold"
                             android:textColor="@color/white"/>
                         <TextView
                             android:layout_width="wrap_content"
@@ -89,7 +93,7 @@
                             android:layout_height="20dp"
                             android:background="@color/black_transparent"/>
                     <LinearLayout
-                        android:orientation="vertical"
+                        android:orientation="horizontal"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -99,6 +103,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="0"
+                            android:textStyle="bold"
                             android:paddingBottom="2dp"
                             android:textColor="@color/white"/>
                         <TextView
@@ -124,16 +129,7 @@
                     android:layout_height="wrap_content"
                     android:padding="16dp"
                     android:gravity="center_vertical">
-                    <TextView
-                        android:id="@+id/tvNiuBi"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:drawableLeft="@drawable/mine_niubi"
-                        android:layout_marginRight="16dp"
-                        android:drawablePadding="10dp"
-                        android:gravity="center_vertical"
-                        android:text="0"
-                        />
+
                     <TextView
                         android:id="@+id/tvSeed"
                         android:layout_width="wrap_content"
