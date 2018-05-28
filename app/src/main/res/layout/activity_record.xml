@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     xmlns:record_view="http://schemas.android.com/apk/res-auto"
+    android:gravity="center_horizontal"
     android:layout_height="match_parent">
 
     <com.king.liaoba.mvp.view.RecordView
@@ -14,13 +15,13 @@
         android:layout_width="wrap_content"
         android:layout_centerHorizontal="true"
         android:text="按住我憋说话"
-        android:id="@+id/button"
+        android:id="@+id/btn_record"
         android:layout_marginBottom="20dp"
         android:layout_alignParentBottom="true"
         android:layout_height="wrap_content" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/btn_play"
         android:layout_width="wrap_content"
         android:text="切换模式"
         android:layout_height="wrap_content"
