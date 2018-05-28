@@ -9,7 +9,6 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 
-import com.king.liaoba.App;
 import com.king.liaoba.Constants;
 import com.king.liaoba.bean.Root;
 import com.king.liaoba.http.APIRetrofit;
@@ -17,9 +16,12 @@ import com.king.liaoba.http.APIService;
 
 import com.king.liaoba.mvp.activity.VoiceChatViewActivity;
 import com.king.liaoba.util.MessageEvent;
+import com.king.liaoba.util.Player;
 import com.liaoba.R;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -38,11 +40,12 @@ public class OnlineService extends Service {
     private AgoraAPIOnlySignal mAgoraAPI;
     private static String TAG = "OnlineService";
     private MediaPlayer mPlayer;
+    Player player;
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d("service","====1===");
         mAgoraAPI = AgoraAPIOnlySignal.getInstance(this, this.getResources().getString(R.string.agora_app_id));
-//        addSignalingCallback();
+        addSignalingCallback();
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -95,6 +98,7 @@ public class OnlineService extends Service {
                 },0,50000);
             }
         }.start();
+        EventBus.getDefault().register(this);
         super.onCreate();
     }
 
@@ -107,7 +111,26 @@ public class OnlineService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
+
+    @Subscribe(threadMode = ThreadMode.BACKGROUND)
+    public void onEventMedia(MessageEvent messageEvent){
+        Log.d("voice","aaa");
+        if(messageEvent.getMessage().equals("play")){
+
+            Log.d("voice","bb");
+
+            if(player==null){
+                 player = new Player();
+            }else{
+                player.stop();
+            }
+            player.playUrl("http://219.138.125.22/myweb/mp3/CMP3/JH19.MP3");
+           // player.play();
+        }
+    }
+
     private void addSignalingCallback() {
 
         if (mAgoraAPI == null) {
@@ -128,7 +151,7 @@ public class OnlineService extends Service {
             @Override
             public void onLoginSuccess(int uid, int fd) {
                 super.onLoginSuccess(uid, fd);
-                Log.d("service","succssful");
+                Log.d("onLoginSuccess","succssful");
             }
 
             @Override
