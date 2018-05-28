@@ -4,6 +4,8 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -11,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -66,8 +69,13 @@ public class VoiceChatViewActivity extends AppCompatActivity implements View.OnC
      CircleImageView circleImageView;
      @BindView(R.id.calling)
      TextView tv_callinfo;
+     @BindView(R.id.btn_refuse)
+     ImageView btn_refuse;
     private int time;
+    private int timeout;
     private String url;
+    private String user;
+    private String call_url;
     private final IRtcEngineEventHandler mRtcEventHandler = new IRtcEngineEventHandler() { // Tutorial Step 1
 
         @Override
@@ -127,6 +135,34 @@ public class VoiceChatViewActivity extends AppCompatActivity implements View.OnC
         }, 0, 1000);
     }
 
+    /**
+     * @j计算呼叫超时
+     * */
+    private void counttimeout(){
+
+        final Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                timeout++;
+                if(timeout==60){
+                    Message message = new Message();
+                    message.what=1;
+                }
+            }
+        },1000);
+    }
+    private Handler handler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if(msg.what==1){
+                tv_callinfo.setText("对方暂时无人接听!");
+                finish();
+            }
+        }
+    };
+
     private void timeshow(int t){
 
         final int h = t/3600;
@@ -141,7 +177,7 @@ public class VoiceChatViewActivity extends AppCompatActivity implements View.OnC
         });
     }
 
-    @OnClick({R.id.btn_answer,R.id.btn_end_call2})
+    @OnClick({R.id.btn_answer,R.id.btn_end_call2,R.id.btn_refuse})
     @Override
     public void onClick(View v) {
         if(v.getId()==R.id.btn_answer){
@@ -149,7 +185,12 @@ public class VoiceChatViewActivity extends AppCompatActivity implements View.OnC
             btn_accept.setVisibility(View.GONE);
             counttime();
         }else if(v.getId()==R.id.btn_end_call2){
+            call_receive.setVisibility(View.VISIBLE);
+            btn_accept.setVisibility(View.VISIBLE);
+            mAgoraAPI.channelInviteRefuse(channel,user,0,null);
+        }else if(v.getId()==R.id.btn_refuse){
             mAgoraAPI.channelLeave(channel);
+
         }
     }
 
@@ -164,8 +205,10 @@ public class VoiceChatViewActivity extends AppCompatActivity implements View.OnC
         iv_mute =(ImageView)this.findViewById(R.id.btn_mute);
         iv_endcall =(ImageView)this.findViewById(R.id.btn_end_call);
         iv_speaker=(ImageView)this.findViewById(R.id.btn_speaker);
-        channel = getIntent().getStringExtra("channel");//获取对方房间id
+        channel = getIntent().getStringExtra("channel");//获取自己的房间id
+        user = getIntent().getStringExtra("user");
         url=getIntent().getStringExtra("head_url");
+        call_url= getIntent().getStringExtra("call_head_url");
         Log.d("gm","url"+url);
 
         if(url!=null){
@@ -183,14 +226,17 @@ public class VoiceChatViewActivity extends AppCompatActivity implements View.OnC
             call_send.setVisibility(View.VISIBLE);
             call_receive.setVisibility(View.GONE);
             tv_callinfo.setVisibility(View.VISIBLE);
+            btn_refuse.setVisibility(View.GONE);
             joinChannel();
+            counttimeout();
         }else{
             //接收到别人的来电。
             call_send.setVisibility(View.GONE);
-            call_receive.setVisibility(View.VISIBLE);
-            btn_accept.setVisibility(View.VISIBLE);
             tv_callinfo.setVisibility(View.GONE);
-
+            btn_refuse.setVisibility(View.VISIBLE);
+            Glide.with(this).load(Constants.BASE_URL+call_url)
+                    .placeholder(R.mipmap.live_default).error(R.mipmap.live_default).
+                    crossFade().centerCrop().diskCacheStrategy(DiskCacheStrategy.SOURCE).into(circleImageView);
         }
 
     }
@@ -298,7 +344,7 @@ public class VoiceChatViewActivity extends AppCompatActivity implements View.OnC
 
     // Tutorial Step 2
     private void joinChannel() {
-        mRtcEngine.joinChannel(null, "voiceDemoChannel1", "Extra Optional Data", 0); // if you do not specify the uid, we will generate the uid for you
+        mRtcEngine.joinChannel(null, Constants.getSharedPreference("chatid",this), "Extra Optional Data", 0); // if you do not specify the uid, we will generate the uid for you
     }
 
     // Tutorial Step 3
