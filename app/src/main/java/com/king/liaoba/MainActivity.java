@@ -1,11 +1,15 @@
 package com.king.liaoba;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.annotation.IdRes;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.RadioButton;
@@ -27,6 +31,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.jpush.android.api.JPushInterface;
+import io.agora.AgoraAPIOnlySignal;
 
 
 public class MainActivity extends PureActivity {
@@ -64,8 +69,40 @@ public class MainActivity extends PureActivity {
         JPushInterface.setAlias(getApplicationContext(),0,
                 Constants.getSharedPreference("jpush_id",this));
         JPushInterface.resumePush(getApplicationContext());
+        requestPermissions();
+        loginAI();
     }
+    /**
+     * 登录声网
+     * */
+    private void loginAI() {
 
+        if (!Constants.getSharedPreference("chatid", getApplicationContext()).equals("Null")
+                && Constants.getSharedPreference("chatid", getApplicationContext()).equals("")) {
+            AgoraAPIOnlySignal mAgoraAPI = AgoraAPIOnlySignal.getInstance(this, getResources().getString(R.string.agora_app_id));
+            mAgoraAPI.login(getResources().getString(R.string.agora_app_id),
+                    Constants.getSharedPreference("chatid", getApplicationContext()), "_no_need_token", 0, null);
+        }
+    }
+    public void requestPermissions() {
+        int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE);
+        if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{
+                    Manifest.permission.READ_PHONE_STATE,
+                    Manifest.permission.RECORD_AUDIO,
+                    Manifest.permission.RECEIVE_BOOT_COMPLETED,
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.MODIFY_AUDIO_SETTINGS,
+                    Manifest.permission.CHANGE_WIFI_STATE,
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.MODIFY_AUDIO_SETTINGS,
+                    Manifest.permission.INTERNET,
+                    Manifest.permission.READ_CONTACTS,
+                    Manifest.permission.CAMERA
+            }, 1);
+        }
+    }
     @Override
     protected void onDestroy() {
         super.onDestroy();
