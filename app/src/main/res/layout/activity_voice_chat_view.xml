@@ -86,6 +86,7 @@
         android:layout_alignParentBottom="true"
         android:id="@+id/call_receive"
         android:layout_marginBottom="20dp"
+        android:gravity="center"
         android:orientation="horizontal">
 
         <ImageView
@@ -93,6 +94,7 @@
             android:layout_height="match_parent"
             android:layout_weight="20"
             android:onClick="onLocalAudioMuteClicked"
+            android:visibility="gone"
             android:id="@+id/btn_answer"
             android:scaleType="centerInside"
            />
