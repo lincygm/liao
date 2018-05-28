@@ -146,7 +146,6 @@ public class LoginFragment extends BaseActivity<ILoginView, LoginPresenter> impl
                 .subscribe(new Observer<Root>() {
                     @Override
                     public void onCompleted() {
-
                         Log.d("login","onCompleted");
                     }
 
@@ -163,7 +162,6 @@ public class LoginFragment extends BaseActivity<ILoginView, LoginPresenter> impl
                             Constants.EditSharedPreference(jsonBean.getData().getGetdata().get(0));
                             JPushInterface.setAlias(getApp().getApplicationContext(),0,
                                     Constants.getSharedPreference(jsonBean.getData().getGetdata().get(0).getRegisterationid().toString(),getApplicationContext()));
-
                         }else{
                             login = false;
                         }
