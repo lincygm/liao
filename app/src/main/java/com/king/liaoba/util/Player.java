@@ -17,7 +17,14 @@ public class Player implements MediaPlayer.OnBufferingUpdateListener, MediaPlaye
     private SeekBar seekBar; // 拖动条
     private Timer mTimer = new Timer(); // 计时器
     public Player() {
-
+        try {
+            mediaPlayer = new MediaPlayer();
+            mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);// 设置媒体流类型
+            mediaPlayer.setOnBufferingUpdateListener(this);
+            mediaPlayer.setOnPreparedListener(this);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
     // 初始化播放器
     public Player(SeekBar seekBar) {
