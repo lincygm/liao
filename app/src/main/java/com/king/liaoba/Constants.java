@@ -66,6 +66,8 @@ public final class Constants {
         edit.putString("chatid",jsonBean.getChatid());
         edit.putString("jpush_id",jsonBean.getRegisterationid());
         edit.putString("headimage_url",jsonBean.getHeadimg_url());
+        edit.putString("voicelibrary",jsonBean.getVoicelibrary());
+        edit.putString("password",jsonBean.getPassword());
         edit.commit();
     }
     public static void clearSharedPreference(){
