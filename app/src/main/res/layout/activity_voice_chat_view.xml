@@ -43,19 +43,24 @@
             android:layout_height="wrap_content" />
     </LinearLayout>
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:layout_marginBottom="20dp"
+        android:layout_alignParentBottom="true"
+        android:layout_height="wrap_content"
+        >
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_alignParentBottom="true"
+            android:layout_height="wrap_content"
             android:id="@+id/call_send"
-            android:layout_marginBottom="20dp"
-            android:visibility="gone"
+            android:visibility="visible"
             android:orientation="horizontal">
 
             <ImageView
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="20"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
                 android:onClick="onLocalAudioMuteClicked"
                 android:id="@+id/btn_mute"
                 android:scaleType="centerInside"
@@ -63,8 +68,8 @@
 
             <ImageView
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="20"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
                 android:onClick="onSwitchSpeakerphoneClicked"
                 android:scaleType="centerInside"
                 android:id="@+id/btn_speaker"
@@ -72,8 +77,8 @@
 
             <ImageView
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="20"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
                 android:onClick="onEncCallClicked"
                 android:id="@+id/btn_end_call"
                 android:scaleType="centerInside"
@@ -82,29 +87,34 @@
         </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_alignParentBottom="true"
+        android:layout_height="wrap_content"
         android:id="@+id/call_receive"
-        android:layout_marginBottom="20dp"
+        android:visibility="gone"
         android:gravity="center"
         android:orientation="horizontal">
 
         <ImageView
             android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="20"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
             android:onClick="onLocalAudioMuteClicked"
-            android:visibility="gone"
             android:id="@+id/btn_answer"
             android:scaleType="centerInside"
            />
         <ImageView
             android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="20"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
             android:id="@+id/btn_end_call2"
             android:scaleType="centerInside"
             android:src="@drawable/btn_end_call" />
 
     </LinearLayout>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/btn_refuse"
+            android:visibility="gone"
+            android:src="@drawable/btn_end_call" />
+    </RelativeLayout>
 </RelativeLayout>
