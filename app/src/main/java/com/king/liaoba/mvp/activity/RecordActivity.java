@@ -69,7 +69,7 @@ public class RecordActivity extends Activity implements View.OnClickListener,Vie
     // 多媒体播放器
     private MediaPlayer mediaPlayer;
     // 多媒体录制器
-    private MediaRecorder mediaRecorder = new MediaRecorder();
+    private MediaRecorder mediaRecorder = null;
     // 音频文件
     private File audioFile;
 
@@ -203,11 +203,16 @@ public class RecordActivity extends Activity implements View.OnClickListener,Vie
 
 
     private void startRecord(){
+
         if(checkSelfPermission(Manifest.permission.RECORD_AUDIO, 22)){
         try {
             if (!EnvironmentShare.haveSdCard()) {
                 Toast.makeText(this, "SD不存在，不正常录音！！", Toast.LENGTH_LONG).show();
             } else {
+
+                if(mediaRecorder == null){
+                    mediaRecorder = new MediaRecorder();
+                }
                 // 设置音频来源(一般为麦克风)
                 mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
                 // 设置音频输出格式（默认的输出格式）
