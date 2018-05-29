@@ -243,6 +243,7 @@ public class MineFragment extends SimpleFragment {
                 break;
             case R.id.mine_logout:
                 Constants.clearSharedPreference();
+                System.exit(0);
                 break;
             case R.id.mine_record:
                 Intent  intent = new Intent(getActivity(), RecordActivity.class);
@@ -276,8 +277,6 @@ public class MineFragment extends SimpleFragment {
                         }
                     }
                 });
-
-
     }
 
 
