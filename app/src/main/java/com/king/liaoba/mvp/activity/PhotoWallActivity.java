@@ -297,19 +297,20 @@ public class PhotoWallActivity extends Activity implements View.OnClickListener{
                     service.uploadPictures(Constants.getSharedPreference("chatid",this),part)
                             .subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(new Observer<Root>() {
+                            .subscribe(new Observer<PictureRoot>() {
                                 @Override
-                                public void onNext(Root root) {
-                                    if(root!=null){
-                                        Constants.EditSharedPreference("headimage", Constants.BASE_URL+root.getData().getGetdata().get(0).getHeadimg_url().toString());
-                                       // adapter.insert();
-
+                                public void onNext(PictureRoot root) {
+                                    if(root!=null&&root.getStatus()==1){
+                                       String []result = root.getData().getInfo().split("#");
+                                       PictureList pictureList = new PictureList();
+                                       pictureList.setId(result[0]);
+                                       pictureList.setPicurl(result[1]);
+                                       adapter.insert(pictureList,0);
                                     }
                                 }
 
                                 @Override
                                 public void onError(Throwable e) {
-                                    Log.d("pic","error"+e.getMessage());
                                 }
 
                                 @Override
