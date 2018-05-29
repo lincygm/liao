@@ -24,6 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.media.MediaPlayer.OnCompletionListener;
 
+import com.carlos.voiceline.mylibrary.VoiceLineView;
 import com.king.liaoba.Constants;
 import com.king.liaoba.bean.Root;
 import com.king.liaoba.http.APIRetrofit;
@@ -59,27 +60,12 @@ public class RecordActivity extends Activity implements View.OnClickListener,Vie
     Button btn_start;
     @BindView(R.id.record_save)
     Button btn_save;
-    @BindView(R.id.btn_delete)
+    @BindView(R.id.record_delete)
     Button btn_delete;
-    @BindView(R.id.btn_play)
+    @BindView(R.id.record_play)
     Button btn_play;
-
-    @BindView(R.id.recordView)
-    RecordView mRecorfView;
-    private Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            int db = (int) (Math.random()*100);
-            mRecorfView.setVolume(db);
-            if (mediaRecorder != null) {
-                // mediaRecorder.stop();
-                mediaRecorder.reset();
-            }
-        }
-    };
-    private int nowModel = RecordView.MODEL_RECORD;
-
+    @BindView(R.id.voicLine)
+    VoiceLineView voiceLineView;
     // 多媒体播放器
     private MediaPlayer mediaPlayer;
     // 多媒体录制器
@@ -99,45 +85,9 @@ public class RecordActivity extends Activity implements View.OnClickListener,Vie
 
     }
 
-    private TimerTask timeTask;
-    private Timer timeTimer = new Timer(true);
 
-    @OnTouch({R.id.btn_play,R.id.record_start})
-    @Override
-    public boolean onTouch(View v, MotionEvent event) {
-        if(v.getId()==R.id.record_start){
-            nowModel=RecordView.MODEL_RECORD;
-                    mRecorfView.setModel(RecordView.MODEL_RECORD);
-            if(event.getAction() == MotionEvent.ACTION_DOWN){
-                mRecorfView.start();
-                timeTimer.schedule(timeTask = new TimerTask() {
-                    public void run() {
-                        Message msg = new Message();
-                        msg.what = 1;
-                        handler.sendMessage(msg);
-                    }
-                }, 20, 20);
-                mRecorfView.setOnCountDownListener(new RecordView.OnCountDownListener() {
-                    @Override
-                    public void onCountDown() {
-                        Toast.makeText(RecordActivity.this,"计时结束啦~~",Toast.LENGTH_SHORT).show();
-                        mediaRecorder.stop();
-                        mediaRecorder.release();//释放资源
-                        mediaRecorder = null;
-                    }
-                });
-                startRecord();
-            }else if(event.getAction() == MotionEvent.ACTION_UP){
-                mRecorfView.cancel();
-                recordstop();
-                mRecorfView.setModel(RecordView.MODEL_PLAY);
-                nowModel = RecordView.MODEL_PLAY;
-            }
-        }
-
-        return false;
-    }
     public void recordstop() {
+
         if (mediaRecorder != null) {
             try {
                 mediaRecorder.stop();
@@ -152,48 +102,91 @@ public class RecordActivity extends Activity implements View.OnClickListener,Vie
         }
     }
 
-    @OnClick({R.id.record_save,R.id.record_play,R.id.btn_play,R.id.btn_delete})
+    @OnTouch({R.id.record_start})
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        if(v.getId()==R.id.record_start){
+            if(event.getAction()==MotionEvent.ACTION_DOWN){
+                startRecord();
+                voiceLineView.setVisibility(View.VISIBLE);
+                btn_delete.setVisibility(View.GONE);
+                btn_play.setVisibility(View.GONE);
+                btn_save.setVisibility(View.GONE);
+            }else if(event.getAction()==MotionEvent.ACTION_UP){
+                recordstop();
+                voiceLineView.setVisibility(View.GONE);
+                btn_delete.setVisibility(View.VISIBLE);
+                btn_play.setVisibility(View.VISIBLE);
+                btn_save.setVisibility(View.VISIBLE);
+            }
+        }
+        return false;
+    }
+
+    private void playrecord(){
+        if (mediaRecorder != null) {
+            mediaRecorder.reset();
+        }
+
+        if (audioFile != null && audioFile.exists()) {
+            try {
+                Log.i("com.kingtone.www.record", ">>>>>>>>>" + audioFile);
+                mediaPlayer = new MediaPlayer();
+                // 为播放器设置数据文件
+                mediaPlayer.setDataSource(audioFile.getAbsolutePath());
+                // 准备并且启动播放器
+                mediaPlayer.prepare();
+                mediaPlayer.start();
+                mediaPlayer.setOnCompletionListener(new OnCompletionListener() {
+                    @Override
+                    public void onCompletion(MediaPlayer mp) {
+                        setTitle("录音播放完毕.");
+
+                    }
+                });
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @OnClick({R.id.record_save,R.id.record_play,R.id.record_delete})
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.btn_play:
-
-                break;
             case R.id.record_save:
                 upload(audioFile);
                 break;
             case R.id.record_start:
-               // Toast.makeText(getApplicationContext(),"ff",Toast.LENGTH_LONG).show();
-               // startRecord();
+                startRecord();
                 break;
             case R.id.record_play:
-
-                mRecorfView.setModel(RecordView.MODEL_PLAY);
-                nowModel = RecordView.MODEL_PLAY;
-                mRecorfView.start();
-                timeTimer.schedule(timeTask = new TimerTask() {
-                    public void run() {
-                        Message msg = new Message();
-                        msg.what = 1;
-                        handler.sendMessage(msg);
-                    }
-                }, 20, 20);
-                mRecorfView.setOnCountDownListener(new RecordView.OnCountDownListener() {
-                    @Override
-                    public void onCountDown() {
-                        Toast.makeText(RecordActivity.this,"计时结束啦~~",Toast.LENGTH_SHORT).show();
-
-                    }
-                });
-
+                playrecord();
                     break;
-            case R.id.btn_delete:
-
+            case R.id.record_delete:
+                deleteFile(EnvironmentShare.getAudioRecordDir());
                 break;
                 default:
                     break;
         }
     }
+
+
+    public void deleteFile(File file) {
+        if (file.exists()) {
+            if (file.isFile()) {
+                file.delete();
+            } else if
+                    (file.isDirectory()) {
+                File files[] = file.listFiles();
+                for (int i = 0; i < files.length; i++) {
+                    this.deleteFile(files[i]);
+                }
+            }
+            file.delete();
+        }
+    }
+
     public boolean checkSelfPermission(String permission, int requestCode) {
         Log.i("", "checkSelfPermission " + permission + " " + requestCode);
         if (ContextCompat.checkSelfPermission(this,
