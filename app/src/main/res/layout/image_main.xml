@@ -28,12 +28,12 @@
             android:layout_height="15dp" />
     </LinearLayout>
     <ImageView
-        android:layout_width="wrap_content"
+        android:layout_width="25dp"
         android:layout_gravity="bottom"
-        android:src="@drawable/icon_female"
+        android:src="@drawable/icon_girl"
         android:id="@+id/sex"
-        android:layout_marginBottom="40dp"
-        android:layout_height="wrap_content" />
+        android:layout_marginBottom="50dp"
+        android:layout_height="25dp" />
     <RelativeLayout
         android:layout_width="match_parent"
         android:background="@color/black"
