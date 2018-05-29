@@ -135,7 +135,7 @@ public interface APIService {
     /** 上传生活照 */
     @Multipart
     @POST("index.php/Home/Upload/upblo/chatid/{chatid}")
-    Observable<Root> uploadPictures( @Path("chatid")String chatid,@Part MultipartBody.Part part);
+    Observable<PictureRoot> uploadPictures( @Path("chatid")String chatid,@Part MultipartBody.Part part);
 
     /** 关注 */
     @POST("index.php/Home/User/searchFollowsAndFocus/chatid/{chatid}/foucschatid/{focus_chatid}")
