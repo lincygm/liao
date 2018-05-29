@@ -30,8 +30,8 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_centerHorizontal="true"
-        android:text="删除"
         android:id="@+id/record_delete"
+        android:background="@drawable/icon_delete"
         android:visibility="gone"
         android:layout_marginBottom="20dp"
         android:layout_alignParentBottom="true"
@@ -40,19 +40,19 @@
     <Button
         android:layout_width="wrap_content"
         android:id="@+id/record_start"
-        android:text="开始录音"
+        android:background="@drawable/icon_record"
         android:layout_height="wrap_content" />
 
     <Button
         android:layout_width="wrap_content"
-        android:text="保存录音"
         android:id="@+id/record_save"
         android:visibility="gone"
+        android:background="@drawable/icon_save"
         android:layout_height="wrap_content" />
     <Button
         android:layout_width="wrap_content"
-        android:text="播放录音"
         android:visibility="gone"
+        android:background="@drawable/icon_play"
         android:id="@+id/record_play"
         android:layout_height="wrap_content" />
     </LinearLayout>
