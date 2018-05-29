@@ -14,8 +14,8 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_centerHorizontal="true"
-        android:text="按住我憋说话"
-        android:id="@+id/btn_record"
+        android:text="删除"
+        android:id="@+id/btn_delete"
         android:layout_marginBottom="20dp"
         android:layout_alignParentBottom="true"
         android:layout_height="wrap_content" />
