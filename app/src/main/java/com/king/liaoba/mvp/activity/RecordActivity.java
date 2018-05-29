@@ -59,8 +59,8 @@ public class RecordActivity extends Activity implements View.OnClickListener,Vie
     Button btn_start;
     @BindView(R.id.record_save)
     Button btn_save;
-    @BindView(R.id.btn_record)
-    Button btn_record;
+    @BindView(R.id.btn_delete)
+    Button btn_delete;
     @BindView(R.id.btn_play)
     Button btn_play;
 
@@ -72,6 +72,10 @@ public class RecordActivity extends Activity implements View.OnClickListener,Vie
             super.handleMessage(msg);
             int db = (int) (Math.random()*100);
             mRecorfView.setVolume(db);
+            if (mediaRecorder != null) {
+                // mediaRecorder.stop();
+                mediaRecorder.reset();
+            }
         }
     };
     private int nowModel = RecordView.MODEL_RECORD;
@@ -98,7 +102,7 @@ public class RecordActivity extends Activity implements View.OnClickListener,Vie
     private TimerTask timeTask;
     private Timer timeTimer = new Timer(true);
 
-    @OnTouch({R.id.btn_record,R.id.btn_play,R.id.record_start})
+    @OnTouch({R.id.btn_play,R.id.record_start})
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         if(v.getId()==R.id.record_start){
@@ -125,17 +129,45 @@ public class RecordActivity extends Activity implements View.OnClickListener,Vie
                 startRecord();
             }else if(event.getAction() == MotionEvent.ACTION_UP){
                 mRecorfView.cancel();
+                recordstop();
+                mRecorfView.setModel(RecordView.MODEL_PLAY);
+                nowModel = RecordView.MODEL_PLAY;
             }
         }
 
         return false;
     }
+    public void recordstop() {
+        if (mediaRecorder != null) {
+            try {
+                mediaRecorder.stop();
+            } catch (IllegalStateException e) {
+                // TODO 如果当前java状态和jni里面的状态不一致，
+                //e.printStackTrace();
+                mediaRecorder = null;
+                mediaRecorder = new MediaRecorder();
+            }
+            mediaRecorder.release();
+            mediaRecorder = null;
+        }
+    }
 
-    @OnClick({R.id.record_save,R.id.record_play,R.id.btn_play})
+    @OnClick({R.id.record_save,R.id.record_play,R.id.btn_play,R.id.btn_delete})
     @Override
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.btn_play:
+
+                break;
+            case R.id.record_save:
+                upload(audioFile);
+                break;
+            case R.id.record_start:
+               // Toast.makeText(getApplicationContext(),"ff",Toast.LENGTH_LONG).show();
+               // startRecord();
+                break;
+            case R.id.record_play:
+
                 mRecorfView.setModel(RecordView.MODEL_PLAY);
                 nowModel = RecordView.MODEL_PLAY;
                 mRecorfView.start();
@@ -153,41 +185,11 @@ public class RecordActivity extends Activity implements View.OnClickListener,Vie
 
                     }
                 });
-                break;
-            case R.id.record_save:
-                upload(audioFile);
-                break;
-            case R.id.record_start:
-                Toast.makeText(getApplicationContext(),"ff",Toast.LENGTH_LONG).show();
-                startRecord();
-                break;
-            case R.id.record_play:
-                if (mediaRecorder != null) {
-                    // mediaRecorder.stop();
-                    mediaRecorder.reset();
-                }
 
-                if (audioFile != null && audioFile.exists()) {
-                    try {
-                        Log.i("com.kingtone.www.record", ">>>>>>>>>" + audioFile);
-                        mediaPlayer = new MediaPlayer();
-                        // 为播放器设置数据文件
-                        mediaPlayer.setDataSource(audioFile.getAbsolutePath());
-                        // 准备并且启动播放器
-                        mediaPlayer.prepare();
-                        mediaPlayer.start();
-                        mediaPlayer.setOnCompletionListener(new OnCompletionListener() {
-                            @Override
-                            public void onCompletion(MediaPlayer mp) {
-                                setTitle("录音播放完毕.");
-
-                            }
-                        });
-                    }catch (Exception e){
-                        e.printStackTrace();
-                    }
-                }
                     break;
+            case R.id.btn_delete:
+
+                break;
                 default:
                     break;
         }
