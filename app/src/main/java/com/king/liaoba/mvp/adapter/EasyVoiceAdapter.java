@@ -67,12 +67,18 @@ public class EasyVoiceAdapter extends RecyclerArrayAdapter <VoiceListInfo>{
             username = $(R.id.username);
             answer=$(R.id.answer);
             voice=$(R.id.live_voice);
+            sex=$(R.id.sex);
         }
 
         @Override
         public void setData(final VoiceListInfo data) {
             super.setData(data);
-            Log.d("url",""+Constants.BASE_URL+data.getHeadimage_url());
+            if(data.getSex().equals("0")){
+                sex.setBackgroundResource(R.drawable.icon_girl);
+            }else {
+                sex.setBackgroundResource(R.drawable.icon_male);
+
+            }
             Glide.with(getContext()).load(Constants.BASE_URL+data.getHeadimage_url())
                     .placeholder(R.mipmap.live_default).error(R.mipmap.live_default).
                     crossFade().centerCrop().diskCacheStrategy(DiskCacheStrategy.SOURCE).into(iv);
