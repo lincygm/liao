@@ -84,26 +84,26 @@ public class SelfEditActivity extends Activity implements View.OnClickListener{
     private void change_sex(){
         
         AlertDialog.Builder builder = new AlertDialog.Builder(SelfEditActivity.this); //定义一个AlertDialog
-        String[] strarr = {"男", "女"};
+        String[] strarr = {"icon_male", "icon_girl"};
         builder.setItems(strarr, new DialogInterface.OnClickListener()
         {
             public void onClick(DialogInterface arg0, int arg1)
             {
                 // 自动生成的方法存根
-                if (arg1 == 0) {//男
-                    tv.setText("女");
-                }else {//女
-                    tv.setText("男");
+                if (arg1 == 0) {//icon_male
+                    tv.setText("icon_girl");
+                }else {//icon_girl
+                    tv.setText("icon_male");
                 }
             }
         });
         builder.show();
     }
     /**
-     * 0==女，1==男
+     * 0==icon_girl，1==icon_male
      * */
     private int sex(String se){
-          if(se.equals("男")){
+          if(se.equals("icon_male")){
                 return 1;
           }                     
         return 9;
