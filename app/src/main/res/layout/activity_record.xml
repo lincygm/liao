@@ -1,33 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    xmlns:record_view="http://schemas.android.com/apk/res-auto"
-    android:gravity="center_horizontal"
+    xmlns:voiceView="http://schemas.android.com/apk/res-auto"
     android:layout_height="match_parent">
 
-    <com.king.liaoba.mvp.view.RecordView
-        android:id="@+id/recordView"
-        android:layout_width="wrap_content"
+    <com.carlos.voiceline.mylibrary.VoiceLineView
+        android:id="@+id/voicLine"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/white"
+        voiceView:maxVolume="200"
+        voiceView:middleLine="@android:color/holo_red_light"
+        voiceView:middleLineHeight="1dp"
+        voiceView:fineness="three"
+        voiceView:rectSpace="2dp"
+        android:visibility="gone"
+        voiceView:rectWidth="5dp"
+        voiceView:sensibility="four"
+        voiceView:viewMode="line"
+        voiceView:voiceLine="@android:color/holo_red_light" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        record_view:model="play_model"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignParentBottom="true"
+        android:gravity="center"
+        android:orientation="horizontal">
     <Button
         android:layout_width="wrap_content"
         android:layout_centerHorizontal="true"
         android:text="删除"
-        android:id="@+id/btn_delete"
+        android:id="@+id/record_delete"
+        android:visibility="gone"
         android:layout_marginBottom="20dp"
         android:layout_alignParentBottom="true"
         android:layout_height="wrap_content" />
 
-    <Button
-        android:id="@+id/btn_play"
-        android:layout_width="wrap_content"
-        android:text="切换模式"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/button"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="18dp" />
     <Button
         android:layout_width="wrap_content"
         android:id="@+id/record_start"
@@ -36,18 +45,15 @@
 
     <Button
         android:layout_width="wrap_content"
-        android:text="停止录音"
-        android:id="@+id/record_stop"
-        android:layout_height="wrap_content" />
-
-    <Button
-        android:layout_width="wrap_content"
         android:text="保存录音"
         android:id="@+id/record_save"
+        android:visibility="gone"
         android:layout_height="wrap_content" />
     <Button
         android:layout_width="wrap_content"
         android:text="播放录音"
+        android:visibility="gone"
         android:id="@+id/record_play"
         android:layout_height="wrap_content" />
-</LinearLayout>
+    </LinearLayout>
+</RelativeLayout>
