@@ -25,6 +25,7 @@ import com.king.liaoba.mvp.fragment.LiveFragment;
 import com.king.liaoba.mvp.fragment.MineFragment;
 import com.king.liaoba.push.OnlineService;
 import com.liaoba.R;
+import com.tencent.bugly.beta.Beta;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -78,6 +79,8 @@ public class MainActivity extends PureActivity {
         JPushInterface.resumePush(getApplicationContext());
         requestPermissions();
         loginAI();
+        Beta.checkUpgrade();
+        getUserInfo();
     }
 
     private void getUserInfo(){
