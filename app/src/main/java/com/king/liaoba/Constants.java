@@ -71,6 +71,8 @@ public final class Constants {
         edit.commit();
     }
     public static void clearSharedPreference(){
-        sp.edit().clear();
+        SharedPreferences.Editor edit = sp.edit();
+        edit.clear();
+        edit.commit();
     }
 }
