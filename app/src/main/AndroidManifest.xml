@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.liaoba">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -14,7 +15,11 @@
     <uses-permission android:name="android.permission.CAMERA"/>
     <uses-permission android:name="android.permission.RECORD_AUDIO"/>
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+
     <permission
         android:name="com.liaoba.permission.JPUSH_MESSAGE"
         android:protectionLevel="signature" />
@@ -36,6 +41,10 @@
         android:supportsRtl="true"
         android:name="com.king.liaoba.App"
         android:theme="@style/BaseAppTheme">
+        <activity
+            android:name="com.tencent.bugly.beta.ui.BetaActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize|locale"
+            android:theme="@android:style/Theme.Translucent" />
         <activity android:name="com.king.liaoba.mvp.activity.WelcomeActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:windowSoftInputMode="stateHidden|stateUnchanged">
@@ -57,9 +66,10 @@
             </intent-filter>
         </service>
         <provider
-            android:name="android.support.v4.content.FileProvider"
+            android:name="com.king.liaoba.util.BuglyFileProvider"
             android:grantUriPermissions="true"
             android:authorities="com.liaoba.fileProvider"
+            tools:replace="name,authorities,exported,grantUriPermissions"
             android:exported="false">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
