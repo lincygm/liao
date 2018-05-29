@@ -8,6 +8,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.jude.easyrecyclerview.adapter.BaseViewHolder;
 import com.king.liaoba.bean.Person;
+import com.king.liaoba.bean.Root;
 import com.liaoba.R;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
@@ -16,7 +17,7 @@ import jp.wasabeef.glide.transformations.CropCircleTransformation;
 /**
  * Created by Mr.Jude on 2015/2/22.
  */
-public class PersonViewHolder extends BaseViewHolder<Person> {
+public class PersonViewHolder extends BaseViewHolder<Root> {
     private TextView mTv_name;
     private ImageView mImg_face;
     private TextView mTv_sign;
@@ -30,12 +31,12 @@ public class PersonViewHolder extends BaseViewHolder<Person> {
     }
 
     @Override
-    public void setData(final Person person){
+    public void setData(final Root person){
         Log.i("ViewHolder","position"+getDataPosition());
-        mTv_name.setText(person.getName());
-        mTv_sign.setText(person.getSign());
+        //mTv_name.setText(person.getName());
+       // mTv_sign.setText(person.getSign());
         Glide.with(getContext())
-                .load(person.getFace())
+                .load("")
                 //.placeholder(R.drawable.default_image)
                 .bitmapTransform(new CropCircleTransformation(getContext()))
                 .into(mImg_face);
