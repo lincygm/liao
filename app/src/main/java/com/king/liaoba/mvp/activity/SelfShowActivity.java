@@ -251,7 +251,7 @@ public class SelfShowActivity extends BaseActivity implements View.OnClickListen
                     @Override
                     public void onCompleted() {
                         Log.d("aa","onCompleted");
-
+                        Toast.makeText(getApplicationContext(),"关注成功!",Toast.LENGTH_LONG).show();
                     }
 
                     @Override
