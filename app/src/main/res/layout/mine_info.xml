@@ -12,11 +12,13 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="@dimen/left_margin"
             android:text="昵称"/>
-        <TextView
+        <EditText
             android:layout_width="wrap_content"
             android:text="小白菜"
+            android:maxLines="1"
+            android:maxLength="15"
             android:clickable="true"
-            android:id="@+id/name"
+            android:id="@+id/et_name"
             android:gravity="center"
             android:layout_marginRight="@dimen/left_margin"
             android:layout_alignParentRight="true"
