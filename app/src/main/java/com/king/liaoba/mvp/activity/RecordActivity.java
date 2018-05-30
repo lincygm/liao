@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -54,16 +55,16 @@ import android.os.Handler;
  * Created by gaomou on 2018/5/17.
  */
 
-public class RecordActivity extends Activity implements View.OnClickListener,View.OnTouchListener{
+public class RecordActivity extends Activity implements View.OnClickListener{
 
     @BindView(R.id.record_start)
-    Button btn_start;
+    ImageView btn_start;
     @BindView(R.id.record_save)
-    Button btn_save;
+    ImageView btn_save;
     @BindView(R.id.record_delete)
-    Button btn_delete;
+    ImageView btn_delete;
     @BindView(R.id.record_play)
-    Button btn_play;
+    ImageView btn_play;
     @BindView(R.id.voicLine)
     VoiceLineView voiceLineView;
     // 多媒体播放器
@@ -72,10 +73,7 @@ public class RecordActivity extends Activity implements View.OnClickListener,Vie
     private MediaRecorder mediaRecorder = null;
     // 音频文件
     private File audioFile;
-
-    // 传给Socket服务器端的上传和下载标志
-    private final int UP_LOAD = 1;
-    private final int DOWN_LOAD = 2;
+    private int time=0;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -83,6 +81,26 @@ public class RecordActivity extends Activity implements View.OnClickListener,Vie
         setContentView(R.layout.activity_record);
         ButterKnife.bind(this);
 
+        btn_start.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if(event.getAction()==MotionEvent.ACTION_DOWN){
+                    startRecord();
+                    voiceLineView.setVisibility(View.VISIBLE);
+                    btn_delete.setVisibility(View.GONE);
+                    btn_play.setVisibility(View.GONE);
+                    btn_save.setVisibility(View.GONE);
+                }else if(event.getAction()==MotionEvent.ACTION_UP){
+                    recordstop();
+                    voiceLineView.setVisibility(View.GONE);
+                    btn_delete.setVisibility(View.VISIBLE);
+                    btn_play.setVisibility(View.VISIBLE);
+                    btn_save.setVisibility(View.VISIBLE);
+                    btn_start.setVisibility(View.GONE);
+                }
+                return true;
+            }
+        });
     }
 
 
@@ -100,27 +118,6 @@ public class RecordActivity extends Activity implements View.OnClickListener,Vie
             mediaRecorder.release();
             mediaRecorder = null;
         }
-    }
-
-    @OnTouch({R.id.record_start})
-    @Override
-    public boolean onTouch(View v, MotionEvent event) {
-        if(v.getId()==R.id.record_start){
-            if(event.getAction()==MotionEvent.ACTION_DOWN){
-                startRecord();
-                voiceLineView.setVisibility(View.VISIBLE);
-                btn_delete.setVisibility(View.GONE);
-                btn_play.setVisibility(View.GONE);
-                btn_save.setVisibility(View.GONE);
-            }else if(event.getAction()==MotionEvent.ACTION_UP){
-                recordstop();
-                voiceLineView.setVisibility(View.GONE);
-                btn_delete.setVisibility(View.VISIBLE);
-                btn_play.setVisibility(View.VISIBLE);
-                btn_save.setVisibility(View.VISIBLE);
-            }
-        }
-        return false;
     }
 
     private void playrecord(){
