@@ -6,7 +6,6 @@ package com.king.liaoba.bean;
 
 public class PictureRoot {
 
-
         private int status;
         private PictureBean data;
         public void setStatus(int status) {
