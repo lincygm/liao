@@ -33,6 +33,7 @@ import com.jude.rollviewpager.RollPagerView;
 import com.jude.rollviewpager.hintview.ColorPointHintView;
 import com.king.liaoba.App;
 import com.king.liaoba.Constants;
+import com.king.liaoba.bean.FriendsRoot;
 import com.king.liaoba.bean.PictureBean;
 import com.king.liaoba.bean.PictureList;
 import com.king.liaoba.bean.PictureRoot;
@@ -123,6 +124,8 @@ public class PhotoWallActivity extends Activity implements View.OnClickListener{
         super.onResume();
         getPicture();
     }
+
+
 
     private void getPicture(){
         Retrofit retrofit = APIRetrofit.getInstance();
