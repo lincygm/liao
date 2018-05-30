@@ -26,34 +26,34 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:gravity="center"
+        android:layout_marginBottom="15dp"
         android:orientation="horizontal">
-    <Button
-        android:layout_width="wrap_content"
+    <ImageView
+        android:layout_width="50dp"
         android:layout_centerHorizontal="true"
         android:id="@+id/record_delete"
-        android:background="@drawable/icon_delete"
+        android:src="@drawable/icon_delete"
         android:visibility="gone"
-        android:layout_marginBottom="20dp"
         android:layout_alignParentBottom="true"
-        android:layout_height="wrap_content" />
+        android:layout_height="50dp" />
 
-    <Button
-        android:layout_width="wrap_content"
+    <ImageView
+        android:layout_width="50dp"
         android:id="@+id/record_start"
-        android:background="@drawable/icon_record"
-        android:layout_height="wrap_content" />
+        android:src="@drawable/icon_record"
+        android:layout_height="50dp" />
 
-    <Button
-        android:layout_width="wrap_content"
+    <ImageView
+        android:layout_width="50dp"
         android:id="@+id/record_save"
         android:visibility="gone"
-        android:background="@drawable/icon_save"
-        android:layout_height="wrap_content" />
-    <Button
-        android:layout_width="wrap_content"
+        android:src="@drawable/icon_save"
+        android:layout_height="50dp" />
+    <ImageView
+        android:layout_width="50dp"
         android:visibility="gone"
-        android:background="@drawable/icon_play"
+        android:src="@drawable/icon_play"
         android:id="@+id/record_play"
-        android:layout_height="wrap_content" />
+        android:layout_height="50dp" />
     </LinearLayout>
 </RelativeLayout>
