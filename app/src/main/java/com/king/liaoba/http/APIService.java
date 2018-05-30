@@ -3,6 +3,7 @@ package com.king.liaoba.http;
 import android.service.media.MediaBrowserService.Result;
 
 import com.king.liaoba.bean.AppStart;
+import com.king.liaoba.bean.FriendsRoot;
 import com.king.liaoba.bean.LiveCategory;
 import com.king.liaoba.bean.LiveListResult;
 import com.king.liaoba.bean.PictureRoot;
@@ -141,9 +142,7 @@ public interface APIService {
     @POST("index.php/Home/User/searchFollowsAndFocus/chatid/{chatid}/foucschatid/{focus_chatid}")
     Observable<Root> focus( @Path("chatid")String chatid,@Path("focus_chatid")String chatid2);
 
-    /** 获取关注列表 */
-    @POST("index.php/Home/User/getFocusList/chatid/{chatid}")
-    Observable<Root> getFocusList( @Path("chatid")String chatid);
+
 
     /**删除图片**/
     @POST("index.php/Home/User/deletePicture/chatid/{chatid}/id/{id}")
@@ -161,8 +160,20 @@ public interface APIService {
     /**获取关注数**/
     @POST("index.php/Home/User/showFocus/chatid/{chatid}")
     Observable<Root> getFocus(@Path("chatid")String chatid);
+
     /**获取粉丝数**/
     @POST("index.php/Home/User/showFans/chatid/{chatid}")
     Observable<Root> getFans(@Path("chatid")String chatid);
+    /** 获取关注列表 */
+    @POST("index.php/Home/User/getFocusList/chatid/{chatid}")
+    Observable<FriendsRoot> getFocusList( @Path("chatid")String chatid);
+    /** 获取粉丝列表 */
+    @POST("index.php/Home/User/getFansList/chatid/{chatid}")
+    Observable<FriendsRoot> getFansList(@Path("chatid")String chatid);
+
+    /** 更新userinfo */
+    @POST("index.php/Home/User/updateUser/chatid/{chatid}/sex/{sex}/age/{age}/sign/{sign}/nickname/{nickname}")
+    Observable<Root> updateUser(@Path("chatid")String chatid,@Path("sex") String sex,@Path("age")String age,
+                                @Path("sign")String sign,@Path("nickname")String nickname);
 
 }
