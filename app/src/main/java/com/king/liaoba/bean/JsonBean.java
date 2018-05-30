@@ -49,6 +49,27 @@ public class JsonBean {
     private String heattime;
     @SerializedName("headimg_url")//头像url
     private String headimg_url;
+    @SerializedName("sign")
+    private String sign;
+    @SerializedName("nickname")
+    private String nickname;
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+
+    public String getSign() {
+        return sign;
+    }
+
+    public void setSign(String sign) {
+        this.sign = sign;
+    }
 
     public String getHeadimg_url() {
         return headimg_url;
