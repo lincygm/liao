@@ -274,6 +274,7 @@ public class MineFragment extends SimpleFragment {
                         Log.d("getFans", "next");
                         if(jsonBean!=null){
                             Constants.EditSharedPreference("fans",jsonBean.getData().getInfo());
+                            tvFans.setText(""+jsonBean.getData().getInfo());
                         }
                     }
                 });
@@ -302,6 +303,7 @@ public class MineFragment extends SimpleFragment {
                         Log.d("getFocus", "next");
                         if(jsonBean!=null){
                             Constants.EditSharedPreference("focus",jsonBean.getData().getInfo());
+                            tvFollow.setText(""+jsonBean.getData().getInfo());
                         }
                     }
                 });
