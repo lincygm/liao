@@ -43,29 +43,32 @@
                         app:civ_border_color="@color/white"/>
 
                         <TextView
-                            android:layout_width="0dp"
+                            android:layout_width="wrap_content"
                             android:id="@+id/name"
                             android:layout_gravity="center"
+                            android:layout_marginLeft="30dp"
                             android:textStyle="bold"
                             android:text="高谋"
-                            android:layout_weight="1"
                             android:layout_height="wrap_content" />
 
                         <TextView
                             android:id="@+id/age"
-                            android:layout_width="0dp"
+                            android:layout_width="wrap_content"
                             android:textStyle="bold"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
+                            android:background="@drawable/corner"
+                            android:layout_marginLeft="30dp"
                             android:layout_gravity="center"
+                            android:textColor="@color/white"
                             android:text="25" />
 
                         <TextView
                             android:id="@+id/chatid"
-                            android:layout_width="0dp"
+                            android:layout_width="wrap_content"
                             android:textStyle="bold"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
+                            android:layout_marginLeft="30dp"
+
                             android:layout_gravity="center"
                             android:text="3435454" />
 
@@ -82,6 +85,7 @@
                         android:gravity="center"
                         android:fontFamily="bold"
                         android:text="100"
+                        android:textStyle="bold"
                         android:layout_weight="1"
                         android:layout_height="match_parent" />
                     <View
@@ -96,6 +100,7 @@
                         android:gravity="center"
                         android:fontFamily="bold"
                         android:text="200"
+                        android:textStyle="bold"
                         android:layout_weight="1"
                         android:layout_height="match_parent" />
                 </LinearLayout>
@@ -154,38 +159,38 @@
         </LinearLayout>
     </ScrollView>
 
-
-
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_alignParentBottom="true"
-        android:layout_height="50dp"
-        android:background="@color/black"
+        android:layout_height="wrap_content"
         android:orientation="horizontal">
-        <TextView
-            android:background="@null"
+        <View
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:textColor="@color/white"
+            android:layout_height="40dp"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:textColor="@color/colorPrimary"
             android:id="@+id/addfocus"
-            android:clickable="true"
             android:gravity="center"
-            android:layout_height="match_parent"
+            android:background="@drawable/btn_background"
+            android:layout_height="wrap_content"
             android:text="关注"/>
         <View
-            android:layout_width="0.5dp"
-            android:background="@color/white"
-            android:layout_height="match_parent"/>
-        <TextView
-            android:background="@null"
-            android:clickable="true"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:id="@+id/gift"
+            android:layout_height="40dp"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:id="@+id/selfgift"
             android:gravity="center"
-            android:textColor="@color/white"
-            android:layout_height="match_parent"
+            android:background="@drawable/btn_background"
+            android:textColor="@color/colorPrimary"
+            android:layout_height="wrap_content"
             android:text="送礼"/>
+        <View
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="40dp"/>
     </LinearLayout>
 </RelativeLayout>
