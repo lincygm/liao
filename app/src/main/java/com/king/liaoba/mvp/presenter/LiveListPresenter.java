@@ -53,7 +53,7 @@ public class LiveListPresenter extends BasePresenter<ILiveListView> {
         }
         Retrofit retrofit = APIRetrofit.getInstance();
         APIService service =retrofit.create(APIService.class);
-        service.getFangList()
+        service.getFangList("0")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<Root>() {
