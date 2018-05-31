@@ -28,6 +28,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.king.liaoba.App;
 import com.king.liaoba.Constants;
+import com.king.liaoba.bean.FriendsRoot;
 import com.king.liaoba.bean.Root;
 import com.king.liaoba.http.APIRetrofit;
 import com.king.liaoba.http.APIService;
@@ -76,7 +77,7 @@ public class MineFragment extends SimpleFragment {
     TextView tvFans;
     @BindView(R.id.tvSeed)
     TextView tvSeed;
-    @BindView(R.id.tvRecharge)
+    @BindView(R.id.mine_charge)
     TextView tvRecharge;
     @BindView(R.id.tvStarLight)
     TextView tvStarLight;
@@ -100,6 +101,8 @@ public class MineFragment extends SimpleFragment {
     TextView tv_logout;
     @BindView(R.id.mine_record)
     TextView tv_record;
+    @BindView(R.id.mine_sign)
+    TextView tv_sign;
 
 
     //请求相机
@@ -193,6 +196,14 @@ public class MineFragment extends SimpleFragment {
             Log.d("q",""+Constants.getSharedPreference("username",getActivity()));
             Glide.with(getActivity()).load(Constants.BASE_URL+Constants.getSharedPreference("headimage_url",getActivity()))
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE).into(headImage1);
+            if(Constants.getSharedPreference("signin",getActivity()).equals("1")){
+                tv_sign.setText("已签到");
+                tv_sign.setClickable(false);
+            }else {
+                tv_sign.setText("签到");
+                tv_sign.setClickable(true);
+            }
+
         }else{
             Log.d("q","b");
             btnLogin.setText("登录");
@@ -202,9 +213,9 @@ public class MineFragment extends SimpleFragment {
     }
 
     @OnClick({R.id.ivLeft, R.id.ivRight, R.id.ivAvatar,
-            R.id.tvFollow, R.id.tvFans, R.id.tvRecharge,
+            R.id.tvFollow, R.id.tvFans, R.id.mine_charge,
             R.id.tvStarLight, R.id.tvContribution, R.id.tvWatch, R.id.tvLevel,
-            R.id.tvTask, R.id.tvSetting, R.id.fab,R.id.mine_logout,R.id.mine_record})
+            R.id.tvTask, R.id.tvSetting, R.id.fab,R.id.mine_logout,R.id.mine_record,R.id.mine_sign})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ivLeft:
@@ -223,7 +234,7 @@ public class MineFragment extends SimpleFragment {
             case R.id.tvFans:
                 startLogin();
                 break;
-            case R.id.tvRecharge:
+            case R.id.mine_charge:
                 startLogin();
                 break;
             case R.id.tvStarLight:
@@ -249,7 +260,41 @@ public class MineFragment extends SimpleFragment {
                 Intent  intent = new Intent(getActivity(), RecordActivity.class);
                 startActivity(intent);
                 break;
+            case R.id.mine_sign:
+                sign();
+                break;
+                default:
+                    break;
         }
+    }
+
+    private void sign(){
+        Retrofit retrofit = APIRetrofit.getInstance();
+        APIService service = retrofit.create(APIService.class);
+        service.signIn(Constants.getSharedPreference("chatid", getActivity()))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<FriendsRoot>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                    }
+
+                    @Override
+                    public void onNext(FriendsRoot jsonBean) {
+                        if(jsonBean!=null){
+                            if(jsonBean.getStatus()==1){
+                                Constants.EditSharedPreference("signin","1");
+                                tv_sign.setText("已签到");
+                                tv_sign.setClickable(false);
+                            }
+                        }
+                    }
+                });
     }
 
     private void getFans(){
