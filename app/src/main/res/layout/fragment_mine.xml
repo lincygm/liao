@@ -124,8 +124,8 @@
                 android:background="@color/white">
 
                 <LinearLayout
-                    android:orientation="horizontal"
                     android:layout_width="match_parent"
+                    android:orientation="horizontal"
                     android:layout_height="wrap_content"
                     android:padding="16dp"
                     android:gravity="center_vertical">
@@ -139,14 +139,31 @@
                         android:drawablePadding="10dp"
                         android:gravity="center_vertical"
                         android:text="0"/>
-                    <View
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"/>
+                        <View
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"/>
+
                     <TextView
-                        android:id="@+id/tvRecharge"
+                        android:id="@+id/mine_sign"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:text="签到"
+                        android:textColor="@color/bg_red_color"
+                        android:layout_alignParentRight="true"
+                        android:paddingTop="4dp"
+                        android:paddingBottom="4dp"
+                        android:background="@drawable/follow_login_btn_bg_selector"/>
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"/>
+                    <TextView
+                        android:id="@+id/mine_charge"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
                         android:clickable="true"
                         android:text="@string/mine_recharge"
                         android:textColor="@color/bg_red_color"
@@ -232,7 +249,7 @@
                     android:padding="16dp"
                     android:background="?android:attr/selectableItemBackground"
                     android:drawableRight="@drawable/ic_triangle"
-                    android:text="@string/mine_member"
+                    android:text="签到"
                     android:drawableLeft="@drawable/mine_level"/>
                 <include layout="@layout/line_h_mine_space"/>
                 <TextView
