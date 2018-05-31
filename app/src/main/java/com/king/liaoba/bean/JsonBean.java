@@ -53,6 +53,16 @@ public class JsonBean {
     private String sign;
     @SerializedName("nickname")
     private String nickname;
+    @SerializedName("signin")
+    private String signin;
+
+    public String getSignin() {
+        return signin;
+    }
+
+    public void setSignin(String signin) {
+        this.signin = signin;
+    }
 
     public String getNickname() {
         return nickname;
