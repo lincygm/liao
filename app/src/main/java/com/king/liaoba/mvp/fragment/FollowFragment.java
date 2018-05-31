@@ -71,7 +71,6 @@ public class FollowFragment extends SimpleFragment implements  RecyclerArrayAdap
     private boolean hasNetWork = true;
 
     public static FollowFragment newInstance() {
-
         Bundle args = new Bundle();
         FollowFragment fragment = new FollowFragment();
         fragment.setArguments(args);
@@ -86,10 +85,10 @@ public class FollowFragment extends SimpleFragment implements  RecyclerArrayAdap
     @Override
     public void initUI() {
         tvTitle.setText(R.string.tab_follw);
+
     }
 
     private void fansadapter(){
-        recyclerView_fans = (EasyRecyclerView) getActivity().findViewById(R.id.foll_fans_recycleview);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView_fans.setLayoutManager(layoutManager);
         DividerDecoration itemDecoration = new DividerDecoration(Color.GRAY,Util.dip2px(getActivity(),16f), Util.dip2px(getActivity(),72),0);
@@ -127,7 +126,6 @@ public class FollowFragment extends SimpleFragment implements  RecyclerArrayAdap
     }
 
     private void focusadapter(){
-        recyclerView_focus = (EasyRecyclerView) getActivity().findViewById(R.id.foll_fans_recycleview);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView_focus.setLayoutManager(layoutManager);
         DividerDecoration itemDecoration = new DividerDecoration(Color.GRAY,Util.dip2px(getActivity(),16f), Util.dip2px(getActivity(),72),0);
@@ -167,9 +165,12 @@ public class FollowFragment extends SimpleFragment implements  RecyclerArrayAdap
 
     @Override
     public void initData() {
+        recyclerView_focus = (EasyRecyclerView) getActivity().findViewById(R.id.foll_focus_recycleview);
+        recyclerView_fans = (EasyRecyclerView) getActivity().findViewById(R.id.foll_fans_recycleview);
+
         Retrofit retrofit = APIRetrofit.getInstance();
         APIService service =retrofit.create(APIService.class);
-        service.getFocusList(Constants.getSharedPreference("chatid",getActivity()))
+        service.getFocusList(Constants.getSharedPreference("chatid",getActivity()),0)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<FriendsRoot>() {
@@ -196,7 +197,7 @@ public class FollowFragment extends SimpleFragment implements  RecyclerArrayAdap
                     }
                 });
 
-        service.getFansList(Constants.getSharedPreference("chatid",getActivity()))
+        service.getFansList(Constants.getSharedPreference("chatid",getActivity()),0)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<FriendsRoot>() {
@@ -300,8 +301,14 @@ public class FollowFragment extends SimpleFragment implements  RecyclerArrayAdap
                 startLogin();
                 break;
             case R.id.foll_fans:
+                fansadapter();
+                recyclerView_fans.setVisibility(View.VISIBLE);
+                recyclerView_focus.setVisibility(View.GONE);
                 break;
             case R.id.foll_focus:
+                focusadapter();
+                recyclerView_fans.setVisibility(View.GONE);
+                recyclerView_focus.setVisibility(View.VISIBLE);
                 break;
                 default:
                     break;
