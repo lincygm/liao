@@ -111,8 +111,8 @@ public interface APIService {
     /**
      * @获取房间列表
      * */
-    @POST("/index.php/Home/FangJian/getFangJianList")
-    Observable<Root> getFangList();
+    @POST("/index.php/Home/FangJian/getFangJianList/page/{page}")
+    Observable<Root> getFangList(@Path("page")String page);
 
     /**
      * 获取用户信息
@@ -165,15 +165,22 @@ public interface APIService {
     @POST("index.php/Home/User/showFans/chatid/{chatid}")
     Observable<Root> getFans(@Path("chatid")String chatid);
     /** 获取关注列表 */
-    @POST("index.php/Home/User/getFocusList/chatid/{chatid}")
-    Observable<FriendsRoot> getFocusList( @Path("chatid")String chatid);
+    @POST("index.php/Home/User/getFocusList/chatid/{chatid}/page/{page}")
+    Observable<FriendsRoot> getFocusList( @Path("chatid")String chatid,@Path("page")int page);
     /** 获取粉丝列表 */
-    @POST("index.php/Home/User/getFansList/chatid/{chatid}")
-    Observable<FriendsRoot> getFansList(@Path("chatid")String chatid);
+    @POST("index.php/Home/User/getFansList/chatid/{chatid}/page{page}")
+    Observable<FriendsRoot> getFansList(@Path("chatid")String chatid,@Path("page")int page);
 
     /** 更新userinfo */
     @POST("index.php/Home/User/updateUser/chatid/{chatid}/sex/{sex}/age/{age}/sign/{sign}/nickname/{nickname}")
     Observable<Root> updateUser(@Path("chatid")String chatid,@Path("sex") String sex,@Path("age")String age,
                                 @Path("sign")String sign,@Path("nickname")String nickname);
 
+    /**签到**/
+    @POST("index.php/Home/User/getSignIn/chatid/{chatid}")
+    Observable<FriendsRoot> signIn(@Path("chatid")String chatid);
+
+    /**获取签到状态**/
+    @POST("index.php/Home/User/getSignInStatus/chatid/{chatid}")
+    Observable<FriendsRoot> signInStatus(@Path("chatid")String chatid);
 }
