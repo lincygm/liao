@@ -59,7 +59,6 @@ public final class Constants {
         return   sp.getString(value,"Null");
     }
     public static void EditSharedPreference(JsonBean jsonBean){
-
         SharedPreferences.Editor edit = sp.edit();
         edit.putString("age",jsonBean.getAge());
         edit.putString("username",jsonBean.getUsername());
@@ -68,6 +67,7 @@ public final class Constants {
         edit.putString("headimage_url",jsonBean.getHeadimg_url());
         edit.putString("voicelibrary",jsonBean.getVoicelibrary());
         edit.putString("password",jsonBean.getPassword());
+        edit.putString("signin",(jsonBean.getSignin().length()>1 ?"1":"0"));
         edit.commit();
     }
     public static void clearSharedPreference(){
