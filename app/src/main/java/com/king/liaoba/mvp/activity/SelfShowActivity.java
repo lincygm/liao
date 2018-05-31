@@ -10,6 +10,7 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -72,7 +73,9 @@ public class SelfShowActivity extends BaseActivity implements View.OnClickListen
     TextView tv_save;
     TextView tv_title;
     @BindView(R.id.addfocus)
-    TextView tv_addfocus;
+    Button btn_addfocus;
+    @BindView(R.id.selfgift)
+    Button btn_gift;
     ImageView iv_close;
     SelfShowPresenter selfShowPresenter = null;
     private EasyRecyclerView recyclerView;
@@ -135,13 +138,11 @@ public class SelfShowActivity extends BaseActivity implements View.OnClickListen
     @Override
     public void showData(final Root root) {
         if(root==null)return;
-        Log.d("data","==="+root.getData().getGetdata().get(0).getAge().toString());
         tv_age.setText(root.getData().getGetdata().get(0).getAge().toString()+"岁");
-        tv_focus.setText(root.getData().getGetdata().get(0).getFollowcount().toString()+"\n关注");
-        tv_fances.setText(root.getData().getGetdata().get(0).getFanscount().toString()+"\n粉丝");
+        tv_focus.setText(root.getData().getGetdata().get(0).getFollowcount().toString()+"关注");
+        tv_fances.setText(root.getData().getGetdata().get(0).getFanscount().toString()+"粉丝");
         tv_chatid.setText("ID "+root.getData().getGetdata().get(0).getChatid().toString());
         tv_title.setText(root.getData().getGetdata().get(0).getChatid().toString());
-        Log.d(">>>>",""+Constants.BASE_URL+root.getData().getGetdata().get(0).getHeadimg_url());
         this.runOnUiThread(new Runnable() {
             @Override
             public void run() {
