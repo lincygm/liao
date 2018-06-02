@@ -59,6 +59,8 @@
             android:text="21"
             android:id="@+id/slef_age"
             android:gravity="center"
+            android:numeric="integer"
+            android:maxLength="2"
             android:layout_marginRight="@dimen/left_margin"
             android:layout_alignParentRight="true"
             android:layout_height="match_parent" />
@@ -79,6 +81,7 @@
             android:id="@+id/sign"
             android:gravity="center"
             android:layout_marginRight="@dimen/left_margin"
+            android:maxLength="25"
             android:layout_alignParentRight="true"
             android:layout_height="match_parent" />
     </RelativeLayout>
