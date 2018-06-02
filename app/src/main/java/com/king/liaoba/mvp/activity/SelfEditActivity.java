@@ -68,9 +68,9 @@ public class SelfEditActivity extends Activity implements View.OnClickListener{
         window_title.setText("个人信息");
 
         //tv_sex.setText(Constants.getSharedPreference("sex",this)?"0");
-        et_name.setText(Constants.getSharedPreference("nickname",this));
-        et_ege.setText(Constants.getSharedPreference("age",this));
-        et_sign.setText(Constants.getSharedPreference("sign",this));
+        et_name.setText(Constants.getSharedPreference("nickname",this).replace("Null",""));
+        et_ege.setText(Constants.getSharedPreference("age",this).replace("Null",""));
+        et_sign.setText(Constants.getSharedPreference("sign",this).replace("Null",""));
     }
 
     @Override
@@ -132,10 +132,10 @@ public class SelfEditActivity extends Activity implements View.OnClickListener{
             {
                 // 自动生成的方法存根
                 if (arg1 == 0) {//icon_male
-                    tv_sex.setText("icon_girl");
+                    tv_sex.setText("女");
                     sex=0;
                 }else {//icon_girl
-                    tv_sex.setText("icon_male");
+                    tv_sex.setText("男");
                     sex=1;
                 }
             }
