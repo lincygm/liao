@@ -29,6 +29,8 @@ import java.util.TimerTask;
 
 import io.agora.AgoraAPI;
 import io.agora.AgoraAPIOnlySignal;
+import io.agora.rtc.IRtcEngineEventHandler;
+import io.agora.rtc.RtcEngine;
 import retrofit2.Retrofit;
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
@@ -38,28 +40,28 @@ import rx.android.schedulers.AndroidSchedulers;
 
 public class OnlineService extends Service {
     private static boolean status = true;
-    private AgoraAPIOnlySignal mAgoraAPI;
+    public static AgoraAPIOnlySignal mAgoraAPI;
     private static String TAG = "OnlineService";
     private MediaPlayer mPlayer;
-    Player player;
+    public static RtcEngine mRtcEngine;
+    public static String account;
+    int time = 0;
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.d("service","====1===");
-        mAgoraAPI = AgoraAPIOnlySignal.getInstance(this, this.getResources().getString(R.string.agora_app_id));
+        Log.d("OnlineService","====1===");
         addSignalingCallback();
         return super.onStartCommand(intent, flags, startId);
     }
 
     @Override
     public ComponentName startService(Intent service) {
-        Log.d("service","=======");
-
+        Log.d("OnlineService","=======");
         return super.startService(service);
     }
-
     @Override
     public void onCreate() {
-        Log.d("service","===2====");
+        Log.d("OnlineService","===2====");
+        //loginAI();
         new Thread(){
             @Override
             public void run() {
@@ -68,7 +70,7 @@ public class OnlineService extends Service {
                 timer.schedule(new TimerTask() {
                     @Override
                     public void run() {
-                        Log.d("service","run===");
+                        Log.d("OnlineService","run===");
                         status = true;
                         while(status){
                             if(Constants.getSharedPreference("chatid",OnlineService.this).equals("Null")||Constants.getSharedPreference("chatid",OnlineService.this)==null){
@@ -90,7 +92,7 @@ public class OnlineService extends Service {
 
                                         @Override
                                         public void onNext( Root jsonBean) {
-                                            Log.d("service","=====");
+                                            Log.d("OnlineService","=====");
                                         }
                                     });
                             status=false;
@@ -113,12 +115,16 @@ public class OnlineService extends Service {
     public void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
+        mRtcEngine.destroy();
+        mRtcEngine = null;
+        mAgoraAPI.destroy();
+        mAgoraAPI = null;
     }
 
     @Subscribe(threadMode = ThreadMode.BACKGROUND)
     public void onEventMedia(MessageEvent messageEvent){
         if(messageEvent.getMessage().equals("play")){
-            Log.d("voice","bb");
+            Log.d("OnlineService","bb");
 
             //1 初始化mediaplayer
              mPlayer = new MediaPlayer();
@@ -140,17 +146,71 @@ public class OnlineService extends Service {
                 e.printStackTrace();
             }
 
+        }else if(messageEvent.getMessage().equals("count")){
+            counttime();
         }
     }
 
+    private void counttime(){
+        Timer timer = new Timer(true);
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                time++;
+                Log.d("tttttt",time+">");
+                if(time==60){
+                    mAgoraAPI.channelInviteEnd(Constants.getSharedPreference("chatid",OnlineService.this),account
+                            ,0);
+                    time = 0;
+                }
+            }
+        }, 0, 1000);
+    }
+    private final IRtcEngineEventHandler mRtcEventHandler = new IRtcEngineEventHandler() { // Tutorial Step 1
+
+        @Override
+        public void onUserOffline(final int uid, final int reason) { // Tutorial Step 4
+//            runOnUiThread(new Runnable() {
+//                @Override
+//                public void run() {
+//                    onRemoteUserLeft(uid, reason);
+//                    Log.d("voice","offline");
+//                }
+//            });
+        }
+
+        @Override
+        public void onUserMuteAudio(final int uid, final boolean muted) { // Tutorial Step 6
+//            runOnUiThread(new Runnable() {
+//                @Override
+//                public void run() {
+//                    onRemoteUserVoiceMuted(uid, muted);
+//                    Log.d("voice","mute");
+//                }
+//            });
+        }
+    };
+
+    private void initializeAgoraEngine() {
+
+        try {
+            mRtcEngine = RtcEngine.create(getBaseContext(), getString(R.string.agora_app_id), mRtcEventHandler);
+        } catch (Exception e) {
+            Log.d("OnlineService", Log.getStackTraceString(e));
+
+            throw new RuntimeException("NEED TO check rtc sdk init fatal error\n" + Log.getStackTraceString(e));
+        }
+    }
     private void addSignalingCallback() {
+        initializeAgoraEngine();
+        mAgoraAPI = AgoraAPIOnlySignal.getInstance(this, this.getResources().getString(R.string.agora_app_id));
 
         if (mAgoraAPI == null) {
-            Log.d("service","=====3=");
+            Log.d("OnlineService","=====3=");
             return;
         }
 
-        Log.d("service","======4===4=");
+        Log.d("OnlineService","======4===4=");
         mAgoraAPI.logout();
         if(!Constants.getSharedPreference("chatid",OnlineService.this).equals("Null")||Constants.getSharedPreference("chatid",OnlineService.this)!=null){
             mAgoraAPI.login(this.getResources().getString(R.string.agora_app_id),Constants.getSharedPreference("chatid",OnlineService.this),
@@ -163,29 +223,12 @@ public class OnlineService extends Service {
             @Override
             public void onLoginSuccess(int uid, int fd) {
                 super.onLoginSuccess(uid, fd);
-                Log.d("onLoginSuccess","succssful");
+                Log.d("OnlineService","succssful");
             }
 
             @Override
             public void onLogout(final int i) {
                 Log.i(TAG, "onLogout  i = " + i);
-               /* runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (i == IAgoraAPI.ECODE_LOGOUT_E_KICKED) { // other login the account
-                            Toast.makeText(VoiceChatViewActivity.this, "Other login account ,you are logout.", Toast.LENGTH_SHORT).show();
-
-                        } else if (i == IAgoraAPI.ECODE_LOGOUT_E_NET) { // net
-                            Toast.makeText(VoiceChatViewActivity.this, "Logout for Network can not be.", Toast.LENGTH_SHORT).show();
-                            finish();
-                        }
-                        Intent intent = new Intent();
-                        intent.putExtra("result", "finish");
-                        setResult(RESULT_OK, intent);
-                        finish();
-                    }
-                });*/
-
             }
 
             /**
@@ -193,10 +236,13 @@ public class OnlineService extends Service {
              */
             @Override
             public void onInviteReceived(final String channelID, final String account, final int uid, String s2) {
-                Log.i(TAG, "onInviteReceived  channelID = " + channelID + "  account = " + account);
+                Log.i(TAG, "onInviteReceived  channelID = " + channelID + "  account = " + account+ " s2=  "+s2);
                 Intent intent = new Intent();
                 intent.setClass(OnlineService.this, VoiceChatViewActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtra("call_head_url","");
+                intent.putExtra("channelID",channelID);
+                intent.putExtra("account",account);
                 startActivity(intent);
                 //收到通话邀请
             }
@@ -228,19 +274,12 @@ public class OnlineService extends Service {
              */
             @Override
             public void onInviteAcceptedByPeer(String channelID, String account, int uid, String s2) {
-                /*runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (mPlayer != null && mPlayer.isPlaying()) {
-                            mPlayer.stop();
-                        }
-                        //mCallTitle.setVisibility(View.GONE);
-                    }
-                });*/
-                Log.d("time","start");
-                EventBus.getDefault().post(new MessageEvent("startcounttime",null));
 
+                Log.d("OnlineService","start");
+                EventBus.getDefault().post(new MessageEvent("startcounttime",null));
             }
+
+
 
             /**
              * other receiver call refuse callback
@@ -282,17 +321,7 @@ public class OnlineService extends Service {
             @Override
             public void onInviteEndByPeer(final String channelID, String account, int uid, String s2) {
                 Log.i(TAG, "onInviteEndByPeer channelID = " + channelID + " account = " + account);
-               /* runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        // if (channelID.equals(channelName)) {
-                        //    onEncCallClicked();
-                        //  }
-
-                    }
-                });*/
                 EventBus.getDefault().post(new MessageEvent("stop.activity",null));
-
             }
 
             /**
@@ -304,12 +333,6 @@ public class OnlineService extends Service {
             @Override
             public void onInviteEndByMyself(String channelID, String account, int uid) {
                 Log.i(TAG, "onInviteEndByMyself channelID = " + channelID + "  account = " + account);
-               /* runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        //onEncCallClicked();
-                    }
-                });*/
                 EventBus.getDefault().post(new MessageEvent("stop.activity",null));
 
             }
