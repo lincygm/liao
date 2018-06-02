@@ -4,6 +4,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -92,9 +93,10 @@ public class EasyVoiceAdapter extends RecyclerArrayAdapter <VoiceListInfo>{
                     intent.setClass(mContext, VoiceChatViewActivity.class);
                     intent.putExtra("channel",Constants.getSharedPreference("chatid",mContext));
                     intent.putExtra("user",data.getChatid());
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     intent.putExtra("head_url",data.getHeadimage_url());
-                    intent.putExtra("call_head_url",Constants.getSharedPreference("head_url",mContext));
-                    Log.d("url",">>"+data.getHeadimage_url());
+                    intent.putExtra("call_head_url",Constants.getSharedPreference("headimg_url",mContext));
+                    intent.putExtra("nickname", Constants.getSharedPreference("nickname",mContext));
                     mContext.startActivity(intent);
                 }
             });
@@ -104,7 +106,6 @@ public class EasyVoiceAdapter extends RecyclerArrayAdapter <VoiceListInfo>{
                     Intent intent = new Intent();
                     intent.setClass(mContext, SelfShowActivity.class);
                     intent.putExtra("chatid",chatid);
-
                     mContext.startActivity(intent);
                 }
             });
@@ -112,7 +113,6 @@ public class EasyVoiceAdapter extends RecyclerArrayAdapter <VoiceListInfo>{
             voice.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                   // Log.d("voice",Constants.BASE_URL+Constants.getSharedPreference("voicelibrary",mContext));
                     EventBus.getDefault().post(new MessageEvent<>("play",
                             Constants.BASE_URL+data.getVoice_url()));
                     Toast.makeText(mContext,
