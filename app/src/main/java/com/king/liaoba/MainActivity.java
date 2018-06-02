@@ -78,7 +78,7 @@ public class MainActivity extends PureActivity {
                 Constants.getSharedPreference("jpush_id",this));
         JPushInterface.resumePush(getApplicationContext());
         requestPermissions();
-        loginAI();
+        //loginAI();
         Beta.checkUpgrade();
         getUserInfo();
     }
@@ -109,18 +109,7 @@ public class MainActivity extends PureActivity {
                 });
     }
 
-    /**
-     * 登录声网
-     * */
-    private void loginAI() {
 
-        if (!Constants.getSharedPreference("chatid", getApplicationContext()).equals("Null")
-                && Constants.getSharedPreference("chatid", getApplicationContext()).equals("")) {
-            AgoraAPIOnlySignal mAgoraAPI = AgoraAPIOnlySignal.getInstance(this, getResources().getString(R.string.agora_app_id));
-            mAgoraAPI.login(getResources().getString(R.string.agora_app_id),
-                    Constants.getSharedPreference("chatid", getApplicationContext()), "_no_need_token", 0, null);
-        }
-    }
     public void requestPermissions() {
         int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE);
         if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
@@ -161,6 +150,7 @@ public class MainActivity extends PureActivity {
     @Override
     public void initUI() {
         showHomeFragment();
+       // showLiveFragment();
     }
 
 
