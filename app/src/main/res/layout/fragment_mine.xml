@@ -179,6 +179,8 @@
                     android:layout_height="match_parent"
                     android:drawablePadding="6dp"
                     android:gravity="center_vertical"
+                    android:visibility="gone"
+
                     android:padding="16dp"
                     android:background="?android:attr/selectableItemBackground"
                     android:drawableRight="@drawable/ic_triangle"
@@ -202,20 +204,11 @@
                     android:background="?android:attr/selectableItemBackground"
                     android:drawableRight="@drawable/ic_triangle"
                     android:text="@string/mine_contribution"
+                    android:visibility="gone"
+
                     android:drawableLeft="@drawable/mine_contribution"/>
                 <include layout="@layout/line_h_mine_space"/>
-                <TextView
-                    android:id="@+id/tvWatch"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:drawablePadding="6dp"
-                    android:gravity="center_vertical"
-                    android:padding="16dp"
-                    android:background="?android:attr/selectableItemBackground"
-                    android:drawableRight="@drawable/ic_triangle"
-                    android:text="@string/mine_watch"
-                    android:drawableLeft="@drawable/mine_watch"/>
-                <include layout="@layout/line_h_mine_space"/>
+
                 <TextView
                     android:id="@+id/tvLevel"
                     android:layout_width="match_parent"
@@ -226,26 +219,19 @@
                     android:background="?android:attr/selectableItemBackground"
                     android:drawableRight="@drawable/ic_triangle"
                     android:text="@string/mine_level"
+                    android:visibility="gone"
+
                     android:drawableLeft="@drawable/mine_level"/>
                 <include layout="@layout/line_h_mine_space"/>
-                <TextView
-                    android:id="@+id/setvalue"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:drawablePadding="6dp"
-                    android:gravity="center_vertical"
-                    android:padding="16dp"
-                    android:background="?android:attr/selectableItemBackground"
-                    android:drawableRight="@drawable/ic_triangle"
-                    android:text="@string/mine_level"
-                    android:drawableLeft="@drawable/mine_level"/>
-                <include layout="@layout/line_h_mine_space"/>
+
                 <TextView
                     android:id="@+id/mine_member"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:drawablePadding="6dp"
                     android:gravity="center_vertical"
+                    android:visibility="gone"
+
                     android:padding="16dp"
                     android:background="?android:attr/selectableItemBackground"
                     android:drawableRight="@drawable/ic_triangle"
@@ -262,6 +248,8 @@
                     android:background="?android:attr/selectableItemBackground"
                     android:drawableRight="@drawable/ic_triangle"
                     android:text="@string/mine_member"
+                    android:visibility="gone"
+
                     android:drawableLeft="@drawable/mine_level"/>
                 <include layout="@layout/line_h_mine_space"/>
 
