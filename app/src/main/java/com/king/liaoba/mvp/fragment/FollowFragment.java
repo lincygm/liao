@@ -165,9 +165,9 @@ public class FollowFragment extends SimpleFragment implements  RecyclerArrayAdap
 
     @Override
     public void initData() {
+
         recyclerView_focus = (EasyRecyclerView) getActivity().findViewById(R.id.foll_focus_recycleview);
         recyclerView_fans = (EasyRecyclerView) getActivity().findViewById(R.id.foll_fans_recycleview);
-
         Retrofit retrofit = APIRetrofit.getInstance();
         APIService service =retrofit.create(APIService.class);
         service.getFocusList(Constants.getSharedPreference("chatid",getActivity()),0)
