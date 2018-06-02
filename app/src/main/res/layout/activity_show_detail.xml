@@ -28,19 +28,34 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
                     android:layout_marginLeft="@dimen/left_margin"
                     android:orientation="horizontal">
-                    <com.king.liaoba.util.uploadimg.CircleImageView
-                        android:id="@+id/head_image_d"
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
-                        android:src="@drawable/mine_default_avatar"
-                        android:scaleType="centerCrop"
-                        android:clickable="true"
-                        android:layout_centerHorizontal="true"
-                        android:padding="10dp"
-                        app:civ_border_width="2dp"
-                        app:civ_border_color="@color/white"/>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                        <com.king.liaoba.util.uploadimg.CircleImageView
+                            android:id="@+id/head_image_d"
+                            android:layout_width="80dp"
+                            android:layout_height="80dp"
+                            android:src="@drawable/mine_default_avatar"
+                            android:scaleType="centerCrop"
+                            android:clickable="true"
+                            android:layout_centerHorizontal="true"
+                            android:padding="10dp"
+                            app:civ_border_width="2dp"
+                            app:civ_border_color="@color/white"/>
+                        <TextView
+                            android:id="@+id/chatid"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:layout_gravity="center"
+                            android:text="3435454" />
+
+                    </LinearLayout>
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -57,20 +72,21 @@
                             android:textStyle="bold"
                             android:layout_height="wrap_content"
                             android:background="@drawable/corner"
-                            android:layout_marginLeft="30dp"
+                            android:layout_marginLeft="10dp"
                             android:layout_gravity="center"
                             android:textColor="@color/white"
                             android:text="25" />
 
-                        <TextView
-                            android:id="@+id/chatid"
-                            android:layout_width="wrap_content"
-                            android:textStyle="bold"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="30dp"
 
-                            android:layout_gravity="center"
-                            android:text="3435454" />
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:textColor="@color/white"
+                        android:id="@+id/addfocus"
+                        android:background="@drawable/corner_focus"
+                        android:layout_marginLeft="30dp"
+                        android:gravity="center"
+                        android:layout_height="wrap_content"
+                        android:text="关注"/>
 
                 </LinearLayout>
                 <include layout="@layout/line_h_mine_space"/>
@@ -126,21 +142,25 @@
                 </RelativeLayout>
                 <include layout="@layout/line_h_mine_space"/>
 
-                <LinearLayout
+                <RelativeLayout
                     android:layout_width="match_parent"
+                    android:gravity="center_vertical"
                     android:layout_marginLeft="@dimen/left_margin"
                     android:layout_height="@dimen/line_height"
-                    android:orientation="horizontal">
+                    >
                     <TextView
                         android:gravity="center_vertical"
                         android:layout_width="wrap_content"
+                        android:layout_alignParentLeft="true"
                         android:text="个性签名"
                         android:layout_height="match_parent" />
                     <TextView
                         android:id="@+id/sign"
                         android:layout_width="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:gravity="center_vertical"
                         android:layout_height="match_parent" />
-                </LinearLayout>
+                </RelativeLayout>
                 <include layout="@layout/line_h_mine_space"/>
 
                 <LinearLayout
@@ -159,38 +179,15 @@
         </LinearLayout>
     </ScrollView>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_alignParentBottom="true"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <View
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="40dp"/>
+
         <Button
-            android:layout_width="wrap_content"
-            android:textColor="@color/colorPrimary"
-            android:id="@+id/addfocus"
-            android:gravity="center"
-            android:background="@drawable/btn_background"
-            android:layout_height="wrap_content"
-            android:text="关注"/>
-        <View
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="40dp"/>
-        <Button
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:id="@+id/selfgift"
+            android:layout_alignParentBottom="true"
             android:gravity="center"
-            android:background="@drawable/btn_background"
-            android:textColor="@color/colorPrimary"
+            android:textColor="@color/white"
+            android:background="@color/mediumblue"
             android:layout_height="wrap_content"
             android:text="送礼"/>
-        <View
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="40dp"/>
-    </LinearLayout>
+
 </RelativeLayout>
