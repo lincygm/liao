@@ -1,5 +1,6 @@
 package com.king.liaoba.mvp.fragment;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -30,6 +31,8 @@ import com.king.liaoba.mvp.adapter.ImageAdapter;
 import com.king.liaoba.mvp.base.BaseFragment;
 import com.king.liaoba.mvp.presenter.LiveListPresenter;
 import com.king.liaoba.mvp.view.ILiveListView;
+import com.king.liaoba.mvp.view.MarqueeTextView;
+import com.king.liaoba.mvp.view.MarqueeTextViewClickListener;
 import com.king.liaoba.util.DensityUtil;
 import com.king.liaoba.util.RecycleViewUtils;
 import com.liaoba.R;
@@ -70,7 +73,7 @@ public class LiveListFragment extends BaseFragment<ILiveListView, LiveListPresen
     public static LiveListFragment newInstance(String slug) {
         return newInstance(slug,false);
     }
-
+    private String [] textArrays = new String[]{"新用户注册就送100聊币!","每天签到就送10聊币！","新用户免费提现!"};
     public static LiveListFragment newInstance(String slug,boolean isSearch) {
         Bundle args = new Bundle();
 
@@ -91,6 +94,7 @@ public class LiveListFragment extends BaseFragment<ILiveListView, LiveListPresen
 
     @Override
     public void initUI() {
+
 
         PictureList pictureList = new PictureList();
         pictureList.setPicurl("http://i2.hdslb.com/52_52/user/61175/6117592/myface.jpg");
@@ -124,7 +128,6 @@ public class LiveListFragment extends BaseFragment<ILiveListView, LiveListPresen
         easyVoiceAdapter.setNotifyOnChange(false);
 
         //getPresenter().getLiveList(slug);
-        Log.d("list","=====");
         GridLayoutManager gridLayoutManager = new GridLayoutManager(context,2);
         gridLayoutManager.setSpanSizeLookup(easyVoiceAdapter.obtainGridSpanSizeLookUp(2));
         easyRecyclerView.setLayoutManager(gridLayoutManager);
@@ -133,7 +136,7 @@ public class LiveListFragment extends BaseFragment<ILiveListView, LiveListPresen
             public View onCreateView(ViewGroup parent) {
                 RollPagerView header = new RollPagerView(getContext());
                 header.setHintView(new ColorPointHintView(getContext(), Color.BLUE, Color.GRAY));
-                header.setHintPadding(0, 0, 0, (int) RecycleViewUtils.convertDpToPixel(28, getContext()));
+                header.setHintPadding(0, 0, 0, (int) RecycleViewUtils.convertDpToPixel(18, getContext()));
                 header.setPlayDelay(2000);
                 header.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                         (int) RecycleViewUtils.convertDpToPixel(100, getContext())));
@@ -203,6 +206,13 @@ public class LiveListFragment extends BaseFragment<ILiveListView, LiveListPresen
           //  easyRecyclerView.showProgress();
             getPresenter().getLiveList(slug);
 
+        MarqueeTextView marqueeTv = (com.king.liaoba.mvp.view.MarqueeTextView) getActivity().findViewById(R.id.live_marquee);
+        marqueeTv.setTextArraysAndClickListener(textArrays, new MarqueeTextViewClickListener() {
+            @Override
+            public void onClick(View view) {
+                //startActivity(new Intent(MainActivity.this,AnotherActivity.class));
+            }
+        });
     }
 
 
