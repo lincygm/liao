@@ -81,6 +81,7 @@ public class SelfShowActivity extends BaseActivity implements View.OnClickListen
     private EasyRecyclerView recyclerView;
     private ImageAdapter adapter;
     CircleImageView circleImageView =null;
+    //被邀请的chatid
     private String chatid = null;
     List<PictureList> list  = new ArrayList<>();
 
@@ -105,7 +106,66 @@ public class SelfShowActivity extends BaseActivity implements View.OnClickListen
     public void initData() {
         initUI();
         getPicture();
+
     }
+
+    private void getFans(String chatid){
+
+        Retrofit retrofit = APIRetrofit.getInstance();
+        APIService service = retrofit.create(APIService.class);
+        service.getFans(chatid)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<Root>() {
+                    @Override
+                    public void onCompleted() {
+                        Log.d("getFans", "onCompleted");
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                    }
+
+                    @Override
+                    public void onNext(Root jsonBean) {
+                        Log.d("getFans", "next");
+                        if(jsonBean!=null){
+                            Constants.EditSharedPreference("fans",jsonBean.getData().getInfo());
+                            tv_fances.setText(""+jsonBean.getData().getInfo()+"粉丝");
+                        }
+                    }
+                });
+    }
+
+
+
+    private void getFocus(String chatid) {
+        Retrofit retrofit = APIRetrofit.getInstance();
+        APIService service = retrofit.create(APIService.class);
+        service.getFocus(chatid)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<Root>() {
+                    @Override
+                    public void onCompleted() {
+                        Log.d("getFocus", "onCompleted");
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                    }
+
+                    @Override
+                    public void onNext(Root jsonBean) {
+                        if(jsonBean!=null){
+                            Constants.EditSharedPreference("focus",jsonBean.getData().getInfo());
+                            tv_focus.setText(""+jsonBean.getData().getInfo()+"关注");
+                        }
+                    }
+                });
+    }
+
+
 
     @NonNull
     @Override
@@ -125,6 +185,13 @@ public class SelfShowActivity extends BaseActivity implements View.OnClickListen
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getFans(chatid);
+        getFocus(chatid);
+    }
+
     @OnClick({R.id.addfocus})
     @Override
     public void onClick(View view) {
@@ -141,8 +208,10 @@ public class SelfShowActivity extends BaseActivity implements View.OnClickListen
         tv_age.setText(root.getData().getGetdata().get(0).getAge().toString()+"岁");
         tv_focus.setText(root.getData().getGetdata().get(0).getFollowcount().toString()+"关注");
         tv_fances.setText(root.getData().getGetdata().get(0).getFanscount().toString()+"粉丝");
-        tv_chatid.setText("ID "+root.getData().getGetdata().get(0).getChatid().toString());
+       // tv_chatid.setText("id "+root.getData().getGetdata().get(0).getChatid().toString());
         tv_title.setText(root.getData().getGetdata().get(0).getChatid().toString());
+        tv_sign.setText(root.getData().getGetdata().get(0).getSign().toString()=="无个性不签名"?
+                "":root.getData().getGetdata().get(0).getSign().toString());
         this.runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -205,7 +274,6 @@ public class SelfShowActivity extends BaseActivity implements View.OnClickListen
     }
 
     private void pictureWall() {
-
         recyclerView = (EasyRecyclerView) findViewById(R.id.recyclerView);
         //recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         recyclerView.setAdapter(adapter = new ImageAdapter(this));
