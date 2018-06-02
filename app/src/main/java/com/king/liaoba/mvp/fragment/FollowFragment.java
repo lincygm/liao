@@ -268,6 +268,7 @@ public class FollowFragment extends SimpleFragment implements  RecyclerArrayAdap
                // adapter.addAll(userList);
 
                 page++;
+                Log.d("page",">>>>"+page);
             }
         }, 2000);
     }
@@ -287,6 +288,7 @@ public class FollowFragment extends SimpleFragment implements  RecyclerArrayAdap
                 //adapter.addAll(DataProvider.getPersonList(page));
                 adapter.addAll(userList);
                 page=1;
+                Log.d("pages",">>+"+page);
             }
         }, 2000);
     }
