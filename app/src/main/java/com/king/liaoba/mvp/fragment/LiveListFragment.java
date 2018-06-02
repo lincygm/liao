@@ -1,27 +1,37 @@
 package com.king.liaoba.mvp.fragment;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.jude.easyrecyclerview.EasyRecyclerView;
 import com.jude.easyrecyclerview.adapter.RecyclerArrayAdapter;
 import com.jude.easyrecyclerview.decoration.SpaceDecoration;
+import com.jude.rollviewpager.RollPagerView;
+import com.jude.rollviewpager.hintview.ColorPointHintView;
 import com.king.base.util.LogUtils;
 import com.king.base.util.StringUtils;
 import com.king.base.util.SystemUtils;
 import com.king.liaoba.bean.P;
+import com.king.liaoba.bean.PictureList;
 import com.king.liaoba.bean.VoiceListInfo;
+import com.king.liaoba.mvp.activity.SelfShowActivity;
+import com.king.liaoba.mvp.adapter.BannerAdapter;
 import com.king.liaoba.mvp.adapter.EasyLiveAdapter;
 import com.king.liaoba.mvp.adapter.EasyVoiceAdapter;
+import com.king.liaoba.mvp.adapter.ImageAdapter;
 import com.king.liaoba.mvp.base.BaseFragment;
 import com.king.liaoba.mvp.presenter.LiveListPresenter;
 import com.king.liaoba.mvp.view.ILiveListView;
 import com.king.liaoba.util.DensityUtil;
+import com.king.liaoba.util.RecycleViewUtils;
 import com.liaoba.R;
 
 import java.util.ArrayList;
@@ -48,11 +58,9 @@ public class LiveListFragment extends BaseFragment<ILiveListView, LiveListPresen
     EasyVoiceAdapter easyVoiceAdapter;
 
     List<VoiceListInfo>  rootList;
-
     private String slug;
-
+    List<PictureList> list  = new ArrayList<>();
     private boolean isSearch;
-
     private int page;
 
     private String key;
@@ -80,8 +88,26 @@ public class LiveListFragment extends BaseFragment<ILiveListView, LiveListPresen
         return R.layout.fragment_live_list;
     }
 
+
     @Override
     public void initUI() {
+
+        PictureList pictureList = new PictureList();
+        pictureList.setPicurl("http://i2.hdslb.com/52_52/user/61175/6117592/myface.jpg");
+        PictureList pictureList2 = new PictureList();
+        pictureList.setPicurl("http://i1.hdslb.com/52_52/user/6738/673856/myface.jpg");
+        PictureList pictureList3 = new PictureList();
+        pictureList.setPicurl("http://i1.hdslb.com/account/face/1467772/e1afaf4a/myface.png");
+        PictureList pictureList4 = new PictureList();
+        pictureList.setPicurl("ttp://i2.hdslb.com/user/3716/371679/myface.jpg");
+
+
+        list.add(pictureList);
+        list.add(pictureList2);
+        list.add(pictureList3);
+        list.add(pictureList4);
+
+        tvTips = (TextView) easyRecyclerView.findViewById(R.id.tvTips);
         tvTips = (TextView) easyRecyclerView.findViewById(R.id.tvTips);
         tvEmpty = (TextView) easyRecyclerView.findViewById(R.id.tvEmpty);
 
@@ -102,7 +128,23 @@ public class LiveListFragment extends BaseFragment<ILiveListView, LiveListPresen
         GridLayoutManager gridLayoutManager = new GridLayoutManager(context,2);
         gridLayoutManager.setSpanSizeLookup(easyVoiceAdapter.obtainGridSpanSizeLookUp(2));
         easyRecyclerView.setLayoutManager(gridLayoutManager);
+        easyVoiceAdapter.addHeader(new RecyclerArrayAdapter.ItemView() {
+            @Override
+            public View onCreateView(ViewGroup parent) {
+                RollPagerView header = new RollPagerView(getContext());
+                header.setHintView(new ColorPointHintView(getContext(), Color.BLUE, Color.GRAY));
+                header.setHintPadding(0, 0, 0, (int) RecycleViewUtils.convertDpToPixel(28, getContext()));
+                header.setPlayDelay(2000);
+                header.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                        (int) RecycleViewUtils.convertDpToPixel(100, getContext())));
+                header.setAdapter(new BannerAdapter(getContext(),list));
+                return header;
+            }
+            @Override
+            public void onBindView(View headerView) {
 
+            }
+        });
         easyRecyclerView.setAdapter(easyVoiceAdapter);
         easyRecyclerView.setRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -160,7 +202,7 @@ public class LiveListFragment extends BaseFragment<ILiveListView, LiveListPresen
         //if(!isSearch){
           //  easyRecyclerView.showProgress();
             getPresenter().getLiveList(slug);
-        //}
+
     }
 
 

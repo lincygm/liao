@@ -69,9 +69,6 @@ public class LoginFragment extends BaseActivity<ILoginView, LoginPresenter> impl
    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventLogin(MessageEvent messageEvent){
         if(messageEvent.equals("loginresult")){
-         //   if((boolean)messageEvent.getData()){
-               //this.finish();
-          //  }
         }
     }
 
@@ -132,7 +129,7 @@ public class LoginFragment extends BaseActivity<ILoginView, LoginPresenter> impl
         super.onDestroy();
         EventBus.getDefault().unregister(this);
     }
-    boolean login =false;
+    boolean login = false;
 
     @Override
     public boolean login(String username, String password) {
@@ -147,6 +144,10 @@ public class LoginFragment extends BaseActivity<ILoginView, LoginPresenter> impl
                     @Override
                     public void onCompleted() {
                         Log.d("login","onCompleted");
+                        if(login){
+                            Toast.makeText(getApplicationContext(),"登录成功!",Toast.LENGTH_LONG).show();
+                            finish();
+                        }
                     }
 
                     @Override
@@ -162,17 +163,13 @@ public class LoginFragment extends BaseActivity<ILoginView, LoginPresenter> impl
                             Constants.EditSharedPreference(jsonBean.getData().getGetdata().get(0));
                             JPushInterface.setAlias(getApp().getApplicationContext(),0,
                                     Constants.getSharedPreference(jsonBean.getData().getGetdata().get(0).getRegisterationid().toString(),getApplicationContext()));
+                            Log.d("login","true");
                         }else{
                             login = false;
+                            Toast.makeText(getApplicationContext(),"登录失败，清检查用户名或密码!",Toast.LENGTH_LONG).show();
                         }
                     }
                 });
-        if(login){
-            Log.d("qq","1");
-            finish();
-        }else{
-            Log.d("qq","2");
-        }
         return login;
     }
 

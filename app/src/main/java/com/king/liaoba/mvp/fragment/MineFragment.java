@@ -26,6 +26,9 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.king.liaoba.App;
 import com.king.liaoba.Constants;
 import com.king.liaoba.bean.FriendsRoot;
@@ -83,12 +86,6 @@ public class MineFragment extends SimpleFragment {
     TextView tvStarLight;
     @BindView(R.id.tvContribution)
     TextView tvContribution;
-    @BindView(R.id.tvWatch)
-    TextView tvWatch;
-    @BindView(R.id.tvLevel)
-    TextView tvLevel;
-    @BindView(R.id.tvTask)
-    TextView tvTask;
     @BindView(R.id.tvSetting)
     TextView tvSetting;
     @BindView(R.id.srl)
@@ -188,14 +185,13 @@ public class MineFragment extends SimpleFragment {
     @Override
     public void onResume() {
         super.onResume();
-        Log.d("mine","aa"+Constants.getSharedPreference("username",getActivity()));
+        Log.d("login","resume"+Constants.getSharedPreference("username",getActivity()));
         if(Constants.getSharedPreference("username",getActivity())!=""&&Constants.getSharedPreference("username",getActivity())!=null
                 &&!Constants.getSharedPreference("username",getActivity()).equals("Null")){
             btnLogin.setText(Constants.getSharedPreference("username",getActivity()));
             btnLogin.setClickable(false);
-            Log.d("q",""+Constants.getSharedPreference("username",getActivity()));
-            Glide.with(getActivity()).load(Constants.BASE_URL+Constants.getSharedPreference("headimage_url",getActivity()))
-                    .diskCacheStrategy(DiskCacheStrategy.SOURCE).into(headImage1);
+            Glide.with(getActivity()).load(Constants.BASE_URL+Constants.getSharedPreference("headimg_url",getActivity()))
+            .dontAnimate().into(headImage1);
             if(Constants.getSharedPreference("signin",getActivity()).equals("1")){
                 tv_sign.setText("已签到");
                 tv_sign.setClickable(false);
@@ -214,7 +210,7 @@ public class MineFragment extends SimpleFragment {
 
     @OnClick({R.id.ivLeft, R.id.ivRight, R.id.ivAvatar,
             R.id.tvFollow, R.id.tvFans, R.id.mine_charge,
-            R.id.tvStarLight, R.id.tvContribution, R.id.tvWatch, R.id.tvLevel,
+            R.id.tvStarLight, R.id.tvContribution, R.id.tvLevel,
             R.id.tvTask, R.id.tvSetting, R.id.fab,R.id.mine_logout,R.id.mine_record,R.id.mine_sign})
     public void onClick(View view) {
         switch (view.getId()) {
@@ -240,12 +236,6 @@ public class MineFragment extends SimpleFragment {
             case R.id.tvStarLight:
                 break;
             case R.id.tvContribution:
-                break;
-            case R.id.tvWatch:
-                break;
-            case R.id.tvLevel:
-                break;
-            case R.id.tvTask:
                 break;
             case R.id.tvSetting:
                 break;
@@ -344,11 +334,16 @@ public class MineFragment extends SimpleFragment {
                     }
 
                     @Override
-                    public void onNext(Root jsonBean) {
+                    public void onNext(final Root jsonBean) {
                         Log.d("getFocus", "next");
                         if(jsonBean!=null){
-                            Constants.EditSharedPreference("focus",jsonBean.getData().getInfo());
-                            tvFollow.setText(""+jsonBean.getData().getInfo());
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Constants.EditSharedPreference("focus",jsonBean.getData().getInfo());
+                                    tvFollow.setText(""+jsonBean.getData().getInfo());
+                                }
+                            });
                         }
                     }
                 });
@@ -522,7 +517,7 @@ public class MineFragment extends SimpleFragment {
                                 @Override
                                 public void onNext(Root root) {
                                     if(root!=null){
-                                        Constants.EditSharedPreference("headimage", Constants.BASE_URL+root.getData().getGetdata().get(0).getHeadimg_url().toString());
+                                        Constants.EditSharedPreference("headimg_url", Constants.BASE_URL+root.getData().getGetdata().get(0).getHeadimg_url().toString());
                                     }
                                 }
 
@@ -533,6 +528,10 @@ public class MineFragment extends SimpleFragment {
 
                                 @Override
                                 public void onCompleted() {
+                                    Glide.with(getActivity()).load(Constants.
+                                            BASE_URL+Constants.getSharedPreference("headimg_url",getActivity()))
+                                            .placeholder(R.mipmap.live_default).dontAnimate().error(R.mipmap.live_default).
+                                            crossFade().centerCrop().into(headImage1);
 
                                 }
                             });
