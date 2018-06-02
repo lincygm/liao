@@ -97,9 +97,8 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:onClick="onLocalAudioMuteClicked"
             android:id="@+id/btn_answer"
-            android:scaleType="centerInside"
+            android:src="@drawable/answer_icon"
            />
         <ImageView
             android:layout_width="0dp"
@@ -114,6 +113,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/btn_refuse"
+            android:clickable="true"
+            android:onClick="onEncCallClicked"
             android:visibility="gone"
             android:src="@drawable/btn_end_call" />
     </RelativeLayout>
