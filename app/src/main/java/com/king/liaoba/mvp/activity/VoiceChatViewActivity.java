@@ -10,6 +10,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.EventLog;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -23,6 +24,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.king.liaoba.App;
 import com.king.liaoba.Constants;
+import com.king.liaoba.push.OnlineService;
 import com.king.liaoba.util.MessageEvent;
 import com.king.liaoba.util.uploadimg.CircleImageView;
 import com.liaoba.R;
@@ -48,7 +50,6 @@ public class VoiceChatViewActivity extends AppCompatActivity implements View.OnC
 
     private static final int PERMISSION_REQ_ID_RECORD_AUDIO = 22;
     private String channel = null;
-    private RtcEngine mRtcEngine;// Tutorial Step 1
     @BindView(R.id.callname)
     TextView tv_callname;
     @BindView(R.id.time)
@@ -59,7 +60,6 @@ public class VoiceChatViewActivity extends AppCompatActivity implements View.OnC
     ImageView iv_speaker;
     @BindView(R.id.btn_end_call)
     ImageView iv_endcall;
-    AgoraAPIOnlySignal mAgoraAPI;
     @BindView(R.id.call_send)
     LinearLayout call_send;
     @BindView(R.id.call_receive)
@@ -74,30 +74,8 @@ public class VoiceChatViewActivity extends AppCompatActivity implements View.OnC
     private int time;
     private int timeout;
     private String url;
-    private String user;
+    private String user;//被呼叫的chatid
     private String call_url;
-    private final IRtcEngineEventHandler mRtcEventHandler = new IRtcEngineEventHandler() { // Tutorial Step 1
-
-        @Override
-        public void onUserOffline(final int uid, final int reason) { // Tutorial Step 4
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    onRemoteUserLeft(uid, reason);
-                }
-            });
-        }
-
-        @Override
-        public void onUserMuteAudio(final int uid, final boolean muted) { // Tutorial Step 6
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    onRemoteUserVoiceMuted(uid, muted);
-                }
-            });
-        }
-    };
 
 
 
@@ -113,17 +91,56 @@ public class VoiceChatViewActivity extends AppCompatActivity implements View.OnC
         EventBus.getDefault().unregister(this);
     }
 
-    @Subscribe(threadMode = ThreadMode.ASYNC)
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMessage(MessageEvent messageEvent) {
         Log.d("MessageEvent","======>>");
         if (messageEvent.equals("startcounttime")) {
             counttime();
-        }else if(messageEvent.equals("stop.activity")){
-            this.finish();
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    tv_callinfo.setText("");
+                }
+            });
+        }else if(messageEvent.getMessage().equals("stop.activity")){
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    tv_callinfo.setVisibility(View.VISIBLE);
+                    tv_callinfo.setText("对方已取消!");
+                }
+            });
+            Timer timer = new Timer(true);
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    Message message = new Message();
+                    message.what=2;
+                    handler.sendMessage(message);
+                }
+            }, 2000);
         }
 
     }
-
+    private Handler handler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if(msg.what==1){
+                 OnlineService.mAgoraAPI.channelInviteEnd(channel,user,0);
+                tv_callinfo.setText("对方暂时无人接听!");
+                Timer timer = new Timer(true);
+                timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        finish();
+                    }
+                }, 2000);
+            }else if(msg.what==2){
+                finish();
+            }
+        }
+    };
     private void counttime(){
         Timer timer = new Timer(true);
         timer.schedule(new TimerTask() {
@@ -139,7 +156,6 @@ public class VoiceChatViewActivity extends AppCompatActivity implements View.OnC
      * @j计算呼叫超时
      * */
     private void counttimeout(){
-
         final Timer timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
@@ -148,31 +164,21 @@ public class VoiceChatViewActivity extends AppCompatActivity implements View.OnC
                 if(timeout==60){
                     Message message = new Message();
                     message.what=1;
+                    handler.sendMessage(message);
                 }
             }
         },1000);
     }
-    private Handler handler = new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            if(msg.what==1){
-                tv_callinfo.setText("对方暂时无人接听!");
-                finish();
-            }
-        }
-    };
+
 
     private void timeshow(int t){
-
         final int h = t/3600;
         final int m = t%3600/60;
         final int s = t%3600%60;
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                tv_time.setText(h+":"+m+":"+s);
-
+                tv_time.setText((h<1?"":":"+h)+""+(m<10?"0"+m:m)+":"+(s<10?"0"+s:s));
             }
         });
     }
@@ -182,15 +188,16 @@ public class VoiceChatViewActivity extends AppCompatActivity implements View.OnC
     public void onClick(View v) {
         if(v.getId()==R.id.btn_answer){
             joinChannel();
-            btn_accept.setVisibility(View.GONE);
+            btn_refuse.setVisibility(View.VISIBLE);
+            call_receive.setVisibility(View.GONE);
             counttime();
         }else if(v.getId()==R.id.btn_end_call2){
             call_receive.setVisibility(View.VISIBLE);
-            btn_accept.setVisibility(View.VISIBLE);
-            mAgoraAPI.channelInviteRefuse(channel,user,0,null);
+            OnlineService.mAgoraAPI.channelInviteRefuse(getIntent().getStringExtra("channelID"),
+                    getIntent().getStringExtra("account"),0,null);
+            this.finish();
         }else if(v.getId()==R.id.btn_refuse){
-            mAgoraAPI.channelLeave(channel);
-
+            OnlineService.mAgoraAPI.channelLeave(channel);
         }
     }
 
@@ -207,33 +214,37 @@ public class VoiceChatViewActivity extends AppCompatActivity implements View.OnC
         iv_speaker=(ImageView)this.findViewById(R.id.btn_speaker);
         channel = getIntent().getStringExtra("channel");//获取自己的房间id
         user = getIntent().getStringExtra("user");
-        url=getIntent().getStringExtra("head_url");
-        call_url= getIntent().getStringExtra("call_head_url");
-        Log.d("gm","url"+url);
+        url = getIntent().getStringExtra("head_url");
+        call_url = getIntent().getStringExtra("call_head_url");
 
-        if(url!=null){
+        if(url != null){
             Glide.with(this).load(Constants.BASE_URL+url)
                     .placeholder(R.mipmap.live_default).error(R.mipmap.live_default).
                     crossFade().centerCrop().diskCacheStrategy(DiskCacheStrategy.SOURCE).into(circleImageView);
         }
+
         if (checkSelfPermission(Manifest.permission.RECORD_AUDIO, PERMISSION_REQ_ID_RECORD_AUDIO)) {
             initAgoraEngineAndJoinChannel();
         }
         if(channel!=null&&!channel.equals("")){
-            mAgoraAPI = AgoraAPIOnlySignal.getInstance(this,getResources().getString(R.string.agora_app_id));
-            mAgoraAPI.channelJoin(Constants.getSharedPreference("chatid",this));//加入频道
-            mAgoraAPI.channelInviteUser(Constants.getSharedPreference("chatid",this),channel,0);//邀请某人加入通话
+            OnlineService.mAgoraAPI.channelJoin(Constants.getSharedPreference("chatid",this));//加入频道
+            //"{/\"headimage_url/\":/\"+call_url+/\"}"
+            OnlineService.mAgoraAPI.channelInviteUser(Constants.getSharedPreference("chatid",this),user,0);//邀请某人加入通话
             call_send.setVisibility(View.VISIBLE);
             call_receive.setVisibility(View.GONE);
             tv_callinfo.setVisibility(View.VISIBLE);
             btn_refuse.setVisibility(View.GONE);
             joinChannel();
             counttimeout();
+            EventBus.getDefault().post(new MessageEvent<>("count",null));
+            OnlineService.account = user;
         }else{
             //接收到别人的来电。
+            call_receive.setVisibility(View.VISIBLE);
             call_send.setVisibility(View.GONE);
             tv_callinfo.setVisibility(View.GONE);
-            btn_refuse.setVisibility(View.VISIBLE);
+            btn_refuse.setVisibility(View.GONE);
+            Toast.makeText(this,call_url,Toast.LENGTH_LONG).show();
             Glide.with(this).load(Constants.BASE_URL+call_url)
                     .placeholder(R.mipmap.live_default).error(R.mipmap.live_default).
                     crossFade().centerCrop().diskCacheStrategy(DiskCacheStrategy.SOURCE).into(circleImageView);
@@ -242,7 +253,8 @@ public class VoiceChatViewActivity extends AppCompatActivity implements View.OnC
     }
 
     private void initAgoraEngineAndJoinChannel() {
-        initializeAgoraEngine();     // Tutorial Step 1
+        //Log.d("voice","initagora");
+        //initializeAgoraEngine();     // Tutorial Step 1
         //joinChannel();               // Tutorial Step 2
     }
 
@@ -291,10 +303,9 @@ public class VoiceChatViewActivity extends AppCompatActivity implements View.OnC
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
         leaveChannel();
-        RtcEngine.destroy();
-        mRtcEngine = null;
+        //RtcEngine.destroy();
+       // mRtcEngine = null;
     }
 
     // Tutorial Step 7
@@ -308,7 +319,7 @@ public class VoiceChatViewActivity extends AppCompatActivity implements View.OnC
             iv.setColorFilter(getResources().getColor(R.color.colorPrimary), PorterDuff.Mode.MULTIPLY);
         }
 
-        mRtcEngine.muteLocalAudioStream(iv.isSelected());
+        OnlineService.mRtcEngine.muteLocalAudioStream(iv.isSelected());
     }
 
     // Tutorial Step 5
@@ -322,34 +333,31 @@ public class VoiceChatViewActivity extends AppCompatActivity implements View.OnC
             iv.setColorFilter(getResources().getColor(R.color.colorPrimary), PorterDuff.Mode.MULTIPLY);
         }
 
-        mRtcEngine.setEnableSpeakerphone(view.isSelected());
+        OnlineService.mRtcEngine.setEnableSpeakerphone(view.isSelected());
     }
 
     // Tutorial Step 3
     public void onEncCallClicked(View view) {
-        mAgoraAPI.channelInviteEnd(channel,channel,0);
+        OnlineService.mAgoraAPI.channelInviteEnd(channel,user,0);
         finish();
     }
 
     // Tutorial Step 1
-    private void initializeAgoraEngine() {
-        try {
-            mRtcEngine = RtcEngine.create(getBaseContext(), getString(R.string.agora_app_id), mRtcEventHandler);
-        } catch (Exception e) {
-            Log.e(LOG_TAG, Log.getStackTraceString(e));
 
-            throw new RuntimeException("NEED TO check rtc sdk init fatal error\n" + Log.getStackTraceString(e));
-        }
-    }
 
     // Tutorial Step 2
     private void joinChannel() {
-        mRtcEngine.joinChannel(null, Constants.getSharedPreference("chatid",this), "Extra Optional Data", 0); // if you do not specify the uid, we will generate the uid for you
+        Log.d("voice","channelID>>"+getIntent().getStringExtra("channelID"));
+        Log.d("voice","account>>"+getIntent().getStringExtra("account"));
+        OnlineService.mAgoraAPI.channelInviteAccept(getIntent().getStringExtra("channelID"),
+                getIntent().getStringExtra("account"),0,null);
+        OnlineService.mRtcEngine.joinChannel(null, getIntent().getStringExtra("channelID"),
+                "Extra Optional Data", 0); // if you do not specify the uid, we will generate the uid for you
     }
 
     // Tutorial Step 3
     private void leaveChannel() {
-        mRtcEngine.leaveChannel();
+        OnlineService.mRtcEngine.leaveChannel();
     }
 
     // Tutorial Step 4
