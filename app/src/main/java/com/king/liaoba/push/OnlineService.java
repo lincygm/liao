@@ -46,6 +46,7 @@ public class OnlineService extends Service {
     public static RtcEngine mRtcEngine;
     public static String account;
     int time = 0;
+    boolean inCall = false;
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d("OnlineService","====1===");
@@ -147,21 +148,26 @@ public class OnlineService extends Service {
             }
 
         }else if(messageEvent.getMessage().equals("count")){
+            time = 0;
+            inCall = true;
             counttime();
         }
     }
 
     private void counttime(){
+
         Timer timer = new Timer(true);
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                time++;
-                Log.d("tttttt",time+">");
-                if(time==60){
+                if(inCall){
+                time = time+1;
+                if(time == 60){
+                    Log.d(TAG," timer end");
                     mAgoraAPI.channelInviteEnd(Constants.getSharedPreference("chatid",OnlineService.this),account
                             ,0);
                     time = 0;
+                }
                 }
             }
         }, 0, 1000);
@@ -262,7 +268,9 @@ public class OnlineService extends Service {
                         //  mCallTitle.setText(String.format(Locale.US, "%s is being called ...", mSubscriber));
                     }
                 });*/
-                EventBus.getDefault().post(new MessageEvent("startcounttime",null));
+                //EventBus.getDefault().post(new MessageEvent("startcounttime",null));
+                time = 0;
+                inCall =true;
             }
 
             /**
@@ -277,6 +285,8 @@ public class OnlineService extends Service {
 
                 Log.d("OnlineService","start");
                 EventBus.getDefault().post(new MessageEvent("startcounttime",null));
+                inCall = false;
+                time = 0;
             }
 
 
@@ -292,22 +302,9 @@ public class OnlineService extends Service {
             @Override
             public void onInviteRefusedByPeer(String channelID, final String account, int uid, final String s2) {
                 Log.i(TAG, "onInviteRefusedByPeer channelID = " + channelID + " account = " + account + " s2 = " + s2);
-                /*runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (mPlayer != null && mPlayer.isPlaying()) {
-                            mPlayer.stop();
-                        }
-                        if (s2.contains("status") && s2.contains("1")) {
-                            Toast.makeText(VoiceChatViewActivity.this, account + " reject your call for busy", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(VoiceChatViewActivity.this, account + " reject your call", Toast.LENGTH_SHORT).show();
-                        }
-
-                        //onEncCallClicked();
-                    }
-                });*/
                 EventBus.getDefault().post(new MessageEvent("stop.activity",null));
+                inCall=false;
+                time=0;
             }
 
 
@@ -322,6 +319,8 @@ public class OnlineService extends Service {
             public void onInviteEndByPeer(final String channelID, String account, int uid, String s2) {
                 Log.i(TAG, "onInviteEndByPeer channelID = " + channelID + " account = " + account);
                 EventBus.getDefault().post(new MessageEvent("stop.activity",null));
+                inCall = false;
+                time = 0;
             }
 
             /**
@@ -334,6 +333,25 @@ public class OnlineService extends Service {
             public void onInviteEndByMyself(String channelID, String account, int uid) {
                 Log.i(TAG, "onInviteEndByMyself channelID = " + channelID + "  account = " + account);
                 EventBus.getDefault().post(new MessageEvent("stop.activity",null));
+                inCall=false;
+                time=0;
+
+            }
+
+            @Override
+            public void onChannelJoined(String channelID) {
+                super.onChannelJoined(channelID);
+                Log.i(TAG, "onChannelJoined channelID = " + channelID );
+                OnlineService.mRtcEngine.joinChannel(null, channelID,
+                        "Extra Optional Data", 0); // if you do not specify the uid, we will generate the uid for you
+
+            }
+
+            @Override
+            public void onChannelJoinFailed(String channelID, int ecode) {
+                super.onChannelJoinFailed(channelID, ecode);
+                Log.i(TAG, "onChannelJoinFailed channelID = " + channelID );
+
 
             }
         });
