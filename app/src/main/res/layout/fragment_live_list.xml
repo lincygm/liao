@@ -3,6 +3,12 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
     <include layout="@layout/line_h_mine_space"/>
+    <com.king.liaoba.mvp.view.MarqueeTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/live_marquee"
+        >
+    </com.king.liaoba.mvp.view.MarqueeTextView>
     <TextView
         android:layout_width="match_parent"
         android:text="热门推荐"
