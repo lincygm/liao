@@ -16,7 +16,10 @@
     <style name="BaseAppTheme" parent="AppTheme">
 
     </style>
-
+    <style name="CustomDialog" parent="Theme.AppCompat.Dialog">
+        <item name="android:backgroundDimEnabled">false</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
 
     <style name="progressBarStyle" parent="Widget.AppCompat.ProgressBar">
         <item name="android:indeterminateDrawable">@drawable/progress_bar</item>
