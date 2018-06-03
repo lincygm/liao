@@ -115,8 +115,9 @@ public class EasyVoiceAdapter extends RecyclerArrayAdapter <VoiceListInfo>{
                 public void onClick(View v) {
                     EventBus.getDefault().post(new MessageEvent<>("play",
                             Constants.BASE_URL+data.getVoice_url()));
-                    Toast.makeText(mContext,
-                            data.getVoice_url(),Toast.LENGTH_LONG).show();
+               if(data.getVoice_url().length()<5){
+                   Toast.makeText(mContext,"对方还未上传语音!",Toast.LENGTH_LONG).show();
+               }
 
                 }
             });
