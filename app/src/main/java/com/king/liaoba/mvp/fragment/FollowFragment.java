@@ -3,9 +3,11 @@ package com.king.liaoba.mvp.fragment;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -35,6 +37,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.jpush.android.service.DataProvider;
 import retrofit2.Retrofit;
@@ -60,14 +63,21 @@ public class FollowFragment extends SimpleFragment implements  RecyclerArrayAdap
     TextView tvTitle;
     @BindView(R.id.ivRight)
     ImageView ivRight;
-    RecyclerArrayAdapter adapter;
+    RecyclerArrayAdapter fans_adapter;
+    RecyclerArrayAdapter  focus_adapter;
+    @BindView(R.id.foll_fans_recycleview)
     EasyRecyclerView recyclerView_fans = null;
+    @BindView(R.id.foll_focus_recycleview)
     EasyRecyclerView recyclerView_focus = null;
     private Handler handler = new Handler();
     private List<String> focusList = new ArrayList<>();
     private List<String> fansList = new ArrayList<>();
-    private List<JsonBean> userList = new ArrayList<>();
-    private int page = 0;
+    private List<JsonBean> userFocusList = new ArrayList<>();
+    private List<JsonBean> userFansList = new ArrayList<>();
+
+    private static int pageFans = 0;
+    private static int pageFocus = 0;
+    private static int index = 0;
     private boolean hasNetWork = true;
 
     public static FollowFragment newInstance() {
@@ -86,39 +96,42 @@ public class FollowFragment extends SimpleFragment implements  RecyclerArrayAdap
     public void initUI() {
         tvTitle.setText(R.string.tab_follw);
 
+
     }
 
     private void fansadapter(){
+
+        recyclerView_fans = (EasyRecyclerView) getActivity().findViewById(R.id.foll_fans_recycleview);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView_fans.setLayoutManager(layoutManager);
         DividerDecoration itemDecoration = new DividerDecoration(Color.GRAY,Util.dip2px(getActivity(),16f), Util.dip2px(getActivity(),72),0);
         itemDecoration.setDrawLastItem(false);
        // recyclerView_fans.addItemDecoration(itemDecoration);
 
-        recyclerView_fans.setAdapterWithProgress(adapter = new RecyclerArrayAdapter<JsonBean>(getActivity()) {
+        recyclerView_fans.setAdapterWithProgress(fans_adapter = new RecyclerArrayAdapter<JsonBean>(getActivity()) {
             @Override
             public BaseViewHolder OnCreateViewHolder(ViewGroup parent, int viewType) {
                 return new PersonViewHolder(parent);
             }
         });
-        adapter.setMore(R.layout.view_more, this);
-        adapter.setNoMore(R.layout.view_nomore);
-        adapter.setOnItemLongClickListener(new RecyclerArrayAdapter.OnItemLongClickListener() {
+        //fans_adapter.setMore(R.layout.view_more, this);
+        fans_adapter.setNoMore(R.layout.view_nomore);
+        fans_adapter.setOnItemLongClickListener(new RecyclerArrayAdapter.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(int position) {
-                adapter.remove(position);
+                fans_adapter.remove(position);
                 return true;
             }
         });
-        adapter.setError(R.layout.view_error, new RecyclerArrayAdapter.OnErrorListener() {
+        fans_adapter.setError(R.layout.view_error, new RecyclerArrayAdapter.OnErrorListener() {
             @Override
             public void onErrorShow() {
-                adapter.resumeMore();
+                fans_adapter.resumeMore();
             }
 
             @Override
             public void onErrorClick() {
-                adapter.resumeMore();
+                fans_adapter.resumeMore();
             }
         });
         recyclerView_fans.setRefreshListener(this);
@@ -126,51 +139,50 @@ public class FollowFragment extends SimpleFragment implements  RecyclerArrayAdap
     }
 
     private void focusadapter(){
+
+        recyclerView_focus = (EasyRecyclerView) getActivity().findViewById(R.id.foll_focus_recycleview);
+        recyclerView_fans = (EasyRecyclerView) getActivity().findViewById(R.id.foll_fans_recycleview);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView_focus.setLayoutManager(layoutManager);
         DividerDecoration itemDecoration = new DividerDecoration(Color.GRAY,Util.dip2px(getActivity(),16f), Util.dip2px(getActivity(),72),0);
         itemDecoration.setDrawLastItem(false);
-        recyclerView_focus.addItemDecoration(itemDecoration);
+        //recyclerView_focus.addItemDecoration(itemDecoration);
 
-        recyclerView_focus.setAdapterWithProgress(adapter = new RecyclerArrayAdapter<JsonBean>(getActivity()) {
+        recyclerView_focus.setAdapterWithProgress(focus_adapter = new RecyclerArrayAdapter<JsonBean>(getActivity()) {
             @Override
             public BaseViewHolder OnCreateViewHolder(ViewGroup parent, int viewType) {
                 return new PersonViewHolder(parent);
             }
         });
-        adapter.setMore(R.layout.view_more, this);
-        adapter.setNoMore(R.layout.view_nomore);
-        adapter.setOnItemLongClickListener(new RecyclerArrayAdapter.OnItemLongClickListener() {
+        //focus_adapter.setMore(R.layout.view_more, this);
+        focus_adapter.setNoMore(R.layout.view_nomore);
+        focus_adapter.setOnItemLongClickListener(new RecyclerArrayAdapter.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(int position) {
-                adapter.remove(position);
+                focus_adapter.remove(position);
                 return true;
             }
         });
-        adapter.setError(R.layout.view_error, new RecyclerArrayAdapter.OnErrorListener() {
+        focus_adapter.setError(R.layout.view_error, new RecyclerArrayAdapter.OnErrorListener() {
             @Override
             public void onErrorShow() {
-                adapter.resumeMore();
+                focus_adapter.resumeMore();
             }
 
             @Override
             public void onErrorClick() {
-                adapter.resumeMore();
+                focus_adapter.resumeMore();
             }
         });
         recyclerView_focus.setRefreshListener(this);
         onRefresh();
     }
 
-
-    @Override
-    public void initData() {
-
-        recyclerView_focus = (EasyRecyclerView) getActivity().findViewById(R.id.foll_focus_recycleview);
-        recyclerView_fans = (EasyRecyclerView) getActivity().findViewById(R.id.foll_fans_recycleview);
+    /**获取关注数**/
+    private void getFocus(int page){
         Retrofit retrofit = APIRetrofit.getInstance();
         APIService service =retrofit.create(APIService.class);
-        service.getFocusList(Constants.getSharedPreference("chatid",getActivity()),0)
+        service.getFocusList(Constants.getSharedPreference("chatid",getActivity()),page)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<FriendsRoot>() {
@@ -186,18 +198,26 @@ public class FollowFragment extends SimpleFragment implements  RecyclerArrayAdap
 
                     @Override
                     public void onNext(FriendsRoot root) {
-                            if(root!=null&&focusList!=null){
-                                focusList.clear();
-                                for(int i=0;i<root.getData().getGetdata().size();i++){
-                                    focusList.add(root.getData().getGetdata().get(i).getFocus_id());
-                                    getUserinfoByChatid(root.getData().getGetdata().get(i).getFocus_id());
-
+                        if(root!=null&&focusList!=null){
+                            for(int i=0;i<root.getData().getGetdata().size();i++){
+                                if(root.getData().getGetdata().size()==0){
+                                    focus_adapter.setNoMore(R.layout.view_empty);
+                                    return;
                                 }
+                                focusList.add(root.getData().getGetdata().get(i).getFocus_id());
+                                getUserinfoByChatid(root.getData().getGetdata().get(i).getFocus_id());
+
+                            }
                         }
                     }
                 });
+    }
 
-        service.getFansList(Constants.getSharedPreference("chatid",getActivity()),0)
+    /**获取粉丝数**/
+    private void getFans(int page){
+        Retrofit retrofit = APIRetrofit.getInstance();
+        APIService service =retrofit.create(APIService.class);
+        service.getFansList(Constants.getSharedPreference("chatid",getActivity()),page)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<FriendsRoot>() {
@@ -213,15 +233,35 @@ public class FollowFragment extends SimpleFragment implements  RecyclerArrayAdap
                     @Override
                     public void onNext(FriendsRoot root) {
                         if(root!=null&&fansList!=null){
-                            fansList.clear();
                             for(int i=0;i<root.getData().getGetdata().size();i++){
-                                    fansList.add(root.getData().getGetdata().get(i).getChat_id());
-                                //getUserinfoByChatid(root.getData().getGetdata().get(i).getChat_id());
+                                if(root.getData().getGetdata().size()==0){
+                                    fans_adapter.setNoMore(R.layout.view_empty);
+                                    return;
+                                }
+                                fansList.add(root.getData().getGetdata().get(i).getChat_id());
+                                getUserinfoByChatid(root.getData().getGetdata().get(i).getChat_id());
+
                             }
                         }
                     }
                 });
+    }
 
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(index==0){
+            getFocus(pageFocus);
+        }else{
+            getFans(pageFans);
+        }
+        Log.d("Follow","onresume");
+
+    }
+
+    @Override
+    public void initData() {
 
     }
 
@@ -235,7 +275,12 @@ public class FollowFragment extends SimpleFragment implements  RecyclerArrayAdap
                     @Override
                     public void onCompleted() {
                         Log.d("DDS","getUserInfoByChatid completes");//最后走这个
-                        fansadapter();
+                        if(index==0){
+                            focusadapter();
+                        }else{
+                            fansadapter();
+                        }
+
                     }
 
                     @Override
@@ -246,7 +291,12 @@ public class FollowFragment extends SimpleFragment implements  RecyclerArrayAdap
                     @Override
                     public void onNext(Root root) {
                         if(root!=null){
-                            userList.add(root.getData().getGetdata().get(0));
+                            if(index==0){
+                                userFocusList.add(root.getData().getGetdata().get(0));
+                            }else{
+                                userFansList.add(root.getData().getGetdata().get(0));
+                            }
+
                         }
                     }
                 });
@@ -255,40 +305,65 @@ public class FollowFragment extends SimpleFragment implements  RecyclerArrayAdap
     //第四页会返回空,意为数据加载结束
     @Override
     public void onLoadMore() {
-        Log.i("EasyRecyclerView","onLoadMore");
+        Log.i("Follow","onLoadMore");
+
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 //刷新
                 if (!hasNetWork) {
-                    adapter.pauseMore();
+                    focus_adapter.pauseMore();
                     return;
                 }
-              // adapter.addAll(DataProvider.getPersonList(page));
-               // adapter.addAll(userList);
+                if(index==0){
+                    pageFocus++;
+                    Log.d("Follow","page>>>>"+pageFocus);
+                    getFocus(pageFocus);
 
-                page++;
-                Log.d("page",">>>>"+page);
+                }else{
+                    pageFans++;
+                    Log.d("Follow","page>>>>"+pageFans);
+                    getFans(pageFans);
+                }
             }
         }, 2000);
     }
 
     @Override
     public void onRefresh() {
-        page = 0;
+        Log.i("Follow","onRefresh");
+        if(index == 0){
+            pageFocus = 0;
+            //getFocus(pageFocus);
+        }else{
+            pageFans = 0;
+            //getFans(pageFans);
+        }
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                adapter.clear();
+                if(index==0){
+                    focus_adapter.clear();
+                }else{
+                    fans_adapter.clear();
+                }
                 //刷新
                 if (!hasNetWork) {
-                    adapter.pauseMore();
+                    //adapter.pauseMore();
                     return;
                 }
-                //adapter.addAll(DataProvider.getPersonList(page));
-                adapter.addAll(userList);
-                page=1;
-                Log.d("pages",">>+"+page);
+                if(index==0){
+                    focus_adapter.addAll(userFocusList);
+                    pageFocus = 1;
+                    Log.d("pages",">>+"+pageFocus);
+
+                }else{
+                    fans_adapter.addAll(userFansList);
+                    pageFans = 1;
+                    Log.d("pages",">>+"+pageFans);
+
+                }
+
             }
         }, 2000);
     }
@@ -303,12 +378,14 @@ public class FollowFragment extends SimpleFragment implements  RecyclerArrayAdap
                 startLogin();
                 break;
             case R.id.foll_fans:
-                fansadapter();
+                index = 1;
+                getFans(pageFans);
                 recyclerView_fans.setVisibility(View.VISIBLE);
                 recyclerView_focus.setVisibility(View.GONE);
                 break;
             case R.id.foll_focus:
-                focusadapter();
+                index = 0;
+                getFocus(pageFocus);
                 recyclerView_fans.setVisibility(View.GONE);
                 recyclerView_focus.setVisibility(View.VISIBLE);
                 break;
