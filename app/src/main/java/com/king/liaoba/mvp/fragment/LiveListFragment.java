@@ -47,7 +47,8 @@ import butterknife.BindView;
  * @since 2017/2/21
  */
 
-public class LiveListFragment extends BaseFragment<ILiveListView, LiveListPresenter> implements ILiveListView {
+public class LiveListFragment extends BaseFragment<ILiveListView, LiveListPresenter>
+        implements ILiveListView, RecyclerArrayAdapter.OnLoadMoreListener{
 
 
     View loadMore;
@@ -63,11 +64,10 @@ public class LiveListFragment extends BaseFragment<ILiveListView, LiveListPresen
     List<VoiceListInfo>  rootList;
     private String slug;
     List<PictureList> list  = new ArrayList<>();
-    private boolean isSearch;
+    private boolean isSearch = false;
     private int page;
 
     private String key;
-
     private boolean isMore;
 
     public static LiveListFragment newInstance(String slug) {
@@ -76,12 +76,10 @@ public class LiveListFragment extends BaseFragment<ILiveListView, LiveListPresen
     private String [] textArrays = new String[]{"新用户注册就送100聊币!","每天签到就送10聊币！","新用户免费提现!"};
     public static LiveListFragment newInstance(String slug,boolean isSearch) {
         Bundle args = new Bundle();
-
         LiveListFragment fragment = new LiveListFragment();
         fragment.slug = slug;
         fragment.isSearch = isSearch;
         fragment.setArguments(args);
-
         return fragment;
     }
 
@@ -149,9 +147,11 @@ public class LiveListFragment extends BaseFragment<ILiveListView, LiveListPresen
             }
         });
         easyRecyclerView.setAdapter(easyVoiceAdapter);
+        //easyVoiceAdapter.setMore(R.layout.view_more,this);
         easyRecyclerView.setRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                Log.d("live","===onRefresh====");
                 if(isSearch){
                     if(!StringUtils.isBlank(key)){
                         page = 0;
@@ -221,8 +221,14 @@ public class LiveListFragment extends BaseFragment<ILiveListView, LiveListPresen
         return new LiveListPresenter(getApp());
     }
 
+    @Override
+    public void onLoadMore() {
+        Log.d("live","====loadmore======");
+
+    }
+
     public void refreshView(){
-        Log.d("refresh","==========");
+        Log.d("live","====refreshView======");
         //getPresenter().getLiveList();
         easyVoiceAdapter.notifyDataSetChanged();
         easyRecyclerView.setRefreshing(false);
