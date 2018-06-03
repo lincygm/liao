@@ -18,8 +18,10 @@ import com.king.liaoba.http.APIService;
 import com.king.liaoba.mvp.base.BaseActivity;
 import com.king.liaoba.mvp.presenter.LoginPresenter;
 import com.king.liaoba.mvp.view.ILoginView;
+import com.king.liaoba.util.CustomDialog;
 import com.king.liaoba.util.MessageEvent;
 import com.liaoba.R;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -133,7 +135,7 @@ public class LoginFragment extends BaseActivity<ILoginView, LoginPresenter> impl
 
     @Override
     public boolean login(String username, String password) {
-
+        getMvpView().showProgress();
         Constants.clearSharedPreference();
         Retrofit retrofit = APIRetrofit.getInstance();
         APIService service =retrofit.create(APIService.class);
@@ -146,7 +148,7 @@ public class LoginFragment extends BaseActivity<ILoginView, LoginPresenter> impl
                         Log.d("login","onCompleted");
                         if(login){
                             Toast.makeText(getApplicationContext(),"登录成功!",Toast.LENGTH_LONG).show();
-                            finish();
+                            onComplete();
                         }
                     }
 
@@ -186,11 +188,14 @@ public class LoginFragment extends BaseActivity<ILoginView, LoginPresenter> impl
     @Override
     public void showProgress() {
 
+        new CustomDialog(this,R.style.CustomDialog).show();
+
     }
 
     @Override
     public void onComplete() {
         Log.d("DDS","==");
+        new CustomDialog(this,R.style.CustomDialog).hide();
         finish();
     }
 }
