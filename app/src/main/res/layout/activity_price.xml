@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <include layout="@layout/line_h_mine_space"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:background="@null"
+        android:clickable="true"
+        android:id="@+id/price_set"
+        android:layout_height="@dimen/line_height"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:text="设置通话收费"
+            android:layout_marginLeft="@dimen/left_margin"
+            android:layout_alignParentLeft="true"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:text="免费"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/left_margin"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+    
+
+</LinearLayout>
