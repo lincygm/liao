@@ -2,13 +2,13 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_marginBottom="6dp"
-    android:background="?android:attr/selectableItemBackground"
+    android:background="@drawable/corner_image"
     android:layout_height="wrap_content">
 
     <ImageView
         android:layout_width="match_parent"
         android:id="@+id/iv"
-        android:src="@drawable/ym"
+        android:src="@drawable/logo_bg"
         android:minHeight="150dp"
         android:scaleType="centerCrop"
         android:layout_height="match_parent" />
