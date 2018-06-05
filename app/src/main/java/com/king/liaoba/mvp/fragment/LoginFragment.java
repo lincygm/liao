@@ -151,7 +151,7 @@ public class LoginFragment extends BaseActivity<ILoginView, LoginPresenter> impl
                         if(login){
                             Toast.makeText(getApplicationContext(),"登录成功!",Toast.LENGTH_LONG).show();
                            // new CustomDialog(LoginFragment.this).hide();
-
+                            LoginFragment.this.finish();
                         }
                     }
 
