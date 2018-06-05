@@ -2,6 +2,7 @@ package com.king.liaoba.util;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.view.View;
 import android.view.WindowManager;
 import android.content.Context;
 import com.liaoba.R;
@@ -34,11 +35,11 @@ public class CustomDialog extends ProgressDialog {
         //设置不可取消，点击其他区域不能取消，实际中可以抽出去封装供外包设置
         setCancelable(false);
         setCanceledOnTouchOutside(false);
-
         setContentView(R.layout.progress_layout);
         avLoadingIndicatorView = (AVLoadingIndicatorView)this.findViewById(R.id.progress);
         WindowManager.LayoutParams params = getWindow().getAttributes();
         params.width = WindowManager.LayoutParams.WRAP_CONTENT;
+        //params.width=70;
         params.height = WindowManager.LayoutParams.WRAP_CONTENT;
         getWindow().setAttributes(params);
     }
@@ -50,7 +51,7 @@ public class CustomDialog extends ProgressDialog {
     }
 
     public void hide(){
-        super.hide();
         avLoadingIndicatorView.hide();
+        super.cancel();
     }
 }
