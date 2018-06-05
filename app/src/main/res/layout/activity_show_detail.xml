@@ -40,7 +40,7 @@
                             android:id="@+id/head_image_d"
                             android:layout_width="80dp"
                             android:layout_height="80dp"
-                            android:src="@drawable/mine_default_avatar"
+                            android:src="@drawable/logo_bg"
                             android:scaleType="centerCrop"
                             android:clickable="true"
                             android:layout_centerHorizontal="true"
