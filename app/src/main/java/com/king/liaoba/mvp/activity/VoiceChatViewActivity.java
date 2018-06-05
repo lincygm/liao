@@ -94,7 +94,7 @@ public class VoiceChatViewActivity extends AppCompatActivity implements View.OnC
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMessage(MessageEvent messageEvent) {
         Log.d("MessageEvent","======>>");
-        if (messageEvent.equals("startcounttime")) {
+        if (messageEvent.getMessage().equals("startcounttime")) {
             counttime();
             runOnUiThread(new Runnable() {
                 @Override
@@ -187,9 +187,9 @@ public class VoiceChatViewActivity extends AppCompatActivity implements View.OnC
     @Override
     public void onClick(View v) {
         if(v.getId()==R.id.btn_answer){
-            joinChannel();
-            btn_refuse.setVisibility(View.VISIBLE);
-            call_receive.setVisibility(View.GONE);
+            OnlineService.mAgoraAPI.channelJoin(getIntent().getStringExtra("channelID"));
+            //btn_refuse.setVisibility(View.VISIBLE);
+            btn_accept.setVisibility(View.GONE);
             counttime();
         }else if(v.getId()==R.id.btn_end_call2){
             call_receive.setVisibility(View.VISIBLE);
@@ -230,11 +230,12 @@ public class VoiceChatViewActivity extends AppCompatActivity implements View.OnC
             OnlineService.mAgoraAPI.channelJoin(Constants.getSharedPreference("chatid",this));//加入频道
             //"{/\"headimage_url/\":/\"+call_url+/\"}"
             OnlineService.mAgoraAPI.channelInviteUser(Constants.getSharedPreference("chatid",this),user,0);//邀请某人加入通话
+            OnlineService.mRtcEngine.joinChannel(null,Constants.getSharedPreference("chatid",
+                    this),"",0);
             call_send.setVisibility(View.VISIBLE);
             call_receive.setVisibility(View.GONE);
             tv_callinfo.setVisibility(View.VISIBLE);
             btn_refuse.setVisibility(View.GONE);
-            joinChannel();
             counttimeout();
             EventBus.getDefault().post(new MessageEvent<>("count",null));
             OnlineService.account = user;
@@ -347,12 +348,12 @@ public class VoiceChatViewActivity extends AppCompatActivity implements View.OnC
 
     // Tutorial Step 2
     private void joinChannel() {
+
         Log.d("voice","channelID>>"+getIntent().getStringExtra("channelID"));
         Log.d("voice","account>>"+getIntent().getStringExtra("account"));
-        OnlineService.mAgoraAPI.channelInviteAccept(getIntent().getStringExtra("channelID"),
-                getIntent().getStringExtra("account"),0,null);
-        OnlineService.mRtcEngine.joinChannel(null, getIntent().getStringExtra("channelID"),
-                "Extra Optional Data", 0); // if you do not specify the uid, we will generate the uid for you
+       // OnlineService.mAgoraAPI.channelInviteAccept(getIntent().getStringExtra("channelID"),
+         //       getIntent().getStringExtra("account"),0,null);
+
     }
 
     // Tutorial Step 3
