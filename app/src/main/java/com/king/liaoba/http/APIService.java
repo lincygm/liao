@@ -168,7 +168,7 @@ public interface APIService {
     @POST("index.php/Home/User/getFocusList/chatid/{chatid}/page/{page}")
     Observable<FriendsRoot> getFocusList( @Path("chatid")String chatid,@Path("page")int page);
     /** 获取粉丝列表 */
-    @POST("index.php/Home/User/getFansList/chatid/{chatid}/page{page}")
+    @POST("index.php/Home/User/getFansList/chatid/{chatid}/page/{page}")
     Observable<FriendsRoot> getFansList(@Path("chatid")String chatid,@Path("page")int page);
 
     /** 更新userinfo */
@@ -183,4 +183,15 @@ public interface APIService {
     /**获取签到状态**/
     @POST("index.php/Home/User/getSignInStatus/chatid/{chatid}")
     Observable<FriendsRoot> signInStatus(@Path("chatid")String chatid);
+
+    /**setprice**/
+    @POST("index.php/Home/User/setPrice/chatid/{chatid}/price/{price}")
+    Observable<Root> setPrice(@Path("chatid")String chatid,@Path("price")String price);
+
+    /**setprice**/
+    @POST("index.php/Home/Heart/getRandOne/chatid{chatid}")
+    Observable<Root> randomChat(@Path("chatid")String chatid);
+
+
+
 }
