@@ -40,7 +40,7 @@
                     android:id="@+id/ivAvatar"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
-                    android:src="@drawable/mine_default_avatar"
+                    android:src="@drawable/logo_bg"
                     android:scaleType="centerCrop"
                     android:layout_below="@+id/ivLeft"
                     android:clickable="true"
@@ -146,11 +146,9 @@
                         android:layout_height="wrap_content"
                         android:clickable="true"
                         android:text="签到"
-                        android:textColor="@color/bg_red_color"
+                        android:gravity="center"
                         android:layout_alignParentRight="true"
-                        android:paddingTop="4dp"
-                        android:paddingBottom="4dp"
-                        android:background="@drawable/follow_login_btn_bg_selector"/>
+                        android:background="@drawable/btn_background"/>
                     <View
                         android:layout_width="0dp"
                         android:layout_weight="1"
@@ -159,14 +157,10 @@
                         android:id="@+id/mine_charge"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="5dp"
+                        android:gravity="center"
                         android:clickable="true"
                         android:text="@string/mine_recharge"
-                        android:textColor="@color/bg_red_color"
-                        android:paddingTop="4dp"
-                        android:paddingBottom="4dp"
-                        android:layout_marginRight="6dp"
-                        android:background="@drawable/follow_login_btn_bg_selector"/>
+                        android:background="@drawable/btn_background"/>
                 </LinearLayout>
                 <include layout="@layout/line_h_mine_space"/>
                 <TextView
