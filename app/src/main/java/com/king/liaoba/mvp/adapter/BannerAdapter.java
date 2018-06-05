@@ -51,7 +51,7 @@ public class BannerAdapter extends StaticPagerAdapter {
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             //加载图片
             Glide.with(ctx)
-                    .load(list.get(position).getImage())
+                    .load(list.get(position).getImage()).placeholder(R.drawable.logo_bg)
                     .into(imageView);
             return imageView;
         }
