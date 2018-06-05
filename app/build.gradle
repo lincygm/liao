@@ -39,7 +39,7 @@ android {
 
         ndk {
             // 设置支持的SO库架构
-            abiFilters 'arm64-v8a', 'armeabi-v7a'//'armeabi',//, 'x86', 'x86_64',
+            abiFilters 'arm64-v8a', 'armeabi-v7a','armeabi', 'x86'//, 'x86_64',
         }
         manifestPlaceholders = [
                 JPUSH_PKGNAME : applicationId,
@@ -125,5 +125,9 @@ dependencies {
     implementation 'com.github.clans:fab:1.6.0'
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.5.4'
    // releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
+    implementation 'com.carlos.voiceline:mylibrary:1.0.6'
+    implementation 'com.wang.avi:library:2.1.3'
+
+
 }
 
