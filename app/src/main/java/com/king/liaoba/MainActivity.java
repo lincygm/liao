@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.RadioButton;
 
 import com.king.base.util.ToastUtils;
+import com.king.liaoba.bean.FriendsRoot;
 import com.king.liaoba.bean.Root;
 import com.king.liaoba.http.APIRetrofit;
 import com.king.liaoba.http.APIService;
@@ -81,6 +82,7 @@ public class MainActivity extends PureActivity {
         //loginAI();
         Beta.checkUpgrade();
         getUserInfo();
+        getSignStatus();
     }
 
     private void getUserInfo(){
@@ -108,6 +110,33 @@ public class MainActivity extends PureActivity {
                     }
                 });
     }
+    private void getSignStatus(){
+
+        Retrofit retrofit = APIRetrofit.getInstance();
+        APIService service =retrofit.create(APIService.class);
+        service.signInStatus(Constants.getSharedPreference("chatid",this))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<FriendsRoot>() {
+                    @Override
+                    public void onCompleted() {
+                        Log.d("login","onCompleted");
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext( FriendsRoot jsonBean) {
+                        Constants.EditSharedPreference("signin",jsonBean.getStatus()+"");
+
+                    }
+                });
+    }
+
+
 
 
     public void requestPermissions() {
