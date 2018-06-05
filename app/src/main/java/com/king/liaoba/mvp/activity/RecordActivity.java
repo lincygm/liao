@@ -31,6 +31,8 @@ import com.king.liaoba.bean.Root;
 import com.king.liaoba.http.APIRetrofit;
 import com.king.liaoba.http.APIService;
 import com.king.liaoba.mvp.view.RecordView;
+import com.king.liaoba.push.Logger;
+import com.king.liaoba.util.CustomDialog;
 import com.king.liaoba.util.EnvironmentShare;
 import com.liaoba.BuildConfig;
 import com.liaoba.R;
@@ -238,12 +240,26 @@ public class RecordActivity extends Activity implements View.OnClickListener{
     }
     }
 
+    private Handler handler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if(msg.what==1){
+                Logger.v( "rx_map" , "handler"+Thread.currentThread().getName()  );
+                new CustomDialog(RecordActivity.this,R.style.CustomDialog).hide();
+            }
+        }
+    };
+
 
 
     private void upload(File file){
+        Logger.v( "rx_map" , "upload"+Thread.currentThread().getName()  );
+
         if(file==null){
             Toast.makeText(getApplicationContext(),"录音文件不存在!",Toast.LENGTH_LONG).show();
-            return;}
+            return;
+        }
         RequestBody requestBody = RequestBody.create(MediaType.parse("audio/mpeg"), file);
         MultipartBody.Part part = MultipartBody.Part.createFormData("file", file.getName(), requestBody);
         Retrofit retrofit = APIRetrofit.getInstance();
@@ -255,6 +271,8 @@ public class RecordActivity extends Activity implements View.OnClickListener{
                 .subscribe(new Observer<Root>() {
                     @Override
                     public void onNext(Root root) {
+                        Logger.v( "rx_map" , "onNext"+Thread.currentThread().getName()  );
+
                         if(root!=null){
                             Constants.EditSharedPreference("voicelibrary",
                                     Constants.BASE_URL+root.getData().getInfo());
@@ -268,7 +286,12 @@ public class RecordActivity extends Activity implements View.OnClickListener{
 
                     @Override
                     public void onCompleted() {
+                        Logger.v( "rx_map" , "onCompleted"+Thread.currentThread().getName()  );
+                        Message message = new Message();
+                        message.what=1;
+                        handler.sendMessage(message);
                         Log.d("record","up suc");
+
                     }
                 });
 
