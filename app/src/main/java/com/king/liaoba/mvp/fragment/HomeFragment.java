@@ -36,10 +36,10 @@ public class HomeFragment extends BaseFragment<ICategoryView, CategoryPresenter>
     ImageView ivTitle;
     @BindView(R.id.ivRight)
     ImageView ivRight;
-    @BindView(R.id.tabLayout)
-    TabLayout tabLayout;
-    @BindView(R.id.viewPager)
-    ViewPager viewPager;
+    //@BindView(R.id.tabLayout)
+   // TabLayout tabLayout;
+    //@BindView(R.id.viewPager)
+    //ViewPager viewPager;
 
     @BindView(R.id.fab)
     FloatingActionButton fab;
@@ -69,6 +69,7 @@ public class HomeFragment extends BaseFragment<ICategoryView, CategoryPresenter>
 
     @Override
     public void initUI() {
+        ivRight.setVisibility(View.GONE);
         listCategory = new ArrayList<>();
         listTitle = new ArrayList<>();
         listData = new ArrayList<>();
@@ -78,11 +79,11 @@ public class HomeFragment extends BaseFragment<ICategoryView, CategoryPresenter>
 //        listTitle.add(getText(R.string.tab_all));
 //        listData.add(LiveListFragment.newInstance(null));
 
-        viewPagerFragmentAdapter = new ViewPagerFragmentAdapter(getChildFragmentManager(),listData,listTitle);
+       // viewPagerFragmentAdapter = new ViewPagerFragmentAdapter(getChildFragmentManager(),listData,listTitle);
 
-        viewPager.setAdapter(viewPagerFragmentAdapter);
+        //viewPager.setAdapter(viewPagerFragmentAdapter);
 
-        tabLayout.setupWithViewPager(viewPager);
+      //  tabLayout.setupWithViewPager(viewPager);
     }
 
     @Override
