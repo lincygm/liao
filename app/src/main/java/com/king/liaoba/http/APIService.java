@@ -188,9 +188,19 @@ public interface APIService {
     @POST("index.php/Home/User/setPrice/chatid/{chatid}/price/{price}")
     Observable<Root> setPrice(@Path("chatid")String chatid,@Path("price")String price);
 
-    /**setprice**/
+    /**randomChat**/
     @POST("index.php/Home/Heart/getRandOne/chatid{chatid}")
     Observable<Root> randomChat(@Path("chatid")String chatid);
+
+    /**register**/
+    @POST("index.php/Home/User/register/username/{username}/password/{password}/nickname/{nickname}/sex/{sex}/telephone/{telephone}")
+    Observable<Root> register(@Path("username")String username,@Path("password")String password,@Path("nickname")String nickname,@Path("sex")String sex
+    ,@Path("telephone")String telephone);
+
+    /**updatePassword**/
+    @POST("index.php/Home/User/updatePassword/password/{password}/telephone/{telephone}")
+    Observable<Root> updatePassword(@Path("password")String password,@Path("telephone")String telephone);
+
 
 
 
