@@ -38,8 +38,6 @@ public class HomeFragment extends BaseFragment<ICategoryView, CategoryPresenter>
     ImageView ivRight;
     @BindView(R.id.tabLayout)
     TabLayout tabLayout;
-    @BindView(R.id.btnMore)
-    ImageView btnMore;
     @BindView(R.id.viewPager)
     ViewPager viewPager;
 
@@ -153,7 +151,7 @@ public class HomeFragment extends BaseFragment<ICategoryView, CategoryPresenter>
     }
 
 
-    @OnClick({R.id.ivLeft, R.id.ivRight, R.id.btnMore,R.id.fab})
+    @OnClick({R.id.ivLeft, R.id.ivRight,R.id.fab})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ivLeft:
@@ -161,8 +159,6 @@ public class HomeFragment extends BaseFragment<ICategoryView, CategoryPresenter>
                 break;
             case R.id.ivRight:
                 startLogin();
-                break;
-            case R.id.btnMore:
                 break;
             case R.id.fab:
                 startAbout();
