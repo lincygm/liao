@@ -186,6 +186,7 @@ public class MineFragment extends SimpleFragment {
             if(super.startLogin()){
             getFocus();
             getFans();
+            getSignStatus();
             btnLogin.setText(Constants.getSharedPreference("username",getActivity()));
             btnLogin.setClickable(false);
             Glide.with(getActivity()).load(Constants.BASE_URL+Constants.getSharedPreference("headimg_url",getActivity()))
@@ -289,7 +290,38 @@ public class MineFragment extends SimpleFragment {
                     }
                 });
     }
+    private void getSignStatus(){
+        Retrofit retrofit = APIRetrofit.getInstance();
+        APIService service = retrofit.create(APIService.class);
+        service.signInStatus(Constants.getSharedPreference("chatid", getActivity()))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<FriendsRoot>() {
+                    @Override
+                    public void onCompleted() {
 
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                    }
+
+                    @Override
+                    public void onNext(FriendsRoot jsonBean) {
+                        if(jsonBean!=null){
+                            if(jsonBean.getStatus()==1){
+                                Constants.EditSharedPreference("signin","1");
+                                tv_sign.setText("已签到");
+                                tv_sign.setClickable(false);
+                            }else{
+                                Constants.EditSharedPreference("signin","0");
+                                tv_sign.setText("签到");
+                                tv_sign.setClickable(true);
+                            }
+                        }
+                    }
+                });
+    }
     private void getFans(){
 
         Retrofit retrofit = APIRetrofit.getInstance();
