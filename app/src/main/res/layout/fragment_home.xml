@@ -40,11 +40,6 @@
                     app:tabIndicatorColor="@color/red"
                     app:tabMode="scrollable"
                     app:tabMinWidth="60dp" />
-                <ImageView
-                    android:id="@+id/btnMore"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/btn_home_fenlei_more"/>
             </LinearLayout>
 
         </android.support.design.widget.AppBarLayout>
