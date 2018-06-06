@@ -39,15 +39,15 @@ public class CustomDialog extends ProgressDialog {
         avLoadingIndicatorView = (AVLoadingIndicatorView)this.findViewById(R.id.progress);
         WindowManager.LayoutParams params = getWindow().getAttributes();
         params.width = WindowManager.LayoutParams.WRAP_CONTENT;
-        //params.width=70;
         params.height = WindowManager.LayoutParams.WRAP_CONTENT;
         getWindow().setAttributes(params);
+        avLoadingIndicatorView.show();
     }
 
     @Override
     public void show() {
+
         super.show();
-        avLoadingIndicatorView.show();
     }
 
     public void hide(){
