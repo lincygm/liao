@@ -44,8 +44,8 @@ public class SetPriceActivity extends Activity implements View.OnClickListener{
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ButterKnife.bind(this);
         setContentView(R.layout.activity_price);
+        ButterKnife.bind(this);
         WheelView wheelView = findViewById(R.id.wheelview);
 
 
