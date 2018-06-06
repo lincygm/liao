@@ -22,7 +22,7 @@ public class GetFloatWindowFreePositionActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_getfloatwindw_freeposition);
+        //setContentView(R.layout.activity_getfloatwindw_freeposition);
     }
 
     @Override
@@ -57,16 +57,16 @@ public class GetFloatWindowFreePositionActivity extends Activity {
 
     public void OnClick(View view) {
         switch (view.getId()) {
-            case R.id.showBt:
-                DraggableFloatWindow floatWindow = DraggableFloatWindow.getDraggableFloatWindow(GetFloatWindowFreePositionActivity.this, null);
-                floatWindow.show();
-                floatWindow.setOnTouchButtonListener(new DraggableFloatView.OnTouchButtonClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Toast.makeText(GetFloatWindowFreePositionActivity.this, R.string.tip_click, Toast.LENGTH_SHORT).show();
-                    }
-                });
-                break;
+            //case R.id.showBt:
+               // DraggableFloatWindow floatWindow = DraggableFloatWindow.getDraggableFloatWindow(GetFloatWindowFreePositionActivity.this, null);
+               // floatWindow.show();
+               // floatWindow.setOnTouchButtonListener(new DraggableFloatView.OnTouchButtonClickListener() {
+                  //  @Override
+                  //  public void onClick(View view) {
+                        //Toast.makeText(GetFloatWindowFreePositionActivity.this, R.string.tip_click, Toast.LENGTH_SHORT).show();
+                  //  }
+              //  });
+             //   break;
         }
     }
 }
