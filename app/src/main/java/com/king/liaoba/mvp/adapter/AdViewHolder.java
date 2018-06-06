@@ -28,7 +28,7 @@ public class AdViewHolder extends BaseViewHolder<Ad> {
         ImageView imageView = (ImageView) itemView;
         Glide.with(getContext())
                 .load(data.getImage())
-                .placeholder(R.drawable.default_image)
+                .placeholder(R.drawable.logo_bg)
                 .into(imageView);
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
