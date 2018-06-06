@@ -161,7 +161,7 @@ public class HomeFragment extends BaseFragment<ICategoryView, CategoryPresenter>
                 startLogin();
                 break;
             case R.id.fab:
-                startAbout();
+              //  startAbout();
                 break;
 
         }
