@@ -50,11 +50,15 @@ public class SetPriceActivity extends Activity implements View.OnClickListener{
 
 
         final List<String> mOptionsItems = new ArrayList<>();
-        mOptionsItems.add("item0");
-        mOptionsItems.add("item1");
-        mOptionsItems.add("item2");
+        mOptionsItems.add("0");
+        mOptionsItems.add("10");
+        mOptionsItems.add("20");
+        mOptionsItems.add("30");
+        mOptionsItems.add("40");
+        mOptionsItems.add("50");
+        mOptionsItems.add("60");
         wheelView.setWheelAdapter(new ArrayWheelAdapter(this)); // 文本数据源
-        wheelView.setSkin(WheelView.Skin.Common);
+        wheelView.setSkin(WheelView.Skin.Holo);
         wheelView.setWheelData(mOptionsItems);
        // wheelView.setOnWheelItemSelectedListener();
     }
