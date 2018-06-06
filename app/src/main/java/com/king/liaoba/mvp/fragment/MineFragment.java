@@ -37,6 +37,7 @@ import com.king.liaoba.http.APIRetrofit;
 import com.king.liaoba.http.APIService;
 import com.king.liaoba.mvp.activity.RecordActivity;
 import com.king.liaoba.mvp.activity.SelfEditActivity;
+import com.king.liaoba.mvp.activity.SetPriceActivity;
 import com.king.liaoba.util.uploadimg.CircleImageView;
 import com.king.liaoba.util.uploadimg.ClipImageActivity;
 import com.liaoba.BuildConfig;
@@ -212,6 +213,11 @@ public class MineFragment extends SimpleFragment {
     public void onClick(View view) {
 
         switch (view.getId()) {
+            case R.id.tvTask:
+                Intent intent2 = new Intent();
+                intent2.setClass(getActivity(), SetPriceActivity.class);
+                startActivity(intent2);
+                break;
             case R.id.ivLeft:
                 //startLogin();
                 gotoSelfEditInfo();
@@ -223,7 +229,6 @@ public class MineFragment extends SimpleFragment {
                 uploadHeadImage(parent);
                 break;
             case R.id.tvFollow:
-
                 break;
             case R.id.tvFans:
                 startLogin();
