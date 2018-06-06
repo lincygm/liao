@@ -19,7 +19,7 @@
             android:drawablePadding="4dp"
             android:text="@string/tab_home"
             android:textSize="@dimen/bottom_menu_text_size"
-            android:textColor="@color/third_party_text_color"
+            android:textColor="@color/tab_text_color"
             android:drawableTop="@drawable/btn_tabbar_home_selector"/>
         <RadioButton
             android:id="@+id/rbLive"
@@ -31,7 +31,7 @@
             android:drawablePadding="4dp"
             android:text="@string/tab_live"
             android:textSize="@dimen/bottom_menu_text_size"
-            android:textColor="@color/third_party_text_color"
+            android:textColor="@color/tab_text_color"
             android:drawableTop="@drawable/btn_tabbar_zhibo_selector"/>
         <RadioButton
             android:id="@+id/rbFollw"
@@ -43,7 +43,7 @@
             android:drawablePadding="4dp"
             android:text="@string/tab_follw"
             android:textSize="@dimen/bottom_menu_text_size"
-            android:textColor="@color/third_party_text_color"
+            android:textColor="@color/tab_text_color"
             android:drawableTop="@drawable/btn_tabbar_guanzhu_selector"/>
         <RadioButton
             android:id="@+id/rbMe"
@@ -55,7 +55,7 @@
             android:drawablePadding="4dp"
             android:text="@string/tab_me"
             android:textSize="@dimen/bottom_menu_text_size"
-            android:textColor="@color/third_party_text_color"
+            android:textColor="@color/tab_text_color"
             android:drawableTop="@drawable/btn_tabbar_wode_selector"/>
 
     </RadioGroup>
