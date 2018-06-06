@@ -118,13 +118,11 @@ public class MineFragment extends SimpleFragment {
     private ImageView headImage2;
     //调用照相机返回图片文件
     private File tempFile;
-    // 1: qq, 2: weixin
     private int type;
 
     public static MineFragment newInstance() {
         
         Bundle args = new Bundle();
-        
         MineFragment fragment = new MineFragment();
         fragment.setArguments(args);
         return fragment;
@@ -155,8 +153,7 @@ public class MineFragment extends SimpleFragment {
                 startActivity(intent);
             }
         });
-        getFocus();
-        getFans();
+
     }
 
     public void updateRefreshStatus(){
@@ -188,6 +185,8 @@ public class MineFragment extends SimpleFragment {
         Log.d("login","resume"+Constants.getSharedPreference("username",getActivity()));
         if(Constants.getSharedPreference("username",getActivity())!=""&&Constants.getSharedPreference("username",getActivity())!=null
                 &&!Constants.getSharedPreference("username",getActivity()).equals("Null")){
+            getFocus();
+            getFans();
             btnLogin.setText(Constants.getSharedPreference("username",getActivity()));
             btnLogin.setClickable(false);
             Glide.with(getActivity()).load(Constants.BASE_URL+Constants.getSharedPreference("headimg_url",getActivity()))
