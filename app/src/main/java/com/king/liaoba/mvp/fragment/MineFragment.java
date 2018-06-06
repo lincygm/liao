@@ -212,7 +212,8 @@ public class MineFragment extends SimpleFragment {
             R.id.tvStarLight, R.id.tvContribution, R.id.tvLevel,
             R.id.tvTask, R.id.tvSetting, R.id.fab,R.id.mine_logout,R.id.mine_record,R.id.mine_sign})
     public void onClick(View view) {
-
+        if(!super.startLogin())
+            return;
         switch (view.getId()) {
             case R.id.tvTask:
                 Intent intent2 = new Intent();
