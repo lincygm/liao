@@ -180,7 +180,7 @@ public class SelfShowActivity extends BaseActivity implements View.OnClickListen
         tv_save.setVisibility(View.GONE);
         tv_title=(TextView)this.findViewById(R.id.title_name);
         iv_close=(ImageView)this.findViewById(R.id.close_activity);
-        iv_close.setClickable(true);
+        iv_close.setOnClickListener(this);
         circleImageView=(CircleImageView)this.findViewById(R.id.head_image_d);
 
     }
