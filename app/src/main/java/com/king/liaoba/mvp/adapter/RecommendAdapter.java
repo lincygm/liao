@@ -100,7 +100,7 @@ public class RecommendAdapter extends RecyclerArrayAdapter<Recommend.RoomBean> {
         @Override
         public void setData(final Recommend.RoomBean data) {
             super.setData(data);
-            Glide.with(getContext()).load(data.getIcon()).error(R.drawable.default_recommend_icon).crossFade().centerCrop().diskCacheStrategy(DiskCacheStrategy.SOURCE).into(iv);
+            Glide.with(getContext()).load(data.getIcon()).error(R.drawable.logo_bg).crossFade().centerCrop().diskCacheStrategy(DiskCacheStrategy.SOURCE).into(iv);
             tvCategroy.setText(data.getName());
             tvMore.setOnClickListener(new View.OnClickListener() {
                 @Override
