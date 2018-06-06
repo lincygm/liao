@@ -63,6 +63,10 @@ public class FollowFragment extends SimpleFragment implements  RecyclerArrayAdap
     TextView tvTitle;
     @BindView(R.id.ivRight)
     ImageView ivRight;
+    @BindView(R.id.foll_focus_bg)
+    View view_focus_bg;
+    @BindView(R.id.foll_fans_bg)
+    View view_fans_bg;
     RecyclerArrayAdapter fans_adapter;
     RecyclerArrayAdapter  focus_adapter;
     @BindView(R.id.foll_fans_recycleview)
@@ -95,8 +99,6 @@ public class FollowFragment extends SimpleFragment implements  RecyclerArrayAdap
     @Override
     public void initUI() {
         tvTitle.setText(R.string.tab_follw);
-
-
     }
 
     private void fansadapter(){
@@ -382,12 +384,16 @@ public class FollowFragment extends SimpleFragment implements  RecyclerArrayAdap
                 getFans(pageFans);
                 recyclerView_fans.setVisibility(View.VISIBLE);
                 recyclerView_focus.setVisibility(View.GONE);
+                view_fans_bg.setVisibility(View.VISIBLE);
+                view_focus_bg.setVisibility(View.GONE);
                 break;
             case R.id.foll_focus:
                 index = 0;
                 getFocus(pageFocus);
                 recyclerView_fans.setVisibility(View.GONE);
                 recyclerView_focus.setVisibility(View.VISIBLE);
+                view_fans_bg.setVisibility(View.GONE);
+                view_focus_bg.setVisibility(View.VISIBLE);
                 break;
                 default:
                     break;
