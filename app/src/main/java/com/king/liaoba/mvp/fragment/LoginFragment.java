@@ -64,6 +64,8 @@ public class LoginFragment extends BaseActivity<ILoginView, LoginPresenter> impl
     @BindView(R.id.ivWeixin)
     ImageView ivWeixin;
 
+    CustomDialog customDialog;
+
     @Override
     public LoginPresenter createPresenter() {
         return new LoginPresenter(getApp());
@@ -136,8 +138,8 @@ public class LoginFragment extends BaseActivity<ILoginView, LoginPresenter> impl
 
     @Override
     public boolean login(String username, String password) {
-        //new CustomDialog(LoginFragment.this).show();
-        //super.showProgress(LoginFragment.this);
+        customDialog = new CustomDialog(LoginFragment.this,R.style.CustomDialog);
+        customDialog.show();
         Constants.clearSharedPreference();
         Retrofit retrofit = APIRetrofit.getInstance();
         APIService service =retrofit.create(APIService.class);
@@ -150,7 +152,7 @@ public class LoginFragment extends BaseActivity<ILoginView, LoginPresenter> impl
                         Log.d("login","onCompleted");
                         if(login){
                             Toast.makeText(getApplicationContext(),"登录成功!",Toast.LENGTH_LONG).show();
-                           // new CustomDialog(LoginFragment.this).hide();
+                            customDialog.hide();
                             LoginFragment.this.finish();
                         }
                     }
@@ -173,8 +175,7 @@ public class LoginFragment extends BaseActivity<ILoginView, LoginPresenter> impl
                         }else{
                             login = false;
                             Toast.makeText(getApplicationContext(),"登录失败，清检查用户名或密码!",Toast.LENGTH_LONG).show();
-                            //new CustomDialog(LoginFragment.this).hide();
-
+                            customDialog.hide();
                         }
                     }
                 });
@@ -209,7 +210,7 @@ public class LoginFragment extends BaseActivity<ILoginView, LoginPresenter> impl
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             Log.d("LOGIN","=====");
-            super.hideProgress(LoginFragment.this);
+           // super.hideProgress(LoginFragment.this);
         }
         return super.onKeyDown(keyCode, event);
     }
