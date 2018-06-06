@@ -10,8 +10,8 @@
     <RelativeLayout
         android:layout_width="70dp"
         android:layout_height="70dp"
-        android:background="@drawable/progress_bg"
         android:gravity="center"
+        android:background="#000"
         android:layout_marginTop="0dp">
 
         <com.wang.avi.AVLoadingIndicatorView

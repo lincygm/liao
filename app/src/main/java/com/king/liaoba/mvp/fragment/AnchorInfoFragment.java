@@ -71,7 +71,7 @@ public class AnchorInfoFragment extends SimpleFragment {
     public void initData() {
 
         if (room != null && getRootView()!=null) {
-            Glide.with(this).load(room.getAvatar()).error(R.drawable.mine_default_avatar).placeholder(R.drawable.mine_default_avatar).diskCacheStrategy(DiskCacheStrategy.SOURCE).into(civAvatar);
+            Glide.with(this).load(room.getAvatar()).error(R.drawable.logo_bg).placeholder(R.drawable.logo_bg).diskCacheStrategy(DiskCacheStrategy.SOURCE).into(civAvatar);
             tvAnchorName.setText(room.getNick());
             tvAccount.setText(String.valueOf(room.getNo()));
             tvFans.setText(String.valueOf(room.getFollow()));

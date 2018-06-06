@@ -132,7 +132,7 @@ public class RecommendFragment extends BaseFragment<IRecommendView, RecommendPre
         @Override
         public View onCreateView(ViewGroup parent) {
             ImageView iv = new ImageView(context);
-            iv.setImageResource(R.drawable.mine_default_avatar);
+            iv.setImageResource(R.drawable.logo_bg);
             return iv;
         }
 

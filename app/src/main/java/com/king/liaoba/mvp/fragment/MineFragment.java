@@ -37,6 +37,7 @@ import com.king.liaoba.http.APIRetrofit;
 import com.king.liaoba.http.APIService;
 import com.king.liaoba.mvp.activity.RecordActivity;
 import com.king.liaoba.mvp.activity.SelfEditActivity;
+import com.king.liaoba.mvp.activity.SetPriceActivity;
 import com.king.liaoba.util.uploadimg.CircleImageView;
 import com.king.liaoba.util.uploadimg.ClipImageActivity;
 import com.liaoba.BuildConfig;
@@ -118,13 +119,11 @@ public class MineFragment extends SimpleFragment {
     private ImageView headImage2;
     //调用照相机返回图片文件
     private File tempFile;
-    // 1: qq, 2: weixin
     private int type;
 
     public static MineFragment newInstance() {
         
         Bundle args = new Bundle();
-        
         MineFragment fragment = new MineFragment();
         fragment.setArguments(args);
         return fragment;
@@ -155,8 +154,7 @@ public class MineFragment extends SimpleFragment {
                 startActivity(intent);
             }
         });
-        getFocus();
-        getFans();
+
     }
 
     public void updateRefreshStatus(){
@@ -185,9 +183,10 @@ public class MineFragment extends SimpleFragment {
     @Override
     public void onResume() {
         super.onResume();
-        Log.d("login","resume"+Constants.getSharedPreference("username",getActivity()));
-        if(Constants.getSharedPreference("username",getActivity())!=""&&Constants.getSharedPreference("username",getActivity())!=null
-                &&!Constants.getSharedPreference("username",getActivity()).equals("Null")){
+            if(super.startLogin()){
+            getFocus();
+            getFans();
+            getSignStatus();
             btnLogin.setText(Constants.getSharedPreference("username",getActivity()));
             btnLogin.setClickable(false);
             Glide.with(getActivity()).load(Constants.BASE_URL+Constants.getSharedPreference("headimg_url",getActivity()))
@@ -213,7 +212,14 @@ public class MineFragment extends SimpleFragment {
             R.id.tvStarLight, R.id.tvContribution, R.id.tvLevel,
             R.id.tvTask, R.id.tvSetting, R.id.fab,R.id.mine_logout,R.id.mine_record,R.id.mine_sign})
     public void onClick(View view) {
+        if(!super.startLogin())
+            return;
         switch (view.getId()) {
+            case R.id.tvTask:
+                Intent intent2 = new Intent();
+                intent2.setClass(getActivity(), SetPriceActivity.class);
+                startActivity(intent2);
+                break;
             case R.id.ivLeft:
                 //startLogin();
                 gotoSelfEditInfo();
@@ -225,7 +231,6 @@ public class MineFragment extends SimpleFragment {
                 uploadHeadImage(parent);
                 break;
             case R.id.tvFollow:
-                startLogin();
                 break;
             case R.id.tvFans:
                 startLogin();
@@ -286,7 +291,38 @@ public class MineFragment extends SimpleFragment {
                     }
                 });
     }
+    private void getSignStatus(){
+        Retrofit retrofit = APIRetrofit.getInstance();
+        APIService service = retrofit.create(APIService.class);
+        service.signInStatus(Constants.getSharedPreference("chatid", getActivity()))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<FriendsRoot>() {
+                    @Override
+                    public void onCompleted() {
 
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                    }
+
+                    @Override
+                    public void onNext(FriendsRoot jsonBean) {
+                        if(jsonBean!=null){
+                            if(jsonBean.getStatus()==1){
+                                Constants.EditSharedPreference("signin","1");
+                                tv_sign.setText("已签到");
+                                tv_sign.setClickable(false);
+                            }else{
+                                Constants.EditSharedPreference("signin","0");
+                                tv_sign.setText("签到");
+                                tv_sign.setClickable(true);
+                            }
+                        }
+                    }
+                });
+    }
     private void getFans(){
 
         Retrofit retrofit = APIRetrofit.getInstance();

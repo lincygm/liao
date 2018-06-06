@@ -36,12 +36,10 @@ public class HomeFragment extends BaseFragment<ICategoryView, CategoryPresenter>
     ImageView ivTitle;
     @BindView(R.id.ivRight)
     ImageView ivRight;
-    @BindView(R.id.tabLayout)
-    TabLayout tabLayout;
-    @BindView(R.id.btnMore)
-    ImageView btnMore;
-    @BindView(R.id.viewPager)
-    ViewPager viewPager;
+    //@BindView(R.id.tabLayout)
+   // TabLayout tabLayout;
+    //@BindView(R.id.viewPager)
+    //ViewPager viewPager;
 
     @BindView(R.id.fab)
     FloatingActionButton fab;
@@ -71,6 +69,7 @@ public class HomeFragment extends BaseFragment<ICategoryView, CategoryPresenter>
 
     @Override
     public void initUI() {
+        ivRight.setVisibility(View.GONE);
         listCategory = new ArrayList<>();
         listTitle = new ArrayList<>();
         listData = new ArrayList<>();
@@ -80,11 +79,11 @@ public class HomeFragment extends BaseFragment<ICategoryView, CategoryPresenter>
 //        listTitle.add(getText(R.string.tab_all));
 //        listData.add(LiveListFragment.newInstance(null));
 
-        viewPagerFragmentAdapter = new ViewPagerFragmentAdapter(getChildFragmentManager(),listData,listTitle);
+       // viewPagerFragmentAdapter = new ViewPagerFragmentAdapter(getChildFragmentManager(),listData,listTitle);
 
-        viewPager.setAdapter(viewPagerFragmentAdapter);
+        //viewPager.setAdapter(viewPagerFragmentAdapter);
 
-        tabLayout.setupWithViewPager(viewPager);
+      //  tabLayout.setupWithViewPager(viewPager);
     }
 
     @Override
@@ -153,7 +152,7 @@ public class HomeFragment extends BaseFragment<ICategoryView, CategoryPresenter>
     }
 
 
-    @OnClick({R.id.ivLeft, R.id.ivRight, R.id.btnMore,R.id.fab})
+    @OnClick({R.id.ivLeft, R.id.ivRight,R.id.fab})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ivLeft:
@@ -162,10 +161,8 @@ public class HomeFragment extends BaseFragment<ICategoryView, CategoryPresenter>
             case R.id.ivRight:
                 startLogin();
                 break;
-            case R.id.btnMore:
-                break;
             case R.id.fab:
-                startAbout();
+              //  startAbout();
                 break;
 
         }

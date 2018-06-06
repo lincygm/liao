@@ -133,7 +133,7 @@ public class LiveListFragment extends BaseFragment<ILiveListView, LiveListPresen
             @Override
             public View onCreateView(ViewGroup parent) {
                 RollPagerView header = new RollPagerView(getContext());
-                header.setHintView(new ColorPointHintView(getContext(), Color.BLUE, Color.GRAY));
+                header.setHintView(new ColorPointHintView(getContext(), R.color.TimeTextColor, Color.GRAY));
                 header.setHintPadding(0, 0, 0, (int) RecycleViewUtils.convertDpToPixel(18, getContext()));
                 header.setPlayDelay(2000);
                 header.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,

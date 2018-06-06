@@ -14,7 +14,7 @@ public final class Constants {
 
 
     //public static final String BASE_URL = "http://www.quanmin.tv/";
-    public static final String BASE_URL ="http://www.bfn68.cn/";
+    public static final String BASE_URL ="http://47.104.132.156/";
 
     public static final String KEY_FRAGMENT = "key_fragment";
 

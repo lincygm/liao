@@ -157,7 +157,7 @@ public class FullRoomFragment extends BaseFragment<IRoomView, RoomPresenter> imp
     private void updateAnchorInfo(Room room){
         if(room!=null){
             rlAnchorInfo.setVisibility(View.VISIBLE);
-            Glide.with(this).load(room.getAvatar()).placeholder(R.drawable.mine_default_avatar).error(R.drawable.mine_default_avatar).centerCrop().crossFade().diskCacheStrategy(DiskCacheStrategy.SOURCE).into(civAvatar);
+            Glide.with(this).load(room.getAvatar()).placeholder(R.drawable.logo_bg).error(R.drawable.logo_bg).centerCrop().crossFade().diskCacheStrategy(DiskCacheStrategy.SOURCE).into(civAvatar);
             tvName.setText(room.getNick());
             tvFans.setText(String.format(getString(R.string.fans_num),room.getFollow()));
 

@@ -33,7 +33,7 @@
             android:layout_height="wrap_content"
             android:text="@string/signup"
             android:textSize="18sp"
-            android:textColor="@color/bg_red_color"/>
+            android:textColor="@color/zise"/>
     </LinearLayout>
     <include layout="@layout/line_h"/>
 
@@ -96,7 +96,7 @@
         android:text="@string/login"
         android:layout_margin="20dp"
         android:textSize="@dimen/title_text_size"
-        android:background="@drawable/btn_login_selector"
+        android:background="@color/zise"
         android:textColor="@color/white"/>
 
     <TextView

@@ -18,7 +18,7 @@
             android:layout_height="80dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="50dp"
-            android:src="@drawable/mine_default_avatar"
+            android:src="@drawable/logo_bg"
             android:scaleType="centerCrop"
             android:clickable="true"
             android:layout_centerHorizontal="true"

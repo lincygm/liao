@@ -23,7 +23,11 @@
             android:layout_alignParentRight="true"
             android:layout_marginRight="@dimen/left_margin"
             android:layout_height="wrap_content" />
-    </RelativeLayout>
-    
 
+    </RelativeLayout>
+
+    <com.wx.wheelview.widget.WheelView
+        android:id="@+id/wheelview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 </LinearLayout>

@@ -47,7 +47,7 @@ public class PersonViewHolder extends BaseViewHolder<JsonBean> {
         }
         Glide.with(getContext())
                 .load(Constants.BASE_URL+person.getHeadimg_url())
-                .placeholder(R.drawable.default_image)
+                .placeholder(R.drawable.logo_bg)
                 .bitmapTransform(new CropCircleTransformation(getContext()))
                 .into(mImg_face);
     }
