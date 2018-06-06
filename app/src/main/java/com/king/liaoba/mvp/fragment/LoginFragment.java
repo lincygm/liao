@@ -2,12 +2,15 @@ package com.king.liaoba.mvp.fragment;
 
 import android.os.Bundle;
 import android.os.Message;
+import android.text.Layout;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -63,8 +66,23 @@ public class LoginFragment extends BaseActivity<ILoginView, LoginPresenter> impl
     ImageView ivSina;
     @BindView(R.id.ivWeixin)
     ImageView ivWeixin;
-
     CustomDialog customDialog;
+    @BindView(R.id.login_login)
+    View layout_login;
+    @BindView(R.id.login_phone)
+    View layout_phone;
+    @BindView(R.id.login_password)
+    View layout_password;
+    @BindView(R.id.register_phone)
+    EditText et_phone;
+    @BindView(R.id.register_code_et)
+    EditText et_code;
+    @BindView(R.id.checkbox)
+    RadioGroup radioGroup;
+    @BindView(R.id.check_nan)
+    RadioButton rb_nan;
+    @BindView(R.id.check_nv)
+    RadioButton rb_nv;
 
     @Override
     public LoginPresenter createPresenter() {
@@ -90,7 +108,20 @@ public class LoginFragment extends BaseActivity<ILoginView, LoginPresenter> impl
 
     @Override
     public void initUI() {
+
         tvTitle.setText(R.string.login);
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                if(checkedId==R.id.check_nan){
+
+                }else if(checkedId==R.id.check_nv){
+
+                }else{
+
+                }
+            }
+        });
     }
 
     @Override
@@ -105,6 +136,9 @@ public class LoginFragment extends BaseActivity<ILoginView, LoginPresenter> impl
                 finish();
                 break;
             case R.id.tvRight:
+                layout_login.setVisibility(View.GONE);
+                layout_phone.setVisibility(View.VISIBLE);
+                layout_password.setVisibility(View.VISIBLE);
                 break;
             case R.id.btnLogin:
                 login(etUsername.getText().toString(),etPassword.getText().toString());
