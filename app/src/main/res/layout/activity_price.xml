@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <include layout="@layout/back_title"/>
     <include layout="@layout/line_h_mine_space"/>
     <RelativeLayout
         android:layout_width="match_parent"
@@ -16,18 +17,21 @@
             android:text="设置通话收费"
             android:layout_marginLeft="@dimen/left_margin"
             android:layout_alignParentLeft="true"
-            android:layout_height="wrap_content" />
+            android:gravity="center_vertical"
+            android:layout_height="match_parent" />
+
         <TextView
+            android:id="@+id/mine_member"
             android:layout_width="wrap_content"
-            android:text="免费"
+            android:layout_height="match_parent"
             android:layout_alignParentRight="true"
             android:layout_marginRight="@dimen/left_margin"
-            android:layout_height="wrap_content" />
+            android:gravity="center_vertical"
+            android:background="?android:attr/selectableItemBackground"
+            android:drawableRight="@drawable/ic_triangle"
+            android:text="免费"
+           />
 
     </RelativeLayout>
 
-    <com.wx.wheelview.widget.WheelView
-        android:id="@+id/wheelview"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
 </LinearLayout>
