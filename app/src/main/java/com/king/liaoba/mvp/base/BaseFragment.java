@@ -161,8 +161,12 @@ public abstract class BaseFragment<V extends BaseView, P extends BasePresenter<V
         //startActivity(intent);
     }
 
-    protected void startLogin(){
-
+    protected boolean startLogin(){
+        if(Constants.getSharedPreference("username",getActivity())!=""&&Constants.getSharedPreference("username",getActivity())!=null
+                &&!Constants.getSharedPreference("username",getActivity()).equals("Null")){
+            return true;
+        }
+        return false;
     }
 
 
