@@ -35,9 +35,9 @@
                     android:background="@color/white"
                     app:tabTextAppearance="@style/TabLayoutTextAppearance"
                     app:tabTextColor="@color/black"
-                    app:tabSelectedTextColor="@color/red"
+                    app:tabSelectedTextColor="@color/blueviolet"
                     app:tabIndicatorHeight="3dp"
-                    app:tabIndicatorColor="@color/red"
+                    app:tabIndicatorColor="@color/blueviolet"
                     app:tabMode="scrollable"
                     app:tabMinWidth="60dp" />
             </LinearLayout>
