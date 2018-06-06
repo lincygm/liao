@@ -166,6 +166,7 @@ public class RecordActivity extends Activity implements View.OnClickListener{
                 btn_save.setVisibility(View.GONE);
                 btn_play.setVisibility(View.GONE);
                 btn_delete.setVisibility(View.GONE);
+                btn_start.setVisibility(View.VISIBLE);
                 deleteFile(EnvironmentShare.getAudioRecordDir());
                 break;
                 default:
