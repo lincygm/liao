@@ -19,7 +19,7 @@
             android:drawablePadding="4dp"
             android:text="@string/tab_home"
             android:textSize="@dimen/bottom_menu_text_size"
-            android:textColor="@color/zise"
+            android:textColor="@color/third_party_text_color"
             android:drawableTop="@drawable/btn_tabbar_home_selector"/>
         <RadioButton
             android:id="@+id/rbLive"
