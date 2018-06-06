@@ -182,9 +182,7 @@ public class MineFragment extends SimpleFragment {
     @Override
     public void onResume() {
         super.onResume();
-        Log.d("login","resume"+Constants.getSharedPreference("username",getActivity()));
-        if(Constants.getSharedPreference("username",getActivity())!=""&&Constants.getSharedPreference("username",getActivity())!=null
-                &&!Constants.getSharedPreference("username",getActivity()).equals("Null")){
+            if(super.startLogin()){
             getFocus();
             getFans();
             btnLogin.setText(Constants.getSharedPreference("username",getActivity()));
@@ -212,6 +210,7 @@ public class MineFragment extends SimpleFragment {
             R.id.tvStarLight, R.id.tvContribution, R.id.tvLevel,
             R.id.tvTask, R.id.tvSetting, R.id.fab,R.id.mine_logout,R.id.mine_record,R.id.mine_sign})
     public void onClick(View view) {
+
         switch (view.getId()) {
             case R.id.ivLeft:
                 //startLogin();
@@ -224,7 +223,7 @@ public class MineFragment extends SimpleFragment {
                 uploadHeadImage(parent);
                 break;
             case R.id.tvFollow:
-                startLogin();
+
                 break;
             case R.id.tvFans:
                 startLogin();
