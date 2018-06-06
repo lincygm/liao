@@ -239,7 +239,6 @@
                     android:drawableRight="@drawable/ic_triangle"
                     android:text="@string/mine_member"
                     android:visibility="gone"
-
                     android:drawableLeft="@drawable/mine_level"/>
                 <include layout="@layout/line_h_mine_space"/>
 
