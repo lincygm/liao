@@ -1,6 +1,8 @@
 package com.king.liaoba.mvp.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Message;
 import android.text.Layout;
 import android.util.Log;
@@ -31,9 +33,17 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.sql.Time;
+import java.util.HashMap;
+import java.util.Timer;
+import java.util.TimerTask;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 import cn.jpush.android.api.JPushInterface;
+import cn.smssdk.EventHandler;
+import cn.smssdk.SMSSDK;
+import cn.smssdk.gui.RegisterPage;
 import retrofit2.Retrofit;
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
@@ -77,6 +87,10 @@ public class LoginFragment extends BaseActivity<ILoginView, LoginPresenter> impl
     EditText et_phone;
     @BindView(R.id.register_code_et)
     EditText et_code;
+    @BindView(R.id.register_code)
+    Button btn_code;
+    @BindView(R.id.register_next)
+    Button btn_verifyCode;
     @BindView(R.id.checkbox)
     RadioGroup radioGroup;
     @BindView(R.id.check_nan)
@@ -84,6 +98,7 @@ public class LoginFragment extends BaseActivity<ILoginView, LoginPresenter> impl
     @BindView(R.id.check_nv)
     RadioButton rb_nv;
 
+    private static int time=60;
     @Override
     public LoginPresenter createPresenter() {
         return new LoginPresenter(getApp());
@@ -129,7 +144,7 @@ public class LoginFragment extends BaseActivity<ILoginView, LoginPresenter> impl
 
     }
 
-    @OnClick({R.id.ivLeft, R.id.tvRight, R.id.btnLogin, R.id.tvForgetPwd, R.id.ivQQ, R.id.ivSina, R.id.ivWeixin})
+    @OnClick({R.id.ivLeft, R.id.tvRight, R.id.btnLogin, R.id.tvForgetPwd, R.id.ivQQ, R.id.ivSina, R.id.ivWeixin,R.id.register_code,R.id.register_next})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ivLeft:
@@ -151,8 +166,87 @@ public class LoginFragment extends BaseActivity<ILoginView, LoginPresenter> impl
                 break;
             case R.id.ivWeixin:
                 break;
+            case R.id.register_code:
+                sendCode("86",et_phone.getText().toString() );
+                btn_code.setClickable(false);
+                time=60;
+                timeCode();
+                break;
+            case R.id.register_next:
+                submitCode("85",et_phone.getText().toString().trim(),"code");
+                break;
         }
     }
+
+    Handler handler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if(msg.what==2){
+                btn_code.setText("获取验证码("+time+"s)");
+            }else if(msg.what==1){
+                btn_code.setText("获取验证码");
+                btn_code.setClickable(true);
+                time=60;
+            }
+        }
+    };
+    private void timeCode(){
+        final Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                time--;
+                Message message = new Message();
+                if(time==0){
+                    message.what=1;
+                    handler.sendMessage(message);
+                    return;
+                    }
+                message.what = 2;
+                handler.sendMessage(message);
+                }
+        },0,1000);
+    }
+    public void sendCode(String country, String phone) {
+        // 注册一个事件回调，用于处理发送验证码操作的结果
+        SMSSDK.registerEventHandler(new EventHandler() {
+            public void afterEvent(int event, int result, Object data) {
+                if (result == SMSSDK.RESULT_COMPLETE) {
+                    // TODO 处理成功得到验证码的结果
+                    // 请注意，此时只是完成了发送验证码的请求，验证码短信还需要几秒钟之后才送达
+                } else{
+                    // TODO 处理错误的结果
+                    Toast.makeText(LoginFragment.this,"发送验证码失败,请检查",Toast.LENGTH_LONG).show();
+
+                }
+
+            }
+        });
+        // 触发操作
+        SMSSDK.getVerificationCode(country, phone);
+    }
+
+    // 提交验证码，其中的code表示验证码，如“1357”
+    public void submitCode(String country, String phone, String code) {
+        // 注册一个事件回调，用于处理提交验证码操作的结果
+        SMSSDK.registerEventHandler(new EventHandler() {
+            public void afterEvent(int event, int result, Object data) {
+                if (result == SMSSDK.RESULT_COMPLETE) {
+                    // TODO 处理验证成功的结果
+                    layout_password.setVisibility(View.VISIBLE);
+                    layout_phone.setVisibility(View.GONE);
+                } else{
+                    // TODO 处理错误的结果
+                    Toast.makeText(LoginFragment.this,"验证码错误,请重试",Toast.LENGTH_LONG).show();
+                }
+
+            }
+        });
+        // 触发操作
+        SMSSDK.submitVerificationCode(country, phone, code);
+    }
+
 
     @Override
     public void onError(Throwable e) {
@@ -167,6 +261,7 @@ public class LoginFragment extends BaseActivity<ILoginView, LoginPresenter> impl
     public void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
+        SMSSDK.unregisterAllEventHandler();
     }
     boolean login = false;
 
