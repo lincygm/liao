@@ -10,6 +10,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.provider.MediaStore;
+
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
@@ -26,10 +27,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
-import com.king.liaoba.App;
+
 import com.king.liaoba.Constants;
 import com.king.liaoba.bean.FriendsRoot;
 import com.king.liaoba.bean.Root;
@@ -38,6 +36,7 @@ import com.king.liaoba.http.APIService;
 import com.king.liaoba.mvp.activity.RecordActivity;
 import com.king.liaoba.mvp.activity.SelfEditActivity;
 import com.king.liaoba.mvp.activity.SetPriceActivity;
+import com.king.liaoba.util.CustomDialog;
 import com.king.liaoba.util.uploadimg.CircleImageView;
 import com.king.liaoba.util.uploadimg.ClipImageActivity;
 import com.liaoba.BuildConfig;
@@ -45,9 +44,9 @@ import com.liaoba.R;
 
 import java.io.File;
 
+
 import butterknife.BindView;
 import butterknife.OnClick;
-import cn.jpush.android.api.JPushInterface;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -120,7 +119,8 @@ public class MineFragment extends SimpleFragment {
     //调用照相机返回图片文件
     private File tempFile;
     private int type;
-
+    CustomDialog customDialog;
+    private String TAG="GLIDE";
     public static MineFragment newInstance() {
         
         Bundle args = new Bundle();
@@ -190,7 +190,7 @@ public class MineFragment extends SimpleFragment {
             btnLogin.setText(Constants.getSharedPreference("username",getActivity()));
             btnLogin.setClickable(false);
             Glide.with(getActivity()).load(Constants.BASE_URL+Constants.getSharedPreference("headimg_url",getActivity()))
-            .dontAnimate().into(headImage1);
+            .diskCacheStrategy(DiskCacheStrategy.NONE).into(headImage1);
             if(Constants.getSharedPreference("signin",getActivity()).equals("1")){
                 tv_sign.setText("已签到");
                 tv_sign.setClickable(false);
@@ -537,6 +537,7 @@ public class MineFragment extends SimpleFragment {
                     if (uri == null) {
                         return;
                     }
+                    showProgress();
                     String cropImagePath = com.king.liaoba.util.FileUtil.getRealFilePathFromUri(getActivity().getApplicationContext(), uri);
                     Log.d("path",cropImagePath);
                     Bitmap bitMap = BitmapFactory.decodeFile(cropImagePath);
@@ -553,10 +554,9 @@ public class MineFragment extends SimpleFragment {
                                 @Override
                                 public void onNext(Root root) {
                                     if(root!=null){
-                                        Constants.EditSharedPreference("headimg_url", Constants.BASE_URL+root.getData().getGetdata().get(0).getHeadimg_url().toString());
+                                        Constants.EditSharedPreference("headimg_url", root.getData().getGetdata().get(0).getHeadimg_url().toString());
                                     }
                                 }
-
                                 @Override
                                 public void onError(Throwable e) {
                                     Log.d("pic","error");
@@ -564,10 +564,11 @@ public class MineFragment extends SimpleFragment {
 
                                 @Override
                                 public void onCompleted() {
-                                    Glide.with(getActivity()).load(Constants.
-                                            BASE_URL+Constants.getSharedPreference("headimg_url",getActivity()))
-                                            .placeholder(R.mipmap.live_default).dontAnimate().error(R.mipmap.live_default).
-                                            crossFade().centerCrop().into(headImage1);
+                                    Log.d("DDS",Constants.getSharedPreference("headimg_url",getActivity()));
+
+                                    Glide.with(getActivity()).load(Constants.BASE_URL+Constants.getSharedPreference("headimg_url",getActivity())).placeholder(R.drawable.logo_bg)
+                                           .diskCacheStrategy(DiskCacheStrategy.NONE).into(headImage1);
+                                    customDialog.cancel();
 
                                 }
                             });
@@ -599,5 +600,11 @@ public class MineFragment extends SimpleFragment {
         Intent intent = new Intent();
         intent.setClass(getActivity().getApplicationContext(), SelfEditActivity.class);
         startActivity(intent);
+    }
+
+    private void showProgress(){
+        if(customDialog==null)
+            customDialog = new CustomDialog(getActivity(),R.style.CustomDialog);
+        customDialog.show();
     }
 }
