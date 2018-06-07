@@ -113,6 +113,9 @@
         <activity android:name="com.king.liaoba.mvp.activity.SetPriceActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:windowSoftInputMode="stateHidden|stateUnchanged" />
+        <activity android:name="com.king.liaoba.mvp.activity.ChargeActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:windowSoftInputMode="stateHidden|stateUnchanged" />
         <service android:name="com.king.liaoba.push.OnlineService">
             <intent-filter>
                 <action android:name="com.liaoba.service" />
