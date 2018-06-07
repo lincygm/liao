@@ -10,6 +10,7 @@ import com.king.liaoba.di.component.AppComponent;
 import com.king.liaoba.di.component.DaggerAppComponent;
 import com.king.liaoba.di.module.AppModule;
 import com.liaoba.R;
+import com.mob.MobSDK;
 import com.squareup.leakcanary.LeakCanary;
 import com.tencent.bugly.Bugly;
 import com.tencent.bugly.beta.Beta;
@@ -41,6 +42,7 @@ public class App extends Application {
         this.mContext = base;
         //MultiDex.install(base);
 //        Beta.installTinker();
+        MobSDK.init(this);
     }
 
     @Override
