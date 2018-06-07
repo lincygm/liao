@@ -1,9 +1,13 @@
 package com.king.liaoba.mvp.fragment;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.Settings;
 import android.text.Layout;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -19,6 +23,9 @@ import android.widget.Toast;
 
 import com.king.liaoba.Constants;
 import com.king.liaoba.bean.Root;
+import com.king.liaoba.floatwindow.DraggableFloatView;
+import com.king.liaoba.floatwindow.DraggableFloatWindow;
+import com.king.liaoba.floatwindow.GetFloatWindowFreePositionActivity;
 import com.king.liaoba.http.APIRetrofit;
 import com.king.liaoba.http.APIService;
 import com.king.liaoba.mvp.base.BaseActivity;
@@ -91,6 +98,12 @@ public class LoginFragment extends BaseActivity<ILoginView, LoginPresenter> impl
     Button btn_code;
     @BindView(R.id.register_next)
     Button btn_verifyCode;
+    @BindView(R.id.register_now)
+    Button btn_register;
+    @BindView(R.id.register_password)
+    EditText et_password;
+    @BindView(R.id.register_nick)
+    EditText et_nick;
     @BindView(R.id.checkbox)
     RadioGroup radioGroup;
     @BindView(R.id.check_nan)
@@ -99,6 +112,7 @@ public class LoginFragment extends BaseActivity<ILoginView, LoginPresenter> impl
     RadioButton rb_nv;
 
     private static int time=60;
+    private String sex= "0";
     @Override
     public LoginPresenter createPresenter() {
         return new LoginPresenter(getApp());
@@ -129,11 +143,11 @@ public class LoginFragment extends BaseActivity<ILoginView, LoginPresenter> impl
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 if(checkedId==R.id.check_nan){
-
+                    sex="1";
                 }else if(checkedId==R.id.check_nv){
-
+                    sex="0";
                 }else{
-
+                    sex="0";
                 }
             }
         });
@@ -143,8 +157,37 @@ public class LoginFragment extends BaseActivity<ILoginView, LoginPresenter> impl
     public void initData() {
 
     }
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (!Settings.canDrawOverlays(this)) {
+                Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                        Uri.parse("package:" + getPackageName()));
+                startActivityForResult(intent, 2);
+            }
+        }
+    }
 
-    @OnClick({R.id.ivLeft, R.id.tvRight, R.id.btnLogin, R.id.tvForgetPwd, R.id.ivQQ, R.id.ivSina, R.id.ivWeixin,R.id.register_code,R.id.register_next})
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case 2:
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        if (!Settings.canDrawOverlays(this)) {
+                            Toast.makeText(LoginFragment.this, "权限授予失败，无法开启悬浮窗", Toast.LENGTH_SHORT).show();
+                        } else {
+                            // TODO: 18/1/7 已经授权
+                        }
+                    }
+                    break;
+            }
+        }
+    }
+    @OnClick({R.id.ivLeft, R.id.tvRight, R.id.btnLogin, R.id.tvForgetPwd, R.id.ivQQ,
+            R.id.ivSina, R.id.ivWeixin,R.id.register_code,R.id.register_next,R.id.register_now})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ivLeft:
@@ -161,6 +204,14 @@ public class LoginFragment extends BaseActivity<ILoginView, LoginPresenter> impl
             case R.id.tvForgetPwd:
                 break;
             case R.id.ivQQ:
+                DraggableFloatWindow floatWindow = DraggableFloatWindow.getDraggableFloatWindow(LoginFragment.this, null);
+                floatWindow.show();
+                floatWindow.setOnTouchButtonListener(new DraggableFloatView.OnTouchButtonClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Toast.makeText(LoginFragment.this, "aaaa", Toast.LENGTH_SHORT).show();
+                    }
+                });
                 break;
             case R.id.ivSina:
                 break;
@@ -173,8 +224,14 @@ public class LoginFragment extends BaseActivity<ILoginView, LoginPresenter> impl
                 timeCode();
                 break;
             case R.id.register_next:
-                submitCode("85",et_phone.getText().toString().trim(),"code");
+                submitCode("86",et_phone.getText().toString().trim(),et_code.getText().toString().trim());
                 break;
+            case R.id.register_now:
+
+                register(et_phone.getText().toString(),sex, et_password.getText().toString(),et_nick.getText().toString());
+                break;
+                default:
+                    break;
         }
     }
 
@@ -265,6 +322,31 @@ public class LoginFragment extends BaseActivity<ILoginView, LoginPresenter> impl
     }
     boolean login = false;
 
+    private void register(String phone,String sex,String password,String nickname){
+        Retrofit retrofit = APIRetrofit.getInstance();
+        APIService service =retrofit.create(APIService.class);
+        service.register(phone,password,nickname,sex,phone).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<Root>() {
+                    @Override
+                    public void onNext(Root root) {
+                        if(root.getStatus()==1){
+                            Toast.makeText(LoginFragment.this,"注册成功!",Toast.LENGTH_LONG).show();
+                        }
+                    }
+
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+                });
+    }
+
     @Override
     public boolean login(String username, String password) {
         customDialog = new CustomDialog(LoginFragment.this,R.style.CustomDialog);
@@ -315,11 +397,7 @@ public class LoginFragment extends BaseActivity<ILoginView, LoginPresenter> impl
     public void forgetPass(int phone) {
     }
 
-    @Override
-    public boolean register(String phone, String code) {
 
-        return false;
-    }
 
     @Override
     public void showProgress() {
