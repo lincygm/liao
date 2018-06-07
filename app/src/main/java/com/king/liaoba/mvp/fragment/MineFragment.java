@@ -24,6 +24,7 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -33,6 +34,7 @@ import com.king.liaoba.bean.FriendsRoot;
 import com.king.liaoba.bean.Root;
 import com.king.liaoba.http.APIRetrofit;
 import com.king.liaoba.http.APIService;
+import com.king.liaoba.mvp.activity.ChargeActivity;
 import com.king.liaoba.mvp.activity.RecordActivity;
 import com.king.liaoba.mvp.activity.SelfEditActivity;
 import com.king.liaoba.mvp.activity.SetPriceActivity;
@@ -63,7 +65,7 @@ import rx.schedulers.Schedulers;
  * @since 2017/3/9
  */
 
-public class MineFragment extends SimpleFragment {
+public class MineFragment extends SimpleFragment implements View.OnClickListener{
 
 
     @BindView(R.id.ivLeft)
@@ -80,7 +82,6 @@ public class MineFragment extends SimpleFragment {
     TextView tvFans;
     @BindView(R.id.tvSeed)
     TextView tvSeed;
-    @BindView(R.id.mine_charge)
     TextView tvRecharge;
     @BindView(R.id.tvStarLight)
     TextView tvStarLight;
@@ -136,7 +137,6 @@ public class MineFragment extends SimpleFragment {
 
     @Override
     public void initUI() {
-
         headImage1 =(CircleImageView)this.findView(R.id.ivAvatar);
         srl.setColorSchemeColors(getResources().getColor(R.color.progress_color));
         srl.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -146,10 +146,19 @@ public class MineFragment extends SimpleFragment {
             }
         });
         btnLogin.setClickable(true);
+        tvRecharge =(TextView)getRootView().findViewById(R.id.mine_charge) ;
+        tvRecharge.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getActivity(),"ddd",Toast.LENGTH_LONG).show();
+                Intent intent3 = new Intent();
+                intent3.setClass(getActivity(), ChargeActivity.class);
+                startActivity(intent3);
+            }
+        });
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //startLogin();
                 Intent intent = new Intent(MineFragment.this.getContext(),LoginFragment.class);
                 startActivity(intent);
             }
@@ -208,7 +217,7 @@ public class MineFragment extends SimpleFragment {
     }
 
     @OnClick({R.id.ivLeft, R.id.ivRight, R.id.ivAvatar,
-            R.id.tvFollow, R.id.tvFans, R.id.mine_charge,
+            R.id.tvFollow, R.id.tvFans,
             R.id.tvStarLight, R.id.tvContribution, R.id.tvLevel,
             R.id.tvTask, R.id.tvSetting, R.id.fab,R.id.mine_logout,R.id.mine_record,R.id.mine_sign})
     public void onClick(View view) {
@@ -233,9 +242,6 @@ public class MineFragment extends SimpleFragment {
             case R.id.tvFollow:
                 break;
             case R.id.tvFans:
-                startLogin();
-                break;
-            case R.id.mine_charge:
                 startLogin();
                 break;
             case R.id.tvStarLight:
