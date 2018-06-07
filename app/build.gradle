@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'org.greenrobot.greendao'
 //apply plugin: 'com.neenbedankt.android-apt'
 apply from: 'tinker-support.gradle'
-
+apply plugin: "com.mob.sdk"
 android {
     signingConfigs {
         config {
@@ -58,6 +58,12 @@ android {
         main {
             jniLibs.srcDirs = ['src/main/jnilibs']
         }
+    }
+    MobSDK {
+        appKey "263fb22d178f1"
+        appSecret "cc057a8bb45f874bce0b152ce98681dc"
+
+        SMSSDK {}
     }
 }
 
