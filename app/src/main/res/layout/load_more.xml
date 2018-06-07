@@ -6,7 +6,8 @@
         android:id="@+id/pbMore"
         android:layout_width="15dp"
         android:layout_height="15dp"
-        android:background="@color/blue"
+        android:indeterminateTint="@color/zise"
         android:layout_gravity="center"
+
         android:layout_margin="6dp"/>
 </LinearLayout>
