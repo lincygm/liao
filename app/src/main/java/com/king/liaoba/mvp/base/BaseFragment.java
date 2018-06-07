@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
 import com.king.base.util.LogUtils;
@@ -162,11 +163,12 @@ public abstract class BaseFragment<V extends BaseView, P extends BasePresenter<V
     }
 
     protected boolean startLogin(){
-        if(Constants.getSharedPreference("username",getActivity())!=""&&Constants.getSharedPreference("username",getActivity())!=null
-                &&!Constants.getSharedPreference("username",getActivity()).equals("Null")){
-            return true;
+        if(Constants.getSharedPreference("username",getActivity())==""||Constants.getSharedPreference("username",getActivity())==null
+                ||Constants.getSharedPreference("username",getActivity()).equals("Null")){
+            Toast.makeText(getActivity(),"请登录!",Toast.LENGTH_LONG).show();
+            return false;
         }
-        return false;
+        return true;
     }
 
 
