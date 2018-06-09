@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_marginLeft="@dimen/left_margin"
+        android:layout_height="@dimen/line_height">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:gravity="center_vertical"
+            android:layout_height="match_parent"
+            android:text="手机号"/>
+        <EditText
+            android:layout_width="wrap_content"
+            android:maxLength="11"
+            android:hint="填写手机号"
+            android:layout_marginLeft="70dp"
+            android:background="@null"
+            android:id="@+id/findpass_phone"
+            android:gravity="center_vertical"
+            android:layout_height="match_parent" />
+
+    </RelativeLayout>
+    <include layout="@layout/line_h_mine_space"/>
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_marginLeft="@dimen/left_margin"
+        android:layout_height="@dimen/line_height">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:gravity="center_vertical"
+            android:layout_height="match_parent"
+            android:text="验证码"/>
+        <EditText
+            android:layout_width="wrap_content"
+            android:maxLength="11"
+            android:hint="填写验证码"
+            android:id="@+id/findpass_code_et"
+            android:background="@null"
+            android:gravity="center_vertical"
+            android:layout_marginLeft="70dp"
+            android:layout_height="match_parent" />
+
+
+        <Button
+            android:layout_width="wrap_content"
+            android:id="@+id/findpass_code"
+            android:layout_alignParentRight="true"
+            android:text="获取验证码"
+            android:layout_marginRight="@dimen/left_margin"
+            android:gravity="center"
+            android:background="@drawable/corners_circle_stoke"
+            android:layout_height="wrap_content" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_marginLeft="@dimen/left_margin"
+        android:layout_height="@dimen/line_height">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:gravity="center_vertical"
+            android:layout_height="match_parent"
+            android:text="设置密码"/>
+        <EditText
+            android:layout_width="wrap_content"
+            android:maxLength="166"
+            android:hint="必填"
+            android:layout_marginLeft="70dp"
+            android:background="@null"
+            android:id="@+id/register_password"
+            android:gravity="center_vertical"
+            android:layout_height="match_parent" />
+
+    </RelativeLayout>
+    <Button
+        android:id="@+id/findpass_next"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="下一步"
+        android:layout_margin="@dimen/line_height"
+        android:textSize="@dimen/title_text_size"
+        android:background="@drawable/corners_circle_solide"
+        android:textColor="@color/white"/>
+</LinearLayout>
