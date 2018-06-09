@@ -43,7 +43,9 @@
     <include layout="@layout/layout_password"
         android:visibility="gone"
         android:id="@+id/login_password"/>
-
+    <include layout="@layout/layout_find_pass"
+        android:visibility="gone"
+        android:id="@+id/login_find_pass"/>
 
 
 </LinearLayout>
