@@ -90,6 +90,8 @@ public class LoginFragment extends BaseActivity<ILoginView, LoginPresenter> impl
     View layout_phone;
     @BindView(R.id.login_password)
     View layout_password;
+    @BindView(R.id.login_find_pass)
+    View layout_find_pass;
     @BindView(R.id.register_phone)
     EditText et_phone;
     @BindView(R.id.register_code_et)
@@ -111,8 +113,9 @@ public class LoginFragment extends BaseActivity<ILoginView, LoginPresenter> impl
     @BindView(R.id.check_nv)
     RadioButton rb_nv;
 
-    private static int time=60;
-    private String sex= "0";
+    private static int time = 60;
+    private String sex = "0";
+    private int status = 0;//0登录、1注册、2、設置密碼,3找回密码
     @Override
     public LoginPresenter createPresenter() {
         return new LoginPresenter(getApp());
@@ -135,10 +138,41 @@ public class LoginFragment extends BaseActivity<ILoginView, LoginPresenter> impl
         return R.layout.fragment_login;
     }
 
+    private void setStatus(int status){
+        if(status==0){
+            tvTitle.setText(R.string.login);
+            tvRight.setText("注册");
+            layout_login.setVisibility(View.VISIBLE);
+            layout_phone.setVisibility(View.GONE);
+            layout_password.setVisibility(View.GONE);
+            layout_find_pass.setVisibility(View.GONE);
+        }else if(status==1){
+            tvTitle.setText("注册");
+            tvRight.setText("登录");
+            layout_login.setVisibility(View.GONE);
+            layout_phone.setVisibility(View.VISIBLE);
+            layout_password.setVisibility(View.GONE);
+            layout_find_pass.setVisibility(View.GONE);
+
+        }else if(status==2){
+            tvTitle.setText("注册");
+            tvRight.setText("登录");
+            layout_login.setVisibility(View.GONE);
+            layout_phone.setVisibility(View.GONE);
+            layout_password.setVisibility(View.VISIBLE);
+            layout_find_pass.setVisibility(View.GONE);
+        }else if(status==3){
+            tvTitle.setText("找回密码");
+            tvRight.setText("登录");
+            layout_login.setVisibility(View.GONE);
+            layout_phone.setVisibility(View.GONE);
+            layout_password.setVisibility(View.GONE);
+            layout_find_pass.setVisibility(View.VISIBLE);
+        }
+    }
+
     @Override
     public void initUI() {
-
-        tvTitle.setText(R.string.login);
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -194,14 +228,18 @@ public class LoginFragment extends BaseActivity<ILoginView, LoginPresenter> impl
                 finish();
                 break;
             case R.id.tvRight:
-                layout_login.setVisibility(View.GONE);
-                layout_phone.setVisibility(View.VISIBLE);
-                layout_password.setVisibility(View.VISIBLE);
+                    if(status==1||status==2){
+
+                    }else{
+
+                    }
                 break;
             case R.id.btnLogin:
                 login(etUsername.getText().toString(),etPassword.getText().toString());
                 break;
             case R.id.tvForgetPwd:
+               status=3;
+               setStatus(3);
                 break;
             case R.id.ivQQ:
                 DraggableFloatWindow floatWindow = DraggableFloatWindow.getDraggableFloatWindow(LoginFragment.this, null);
@@ -227,7 +265,6 @@ public class LoginFragment extends BaseActivity<ILoginView, LoginPresenter> impl
                 submitCode("86",et_phone.getText().toString().trim(),et_code.getText().toString().trim());
                 break;
             case R.id.register_now:
-
                 register(et_phone.getText().toString(),sex, et_password.getText().toString(),et_nick.getText().toString());
                 break;
                 default:
