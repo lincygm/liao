@@ -73,7 +73,7 @@ public class SelfShowActivity extends BaseActivity implements View.OnClickListen
     @BindView(R.id.title_right)
     TextView tv_save;
     TextView tv_title;
-    @BindView(R.id.addfocus)
+    @BindView(R.id.self_addfocus)
     Button btn_addfocus;
     @BindView(R.id.selfgift)
     Button btn_gift;
@@ -85,7 +85,7 @@ public class SelfShowActivity extends BaseActivity implements View.OnClickListen
     //被邀请的chatid
     private String chatid = null;
     List<PictureList> list  = new ArrayList<>();
-
+    boolean isFocus = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -191,14 +191,16 @@ public class SelfShowActivity extends BaseActivity implements View.OnClickListen
         super.onResume();
         getFans(chatid);
         getFocus(chatid);
+        focuStatus(chatid);
+        Log.d("SHOW","onResume");
     }
 
-    @OnClick({R.id.addfocus})
+    @OnClick({R.id.self_addfocus})
     @Override
     public void onClick(View view) {
         if(view.getId()==R.id.title_close){
             this.finish();
-        }else if(view.getId()==R.id.addfocus){
+        }else if(view.getId()==R.id.self_addfocus){
             addFocus();
         }
     }
@@ -267,7 +269,6 @@ public class SelfShowActivity extends BaseActivity implements View.OnClickListen
                         list.clear();
                         if(jsonBean!=null){
                             list = jsonBean.getData().getGetdata();
-                            Log.d("====>>",jsonBean.getData().getGetdata().get(0).getPicurl());
                         }
                     }
                 });
@@ -275,6 +276,7 @@ public class SelfShowActivity extends BaseActivity implements View.OnClickListen
     }
 
     private void pictureWall() {
+
         recyclerView = (EasyRecyclerView) findViewById(R.id.recyclerView);
         //recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         recyclerView.setAdapter(adapter = new ImageAdapter(this));
@@ -292,10 +294,14 @@ public class SelfShowActivity extends BaseActivity implements View.OnClickListen
                 RollPagerView header = new RollPagerView(SelfShowActivity.this);
                 header.setHintView(new ColorPointHintView(SelfShowActivity.this, Color.YELLOW, Color.GRAY));
                 header.setHintPadding(0, 0, 0, (int) RecycleViewUtils.convertDpToPixel(8, SelfShowActivity.this));
-                //header.setPlayDelay(2000);
                 header.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                         (int) RecycleViewUtils.convertDpToPixel(200, SelfShowActivity.this)));
-                header.setAdapter(new BannerAdapter(SelfShowActivity.this,list));
+                if(list!=null && list.size()!=0) {
+                    recyclerView.setVisibility(View.VISIBLE);
+                    header.setAdapter(new BannerAdapter(SelfShowActivity.this, list));
+                }else{
+                    recyclerView.setVisibility(View.GONE);
+                }
                 return header;
             }
 
@@ -307,8 +313,43 @@ public class SelfShowActivity extends BaseActivity implements View.OnClickListen
     }
 
     private void addFocus(){
+
         Retrofit retrofit = APIRetrofit.getInstance();
         APIService service = retrofit.create(APIService.class);
+        Log.d("DDS",">>>");
+        if(isFocus){
+            service.deleteFocus(Constants.getSharedPreference("chatid",this),chatid)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Observer<Root>() {
+                        @Override
+                        public void onError(Throwable e) {
+                            Log.d("aa","error");
+                        }
+
+                        @Override
+                        public void onCompleted() {
+
+                        }
+
+                        @Override
+                        public void onNext(Root root) {
+                            if(root.getStatus()==1){
+                                Toast.makeText(getApplicationContext(),"取消成功",Toast.LENGTH_LONG).show();
+                                btn_addfocus.setText("关注");
+                                isFocus = false;
+                            }else{
+                                //Toast.makeText(getApplicationContext(),"取消失败",Toast.LENGTH_LONG).show();
+                                //btn_addfocus.setText("已关注");
+                                //btn_addfocus.setTag(1);
+                            }
+                        }
+                    });
+            Log.d("DDS","aaaaaaa");
+
+        }else{
+
+            Log.d("DDS","bbbbb");
         service.focus(Constants.getSharedPreference("chatid",this),chatid)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -320,14 +361,45 @@ public class SelfShowActivity extends BaseActivity implements View.OnClickListen
 
                     @Override
                     public void onCompleted() {
-                        Log.d("aa","onCompleted");
-                        Toast.makeText(getApplicationContext(),"关注成功!",Toast.LENGTH_LONG).show();
+
                     }
 
                     @Override
                     public void onNext(Root root) {
-                        Log.d("aa","onNext");
+                        if(root.getStatus()==1){
+                            Toast.makeText(getApplicationContext(),"关注成功",Toast.LENGTH_LONG).show();
+                            btn_addfocus.setText("已关注");
+                            isFocus = true;
+                        }
+                    }
+                });
+        }
+    }
 
+
+    private void focuStatus(String chatid){
+
+        Retrofit retrofit = APIRetrofit.getInstance();
+        APIService service = retrofit.create(APIService.class);
+        service.getFocusStatus(Constants.getSharedPreference("chatid",this),chatid)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<Root>() {
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.d("aa","error");
+                    }
+
+                    @Override
+                    public void onCompleted() {
+                    }
+
+                    @Override
+                    public void onNext(Root root) {
+                        if(root.getStatus()==1){
+                            btn_addfocus.setText("已关注");
+                            isFocus = true;
+                        }
                     }
                 });
     }
