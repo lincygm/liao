@@ -201,7 +201,17 @@ public interface APIService {
     @POST("index.php/Home/User/updatePassword/password/{password}/telephone/{telephone}")
     Observable<Root> updatePassword(@Path("password")String password,@Path("telephone")String telephone);
 
+    /**发送短信**/
     @POST("index.php/Home/Message/sendRegist/numbers/{number}")
     Observable<Root> sendMessage(@Path("number")String number);
+
+    /**获取关注状态**/
+    @POST("index.php/Home/User/getFocusStatus/chatid/{chatid}/focus_id/{focus_id}")
+    Observable<Root> getFocusStatus(@Path("chatid")String chatid,@Path("focus_id")String focus_id);
+
+    /**删除关注状态**/
+    @POST("index.php/Home/User/deleteFocus/chatid/{chatid}/focus_id/{focus_id}")
+    Observable<Root> deleteFocus(@Path("chatid")String chatid,@Path("focus_id")String focus_id);
+
 
 }
