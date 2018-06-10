@@ -118,6 +118,12 @@ public class FollowFragment extends SimpleFragment implements  RecyclerArrayAdap
         });
         //fans_adapter.setMore(R.layout.view_more, this);
         fans_adapter.setNoMore(R.layout.view_nomore);
+        fans_adapter.setMore(R.layout.view_more, new RecyclerArrayAdapter.OnLoadMoreListener() {
+            @Override
+            public void onLoadMore() {
+
+            }
+        });
         fans_adapter.setOnItemLongClickListener(new RecyclerArrayAdapter.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(int position) {
@@ -156,7 +162,7 @@ public class FollowFragment extends SimpleFragment implements  RecyclerArrayAdap
                 return new PersonViewHolder(parent);
             }
         });
-        //focus_adapter.setMore(R.layout.view_more, this);
+        focus_adapter.setMore(R.layout.view_more, this);
         focus_adapter.setNoMore(R.layout.view_nomore);
         focus_adapter.setOnItemLongClickListener(new RecyclerArrayAdapter.OnItemLongClickListener() {
             @Override
@@ -202,8 +208,12 @@ public class FollowFragment extends SimpleFragment implements  RecyclerArrayAdap
                     public void onNext(FriendsRoot root) {
                         if(root!=null&&focusList!=null){
                             for(int i=0;i<root.getData().getGetdata().size();i++){
-                                if(root.getData().getGetdata().size()==0){
-                                    focus_adapter.setNoMore(R.layout.view_empty);
+                                if(root.getData().getGetdata().size()==0||root.getData().getGetdata().size()<2){
+                                    focus_adapter.setNoMore(R.layout.view_nomore);
+                                    focusList.add(root.getData().getGetdata().get(i).getFocus_id());
+                                    getUserinfoByChatid(root.getData().getGetdata().get(i).getFocus_id());
+                                    //focus_adapter.stopMore();
+                                    focus_adapter.pauseMore();
                                     return;
                                 }
                                 focusList.add(root.getData().getGetdata().get(i).getFocus_id());
@@ -238,6 +248,7 @@ public class FollowFragment extends SimpleFragment implements  RecyclerArrayAdap
                             for(int i=0;i<root.getData().getGetdata().size();i++){
                                 if(root.getData().getGetdata().size()==0){
                                     fans_adapter.setNoMore(R.layout.view_empty);
+                                    focus_adapter.pauseMore();
                                     return;
                                 }
                                 fansList.add(root.getData().getGetdata().get(i).getChat_id());
@@ -308,7 +319,6 @@ public class FollowFragment extends SimpleFragment implements  RecyclerArrayAdap
     @Override
     public void onLoadMore() {
         Log.i("Follow","onLoadMore");
-
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -356,18 +366,18 @@ public class FollowFragment extends SimpleFragment implements  RecyclerArrayAdap
                 }
                 if(index==0){
                     focus_adapter.addAll(userFocusList);
-                    pageFocus = 1;
+                    pageFocus = 0;
                     Log.d("pages",">>+"+pageFocus);
 
                 }else{
                     fans_adapter.addAll(userFansList);
-                    pageFans = 1;
+                    pageFans = 0;
                     Log.d("pages",">>+"+pageFans);
 
                 }
 
             }
-        }, 2000);
+        }, 1000);
     }
 
     @OnClick({R.id.ivLeft, R.id.ivRight,R.id.foll_focus,R.id.foll_fans})
