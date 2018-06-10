@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <include layout="@layout/back_title"/>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_marginLeft="@dimen/left_margin"
+        android:layout_height="@dimen/line_height">
+        <TextView
+            android:layout_width="wrap_content"
+            android:text="金额"
+            android:gravity="center_vertical"
+            android:layout_height="match_parent" />
+        <EditText
+            android:id="@+id/purchase_money"
+            android:layout_width="wrap_content"
+            android:maxLength="5"
+            android:background="@null"
+            android:layout_marginLeft="@dimen/line_height"
+            android:inputType="number"
+            android:hint="金额必须是整数"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+   <include layout="@layout/line_h_mine_space"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_marginLeft="@dimen/left_margin"
+        android:layout_height="@dimen/line_height">
+        <TextView
+            android:layout_width="wrap_content"
+            android:text="账号"
+            android:gravity="center_vertical"
+            android:layout_height="match_parent" />
+        <EditText
+            android:id="@+id/purchase_account"
+            android:layout_width="wrap_content"
+            android:layout_marginLeft="@dimen/line_height"
+            android:background="@null"
+            android:hint="请输入支付宝或者微信账号"
+            android:maxLength="25"
+            android:inputType="number"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+    <include layout="@layout/line_h_mine_space"/>
+<RadioGroup
+    android:layout_width="match_parent"
+    android:orientation="horizontal"
+    android:id="@+id/purchase_radiogroup"
+    android:layout_marginTop="20dp"
+    android:checkedButton="@id/purchase_weixin"
+    android:layout_height="wrap_content">
+    <RadioButton
+        android:layout_width="wrap_content"
+        android:checked="true"
+        android:id="@+id/purchase_weixin"
+        android:drawableLeft="@drawable/img_wechat_pay"
+        android:layout_height="wrap_content" />
+    <RadioButton
+        android:layout_width="wrap_content"
+        android:id="@+id/purchase_zhifubao"
+        android:drawableLeft="@drawable/img_zfb_pay"
+        android:layout_height="wrap_content" />
+</RadioGroup>
+
+    <Button
+        android:id="@+id/purchase_submit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="提交"
+        android:layout_marginTop="50dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:textSize="@dimen/title_text_size"
+        android:background="@drawable/corners_circle_solide"
+        android:textColor="@color/white"/>
+
+
+</LinearLayout>
