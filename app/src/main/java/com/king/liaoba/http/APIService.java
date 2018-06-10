@@ -201,7 +201,7 @@ public interface APIService {
     @POST("index.php/Home/User/updatePassword/password/{password}/telephone/{telephone}")
     Observable<Root> updatePassword(@Path("password")String password,@Path("telephone")String telephone);
 
-
-
+    @POST("index.php/Home/Message/sendRegist/numbers/{number}")
+    Observable<Root> sendMessage(@Path("number")String number);
 
 }

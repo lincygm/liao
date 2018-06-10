@@ -113,6 +113,12 @@
                 android:gravity="center"
                 android:layout_margin="10dp">
                 <ImageView
+                    android:id="@+id/ivWeixin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/share_weixin"
+                    android:layout_margin="20dp"/>
+                <ImageView
                     android:id="@+id/ivQQ"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -121,15 +127,11 @@
                 <ImageView
                     android:id="@+id/ivSina"
                     android:layout_width="wrap_content"
+                    android:visibility="gone"
                     android:layout_height="wrap_content"
                     android:src="@drawable/share_sina"
                     android:layout_margin="20dp"/>
-                <ImageView
-                    android:id="@+id/ivWeixin"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/share_weixin"
-                    android:layout_margin="20dp"/>
+
             </LinearLayout>
         </LinearLayout>
 

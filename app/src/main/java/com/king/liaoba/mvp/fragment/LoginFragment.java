@@ -41,6 +41,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.sql.Time;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -48,9 +49,7 @@ import java.util.TimerTask;
 import butterknife.BindView;
 import butterknife.OnClick;
 import cn.jpush.android.api.JPushInterface;
-import cn.smssdk.EventHandler;
-import cn.smssdk.SMSSDK;
-import cn.smssdk.gui.RegisterPage;
+
 import retrofit2.Retrofit;
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
@@ -112,10 +111,22 @@ public class LoginFragment extends BaseActivity<ILoginView, LoginPresenter> impl
     RadioButton rb_nan;
     @BindView(R.id.check_nv)
     RadioButton rb_nv;
+    @BindView(R.id.login_findpass_code)
+    Button btn_find_code;
+    @BindView(R.id.findpass_code_et)
+    EditText et_find_code;
+    @BindView(R.id.findpass_phone)
+    EditText et_find_phone;
+    @BindView(R.id.find_password)
+    EditText et_find_pass;
+    @BindView(R.id.findpass_next)
+    Button btn_findpass_next;
+
 
     private static int time = 60;
     private String sex = "0";
     private int status = 0;//0登录、1注册、2、設置密碼,3找回密码
+    private static String smsCode = "";
     @Override
     public LoginPresenter createPresenter() {
         return new LoginPresenter(getApp());
@@ -138,7 +149,7 @@ public class LoginFragment extends BaseActivity<ILoginView, LoginPresenter> impl
         return R.layout.fragment_login;
     }
 
-    private void setStatus(int status){
+    private void setStatus(final int status){
         if(status==0){
             tvTitle.setText(R.string.login);
             tvRight.setText("注册");
@@ -146,6 +157,13 @@ public class LoginFragment extends BaseActivity<ILoginView, LoginPresenter> impl
             layout_phone.setVisibility(View.GONE);
             layout_password.setVisibility(View.GONE);
             layout_find_pass.setVisibility(View.GONE);
+            tvRight.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    LoginFragment.this.status=1;
+                    setStatus(1);
+                }
+            });
         }else if(status==1){
             tvTitle.setText("注册");
             tvRight.setText("登录");
@@ -153,6 +171,13 @@ public class LoginFragment extends BaseActivity<ILoginView, LoginPresenter> impl
             layout_phone.setVisibility(View.VISIBLE);
             layout_password.setVisibility(View.GONE);
             layout_find_pass.setVisibility(View.GONE);
+            tvRight.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    LoginFragment.this.status=0;
+                    setStatus(0);
+                }
+            });
 
         }else if(status==2){
             tvTitle.setText("注册");
@@ -161,9 +186,24 @@ public class LoginFragment extends BaseActivity<ILoginView, LoginPresenter> impl
             layout_phone.setVisibility(View.GONE);
             layout_password.setVisibility(View.VISIBLE);
             layout_find_pass.setVisibility(View.GONE);
+            tvRight.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    LoginFragment.this.status=0;
+                    setStatus(0);
+                }
+            });
+
         }else if(status==3){
             tvTitle.setText("找回密码");
             tvRight.setText("登录");
+            tvRight.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    LoginFragment.this.status =0;
+                    setStatus(0);
+                }
+            });
             layout_login.setVisibility(View.GONE);
             layout_phone.setVisibility(View.GONE);
             layout_password.setVisibility(View.GONE);
@@ -221,15 +261,17 @@ public class LoginFragment extends BaseActivity<ILoginView, LoginPresenter> impl
         }
     }
     @OnClick({R.id.ivLeft, R.id.tvRight, R.id.btnLogin, R.id.tvForgetPwd, R.id.ivQQ,
-            R.id.ivSina, R.id.ivWeixin,R.id.register_code,R.id.register_next,R.id.register_now})
+            R.id.ivSina, R.id.ivWeixin,R.id.register_code,R.id.register_next,R.id.register_now,R.id.login_findpass_code,R.id.findpass_next})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ivLeft:
                 finish();
                 break;
             case R.id.tvRight:
-                    if(status==1||status==2){
+                status=1;
+                setStatus(status);
 
+                    if(status==1||status==2){
                     }else{
 
                     }
@@ -256,18 +298,82 @@ public class LoginFragment extends BaseActivity<ILoginView, LoginPresenter> impl
             case R.id.ivWeixin:
                 break;
             case R.id.register_code:
-                sendCode("86",et_phone.getText().toString() );
+                if(et_phone.getText().toString().trim().length()!=11){
+                    Toast.makeText(getApplicationContext(),"请填入正确的手机号码!",Toast.LENGTH_LONG).show();
+                    return;
+                }
+                sendCode("86",et_phone.getText().toString());
                 btn_code.setClickable(false);
-                time=60;
+                time = 60;
                 timeCode();
                 break;
             case R.id.register_next:
-                submitCode("86",et_phone.getText().toString().trim(),et_code.getText().toString().trim());
+                if(et_code.getText().toString().trim().length()!=6){
+                    Toast.makeText(getApplicationContext(),"请填入正确的验证码!",Toast.LENGTH_LONG).show();
+                }else{
+
+                    submitCode("86",et_phone.getText().toString().trim(),et_code.getText().toString().trim());
+                }
                 break;
             case R.id.register_now:
+                if(et_password.getText().toString().trim().length()<8|| et_nick.getText().toString().trim().length()<2){
+                    Toast.makeText(getApplicationContext(),"密码或者昵称输入不正确，请重新输入!",Toast.LENGTH_LONG).show();
+                }
                 register(et_phone.getText().toString(),sex, et_password.getText().toString(),et_nick.getText().toString());
                 break;
-                default:
+            case R.id.login_findpass_code:
+                if(et_find_phone.getText().toString().trim().length()!=11){
+                    Toast.makeText(getApplicationContext(),"请填入正确的手机号码!",Toast.LENGTH_LONG).show();
+                    return;
+                }
+                sendCode("86",et_find_phone.getText().toString());
+                btn_find_code.setClickable(false);
+                time = 60;
+                timeCode();
+                break;
+            case R.id.findpass_next:
+                if(et_find_phone.getText().toString().length()!=11||et_find_pass.getText().toString().length()<8){
+                    Toast.makeText(getApplicationContext(),"密码或者验证码输入不正确，请重新输入!",Toast.LENGTH_LONG).show();
+                    return;
+                }
+                Log.d("DDS","code == "+smsCode);
+                Log.d("DDS","co  "+et_find_code.getText().toString().trim());
+                    if(et_find_code.getText().toString().equals(smsCode)){
+                        Retrofit retrofit = APIRetrofit.getInstance();
+                        APIService service =retrofit.create(APIService.class);
+                        service.updatePassword(et_find_pass.getText().toString().trim(),et_find_phone.getText().toString().trim()).
+                                subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(new Observer<Root>() {
+                                    @Override
+                                    public void onNext(Root root) {
+                                        if(root.getStatus()==1){
+                                             Toast.makeText(getApplicationContext(),"修改密码成功!"
+                                                   , Toast.LENGTH_SHORT).show();
+                                             et_find_code.setText("");
+                                             et_find_pass.setText("");
+                                             et_find_phone.setText("");
+                                             status =0 ;
+                                             setStatus(0);
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCompleted() {
+
+                                    }
+
+                                    @Override
+                                    public void onError(Throwable e) {
+
+                                    }
+                                });
+                    }else{
+                        Toast.makeText(getApplicationContext(),"验证码输入不正确，请重新输入!",Toast.LENGTH_LONG).show();
+
+                    }
+
+            default:
                     break;
         }
     }
@@ -277,9 +383,17 @@ public class LoginFragment extends BaseActivity<ILoginView, LoginPresenter> impl
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             if(msg.what==2){
-                btn_code.setText("获取验证码("+time+"s)");
+                if(status==3){
+                    btn_find_code.setText("获取验证码("+time+"s)");
+                }else{
+                    btn_code.setText("获取验证码("+time+"s)");
+                }
             }else if(msg.what==1){
-                btn_code.setText("获取验证码");
+                if(status==3){
+                    btn_find_code.setText("获取验证码");
+                }else{
+                    btn_code.setText("获取验证码");
+                }
                 btn_code.setClickable(true);
                 time=60;
             }
@@ -302,44 +416,47 @@ public class LoginFragment extends BaseActivity<ILoginView, LoginPresenter> impl
                 }
         },0,1000);
     }
+
     public void sendCode(String country, String phone) {
-        // 注册一个事件回调，用于处理发送验证码操作的结果
-        SMSSDK.registerEventHandler(new EventHandler() {
-            public void afterEvent(int event, int result, Object data) {
-                if (result == SMSSDK.RESULT_COMPLETE) {
-                    // TODO 处理成功得到验证码的结果
-                    // 请注意，此时只是完成了发送验证码的请求，验证码短信还需要几秒钟之后才送达
-                } else{
-                    // TODO 处理错误的结果
-                    Toast.makeText(LoginFragment.this,"发送验证码失败,请检查",Toast.LENGTH_LONG).show();
 
-                }
+        Retrofit retrofit = APIRetrofit.getInstance();
+        APIService service =retrofit.create(APIService.class);
+        service.sendMessage(phone).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<Root>() {
+                    @Override
+                    public void onNext(Root root) {
+                        if(root.getStatus()==1){
+                            smsCode = root.getData().getInfo();
+                            //Log.d("DDS","sms >"+smsCode);
+                           // Toast.makeText(getApplicationContext(),root.getData().getInfo()
+                             //       , Toast.LENGTH_SHORT).show();
+                        }
+                    }
 
-            }
-        });
-        // 触发操作
-        SMSSDK.getVerificationCode(country, phone);
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+                });
     }
 
     // 提交验证码，其中的code表示验证码，如“1357”
     public void submitCode(String country, String phone, String code) {
-        // 注册一个事件回调，用于处理提交验证码操作的结果
-        SMSSDK.registerEventHandler(new EventHandler() {
-            public void afterEvent(int event, int result, Object data) {
-                if (result == SMSSDK.RESULT_COMPLETE) {
-                    // TODO 处理验证成功的结果
-                    layout_password.setVisibility(View.VISIBLE);
-                    layout_phone.setVisibility(View.GONE);
-                } else{
-                    // TODO 处理错误的结果
-                    Toast.makeText(LoginFragment.this,"验证码错误,请重试",Toast.LENGTH_LONG).show();
-                }
-
-            }
-        });
-        // 触发操作
-        SMSSDK.submitVerificationCode(country, phone, code);
+        if(code.equals(smsCode)){
+            status=2;
+            setStatus(2);
+        }else{
+            Toast.makeText(getApplicationContext(),"验证码有误!", Toast.LENGTH_LONG).show();
+        }
     }
+
+
 
 
     @Override
@@ -355,7 +472,6 @@ public class LoginFragment extends BaseActivity<ILoginView, LoginPresenter> impl
     public void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
-        SMSSDK.unregisterAllEventHandler();
     }
     boolean login = false;
 
@@ -369,6 +485,12 @@ public class LoginFragment extends BaseActivity<ILoginView, LoginPresenter> impl
                     public void onNext(Root root) {
                         if(root.getStatus()==1){
                             Toast.makeText(LoginFragment.this,"注册成功!",Toast.LENGTH_LONG).show();
+                            status = 0;
+                            setStatus(0);
+                            et_code.setText("");
+                            et_phone.setText("");
+                            et_nick.setText("");
+                            et_password.setText("");
                         }
                     }
 

@@ -10,7 +10,6 @@ import com.king.liaoba.di.component.AppComponent;
 import com.king.liaoba.di.component.DaggerAppComponent;
 import com.king.liaoba.di.module.AppModule;
 import com.liaoba.R;
-import com.mob.MobSDK;
 import com.squareup.leakcanary.LeakCanary;
 import com.tencent.bugly.Bugly;
 import com.tencent.bugly.beta.Beta;
@@ -42,7 +41,6 @@ public class App extends Application {
         this.mContext = base;
         //MultiDex.install(base);
 //        Beta.installTinker();
-        MobSDK.init(this);
     }
 
     @Override
@@ -99,7 +97,7 @@ public class App extends Application {
         /**
          * 点击过确认的弹窗在APP下次启动自动检查更新时会再次显示;
          */
-        Beta.showInterruptedStrategy = false;
+        Beta.showInterruptedStrategy = true;
 
         /**
          * 只允许在MainActivity上显示更新弹窗，其他activity上不显示弹窗;
@@ -107,15 +105,10 @@ public class App extends Application {
          */
         Beta.canShowUpgradeActs.add(MainActivity.class);
 
-        Bugly.init(getApplicationContext(), BUGLY_ID, false);
+        Bugly.init(getApplicationContext(), BUGLY_ID, true);
         mAppComponent = DaggerAppComponent.builder().appModule(new AppModule(this,Constants.BASE_URL)).build();
 
     }
-
-
-
-
-
 
 
     public void initDatabase(){

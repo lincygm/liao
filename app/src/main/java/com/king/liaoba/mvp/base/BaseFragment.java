@@ -165,7 +165,7 @@ public abstract class BaseFragment<V extends BaseView, P extends BasePresenter<V
     protected boolean startLogin(){
         if(Constants.getSharedPreference("username",getActivity())==""||Constants.getSharedPreference("username",getActivity())==null
                 ||Constants.getSharedPreference("username",getActivity()).equals("Null")){
-            Toast.makeText(getActivity(),"请登录!",Toast.LENGTH_LONG).show();
+            //Toast.makeText(getActivity(),"请登录!",Toast.LENGTH_LONG).show();
             return false;
         }
         return true;

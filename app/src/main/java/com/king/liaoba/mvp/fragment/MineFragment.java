@@ -15,6 +15,13 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v4.app.DialogFragment;
+import android.content.DialogInterface;
+import android.support.v4.app.FragmentManager;
+import android.app.Dialog;
+import android.os.Bundle;
+import android.app.AlertDialog;
+
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -29,18 +36,21 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
+
 import com.king.liaoba.Constants;
 import com.king.liaoba.bean.FriendsRoot;
 import com.king.liaoba.bean.Root;
 import com.king.liaoba.http.APIRetrofit;
 import com.king.liaoba.http.APIService;
 import com.king.liaoba.mvp.activity.ChargeActivity;
+import com.king.liaoba.mvp.activity.PurchashActivity;
 import com.king.liaoba.mvp.activity.RecordActivity;
 import com.king.liaoba.mvp.activity.SelfEditActivity;
 import com.king.liaoba.mvp.activity.SetPriceActivity;
 import com.king.liaoba.util.CustomDialog;
 import com.king.liaoba.util.uploadimg.CircleImageView;
 import com.king.liaoba.util.uploadimg.ClipImageActivity;
+import com.king.liaoba.view.ButtonDialogFragment;
 import com.liaoba.BuildConfig;
 import com.liaoba.R;
 
@@ -101,7 +111,8 @@ public class MineFragment extends SimpleFragment implements View.OnClickListener
     TextView tv_record;
     @BindView(R.id.mine_sign)
     TextView tv_sign;
-
+    @BindView(R.id.mine_purchase)
+    TextView tv_purchase;
 
     //请求相机
     private static final int REQUEST_CAPTURE = 100;
@@ -150,7 +161,10 @@ public class MineFragment extends SimpleFragment implements View.OnClickListener
         tvRecharge.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getActivity(),"ddd",Toast.LENGTH_LONG).show();
+                if(!MineFragment.super.startLogin()){
+                    Toast.makeText(getActivity(),"请登陆!",Toast.LENGTH_LONG).show();
+                    return;
+                }
                 Intent intent3 = new Intent();
                 intent3.setClass(getActivity(), ChargeActivity.class);
                 startActivity(intent3);
@@ -186,20 +200,25 @@ public class MineFragment extends SimpleFragment implements View.OnClickListener
 
     @Override
     public void initData() {
-
+        loadimg();
+    }
+    private void loadimg(){
+        Glide.with(getActivity()).load(Constants.BASE_URL+Constants.getSharedPreference("headimg_url",getActivity())).
+                diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                .placeholder(R.drawable.logo_bg).into(headImage1);
     }
 
     @Override
     public void onResume() {
         super.onResume();
             if(super.startLogin()){
+                loadimg();
             getFocus();
             getFans();
             getSignStatus();
             btnLogin.setText(Constants.getSharedPreference("username",getActivity()));
             btnLogin.setClickable(false);
-            Glide.with(getActivity()).load(Constants.BASE_URL+Constants.getSharedPreference("headimg_url",getActivity()))
-            .diskCacheStrategy(DiskCacheStrategy.NONE).into(headImage1);
+            Log.d("DDS","resume "+Constants.BASE_URL+Constants.getSharedPreference("headimg_url",getActivity()));
             if(Constants.getSharedPreference("signin",getActivity()).equals("1")){
                 tv_sign.setText("已签到");
                 tv_sign.setClickable(false);
@@ -209,7 +228,6 @@ public class MineFragment extends SimpleFragment implements View.OnClickListener
             }
 
         }else{
-            Log.d("q","b");
             btnLogin.setText("登录");
             btnLogin.setClickable(true);
         }
@@ -219,7 +237,7 @@ public class MineFragment extends SimpleFragment implements View.OnClickListener
     @OnClick({R.id.ivLeft, R.id.ivRight, R.id.ivAvatar,
             R.id.tvFollow, R.id.tvFans,
             R.id.tvStarLight, R.id.tvContribution, R.id.tvLevel,
-            R.id.tvTask, R.id.tvSetting, R.id.fab,R.id.mine_logout,R.id.mine_record,R.id.mine_sign})
+            R.id.tvTask, R.id.tvSetting, R.id.fab,R.id.mine_logout,R.id.mine_record,R.id.mine_sign,R.id.mine_purchase})
     public void onClick(View view) {
         if(!super.startLogin())
             return;
@@ -254,8 +272,21 @@ public class MineFragment extends SimpleFragment implements View.OnClickListener
                 startAbout();
                 break;
             case R.id.mine_logout:
-                Constants.clearSharedPreference();
-                System.exit(0);
+                final ButtonDialogFragment buttonDialogFragment = new ButtonDialogFragment();
+                buttonDialogFragment.show("确定要退出吗？","",new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Constants.clearSharedPreference();
+                        System.exit(0);
+                    }
+                }, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        buttonDialogFragment.dismiss();
+                    }
+                }, getFragmentManager());
+
+
                 break;
             case R.id.mine_record:
                 Intent  intent = new Intent(getActivity(), RecordActivity.class);
@@ -264,7 +295,12 @@ public class MineFragment extends SimpleFragment implements View.OnClickListener
             case R.id.mine_sign:
                 sign();
                 break;
-                default:
+            case R.id.mine_purchase:
+                Intent mIntent = new Intent();
+                mIntent.setClass(getActivity(), PurchashActivity.class);
+                startActivity(mIntent);
+                break;
+            default:
                     break;
         }
     }
@@ -572,8 +608,7 @@ public class MineFragment extends SimpleFragment implements View.OnClickListener
                                 public void onCompleted() {
                                     Log.d("DDS",Constants.getSharedPreference("headimg_url",getActivity()));
 
-                                    Glide.with(getActivity()).load(Constants.BASE_URL+Constants.getSharedPreference("headimg_url",getActivity())).placeholder(R.drawable.logo_bg)
-                                           .diskCacheStrategy(DiskCacheStrategy.NONE).into(headImage1);
+                                    Glide.with(getActivity()).load(Constants.BASE_URL+Constants.getSharedPreference("headimg_url",getActivity())).into(headImage1);
                                     customDialog.cancel();
 
                                 }

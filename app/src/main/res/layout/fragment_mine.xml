@@ -229,7 +229,7 @@
                     android:drawableLeft="@drawable/mine_level"/>
                 <include layout="@layout/line_h_mine_space"/>
                 <TextView
-                    android:id="@+id/mine_share"
+                    android:id="@+id/mine_purchase"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:drawablePadding="6dp"
@@ -237,8 +237,7 @@
                     android:padding="16dp"
                     android:background="?android:attr/selectableItemBackground"
                     android:drawableRight="@drawable/ic_triangle"
-                    android:text="@string/mine_member"
-                    android:visibility="gone"
+                    android:text="提现"
                     android:drawableLeft="@drawable/mine_level"/>
                 <include layout="@layout/line_h_mine_space"/>
 
@@ -294,6 +293,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:drawablePadding="6dp"
+                    android:visibility="gone"
                     android:gravity="center_vertical"
                     android:padding="16dp"
                     android:background="?android:attr/selectableItemBackground"

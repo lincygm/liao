@@ -38,6 +38,7 @@ import rx.schedulers.Schedulers;
 public class ImageViewHolder extends BaseViewHolder<PictureList> implements View.OnClickListener{
     ImageView imgPicture;
     PhotoWallActivity.MyItemOnClickListener mListener;
+
     public ImageViewHolder(ViewGroup parent,PhotoWallActivity.MyItemOnClickListener myItemOnClickListener) {
        // super(parent,R.layout.picture_list);
         //imgPicture = $(R.id.picture);;

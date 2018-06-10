@@ -11,7 +11,7 @@ public interface ILoginView extends BaseView {
 
      boolean login(String username,String password);
      void forgetPass(int phone);
-     boolean register(String phone,String code);
+    // boolean register(String phone,String code);
 
     @Override
     void onCompleted();
