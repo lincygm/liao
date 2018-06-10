@@ -76,12 +76,35 @@ public class RecordActivity extends Activity implements View.OnClickListener{
     // 音频文件
     private File audioFile;
     private int time=0;
+    CustomDialog customDialog = null;
+
+    @BindView(R.id.title_close)
+    ImageView iv_close;
+    @BindView(R.id.title_name)
+    TextView tv_title;
+    @BindView(R.id.title_right)
+    TextView tv_right;
+
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_record);
         ButterKnife.bind(this);
+        tv_title.setText("录音");
+        tv_right.setText("");
+        iv_close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
         btn_start.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -157,9 +180,11 @@ public class RecordActivity extends Activity implements View.OnClickListener{
                 upload(audioFile);
                 break;
             case R.id.record_start:
+                Toast.makeText(RecordActivity.this,"开始录音",Toast.LENGTH_SHORT).show();
                 startRecord();
                 break;
             case R.id.record_play:
+                Toast.makeText(RecordActivity.this,"开始播放",Toast.LENGTH_SHORT).show();
                 playrecord();
                     break;
             case R.id.record_delete:
@@ -246,8 +271,7 @@ public class RecordActivity extends Activity implements View.OnClickListener{
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             if(msg.what==1){
-                Logger.v( "rx_map" , "handler"+Thread.currentThread().getName()  );
-                new CustomDialog(RecordActivity.this,R.style.CustomDialog).hide();
+                customDialog.hide();
             }
         }
     };
@@ -255,12 +279,13 @@ public class RecordActivity extends Activity implements View.OnClickListener{
 
 
     private void upload(File file){
-        Logger.v( "rx_map" , "upload"+Thread.currentThread().getName()  );
 
         if(file==null){
             Toast.makeText(getApplicationContext(),"录音文件不存在!",Toast.LENGTH_LONG).show();
             return;
         }
+        customDialog = new CustomDialog(RecordActivity.this,R.style.CustomDialog);
+        customDialog.show();
         RequestBody requestBody = RequestBody.create(MediaType.parse("audio/mpeg"), file);
         MultipartBody.Part part = MultipartBody.Part.createFormData("file", file.getName(), requestBody);
         Retrofit retrofit = APIRetrofit.getInstance();
@@ -287,12 +312,10 @@ public class RecordActivity extends Activity implements View.OnClickListener{
 
                     @Override
                     public void onCompleted() {
-                        Logger.v( "rx_map" , "onCompleted"+Thread.currentThread().getName()  );
                         Message message = new Message();
                         message.what=1;
                         handler.sendMessage(message);
                         Log.d("record","up suc");
-
                     }
                 });
 
