@@ -59,7 +59,7 @@ public class SelfEditActivity extends Activity implements View.OnClickListener{
         tv_sex=(TextView) this.findViewById(R.id.male);
         window_title =(TextView)this.findViewById(R.id.title_name);
         et_ege =(EditText)this.findViewById(R.id.slef_age);
-        save=(TextView)this.findViewById(R.id.save);
+        save=(TextView)this.findViewById(R.id.title_right);
         et_sign =(EditText)this.findViewById(R.id.sign);
         tv_sex.setClickable(true);
         tv_sex.setOnClickListener(this);
@@ -74,13 +74,13 @@ public class SelfEditActivity extends Activity implements View.OnClickListener{
     }
 
     @Override
-    @OnClick({R.id.male,R.id.save,R.id.photowalls})
+    @OnClick({R.id.male,R.id.title_right,R.id.photowalls})
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.male:
                 change_sex();
                 break;
-            case R.id.save:
+            case R.id.title_right:
                 updateUserInfo();
                 break;
             case R.id.photowalls:

@@ -70,7 +70,7 @@ public class SelfShowActivity extends BaseActivity implements View.OnClickListen
     TextView tv_name;
     @BindView(R.id.chatid)
     TextView tv_chatid;
-    @BindView(R.id.save)
+    @BindView(R.id.title_right)
     TextView tv_save;
     TextView tv_title;
     @BindView(R.id.addfocus)
@@ -177,10 +177,10 @@ public class SelfShowActivity extends BaseActivity implements View.OnClickListen
 
     @Override
     public void initUI() {
-        tv_save =(TextView)this.findViewById(R.id.save);
+        tv_save =(TextView)this.findViewById(R.id.title_right);
         tv_save.setVisibility(View.GONE);
         tv_title=(TextView)this.findViewById(R.id.title_name);
-        iv_close=(ImageView)this.findViewById(R.id.close_activity);
+        iv_close=(ImageView)this.findViewById(R.id.title_close);
         iv_close.setOnClickListener(this);
         circleImageView=(CircleImageView)this.findViewById(R.id.head_image_d);
 
@@ -196,7 +196,7 @@ public class SelfShowActivity extends BaseActivity implements View.OnClickListen
     @OnClick({R.id.addfocus})
     @Override
     public void onClick(View view) {
-        if(view.getId()==R.id.close_activity){
+        if(view.getId()==R.id.title_close){
             this.finish();
         }else if(view.getId()==R.id.addfocus){
             addFocus();

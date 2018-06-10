@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
@@ -55,9 +56,9 @@ public class SetPriceActivity extends BaseActivity implements View.OnClickListen
     TextView textView;
     //@BindView(R.id.save)
     TextView title_right;
-    //@BindView(R.id.close_activity)
-    TextView title_close;
-    //@BindView(R.id.title_name)
+    @BindView(R.id.title_close)
+    ImageView title_close;
+    @BindView(R.id.title_name)
     TextView title_name;
 
     private static String price = "0";
@@ -70,9 +71,9 @@ public class SetPriceActivity extends BaseActivity implements View.OnClickListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_price);
         ButterKnife.bind(this);
-        title_name = (TextView) this.findViewById(R.id.title_name);
-        title_close = (TextView) this.findViewById(R.id.close_activity);
-        title_right = (TextView) this.findViewById(R.id.save);
+        //title_name = (TextView) this.findViewById(R.id.title_name);
+        //title_close = (TextView) this.findViewById(R.id.title_close);
+        //title_right = (TextView) this.findViewById(R.id.title_right);
     }
 
     @Override
