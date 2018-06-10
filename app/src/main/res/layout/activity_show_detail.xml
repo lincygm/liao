@@ -81,7 +81,7 @@
                     <Button
                         android:layout_width="50dp"
                         android:textColor="@color/white"
-                        android:id="@+id/addfocus"
+                        android:id="@+id/self_addfocus"
                         android:background="@drawable/corner_focus"
                         android:layout_marginLeft="30dp"
                         android:gravity="center"
