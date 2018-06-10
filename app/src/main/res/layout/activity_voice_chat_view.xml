@@ -58,29 +58,29 @@
             android:orientation="horizontal">
 
             <ImageView
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:onClick="onLocalAudioMuteClicked"
+                android:layout_marginLeft="40dp"
                 android:id="@+id/btn_mute"
                 android:scaleType="centerInside"
                 android:src="@drawable/btn_mute" />
 
             <ImageView
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:onClick="onSwitchSpeakerphoneClicked"
-                android:scaleType="centerInside"
                 android:id="@+id/btn_speaker"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:onClick="onSwitchSpeakerphoneClicked"
+                android:layout_marginLeft="40dp"
+                android:scaleType="centerInside"
                 android:src="@drawable/btn_speaker" />
 
             <ImageView
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:onClick="onEncCallClicked"
                 android:id="@+id/btn_end_call"
+                android:layout_marginLeft="40dp"
                 android:scaleType="centerInside"
                 android:src="@drawable/btn_end_call" />
 
@@ -94,25 +94,26 @@
         android:orientation="horizontal">
 
         <ImageView
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
+            android:layout_width="40dp"
+            android:layout_marginLeft="40dp"
+            android:layout_height="40dp"
             android:id="@+id/btn_answer"
             android:src="@drawable/answer_icon"
            />
         <ImageView
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:id="@+id/btn_end_call2"
+            android:layout_marginLeft="40dp"
             android:scaleType="centerInside"
             android:src="@drawable/btn_end_call" />
 
     </LinearLayout>
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:id="@+id/btn_refuse"
+            android:layout_marginLeft="40dp"
             android:clickable="true"
             android:onClick="onEncCallClicked"
             android:visibility="gone"
