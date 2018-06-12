@@ -78,8 +78,8 @@
             android:layout_marginLeft="@dimen/left_margin"
             android:text="个性签名"/>
         <EditText
-            android:layout_width="50dp"
-            android:text="不个性不签名"
+            android:layout_width="wrap_content"
+            android:hint="不个性不签名"
             android:id="@+id/sign"
             android:gravity="center"
             android:layout_marginRight="@dimen/left_margin"
@@ -89,12 +89,13 @@
             android:layout_height="match_parent" />
     </RelativeLayout>
         <Button
-            android:layout_width="50dp"
-            android:gravity="center_vertical"
+            android:layout_width="match_parent"
+            android:gravity="center"
+            android:layout_marginTop="20dp"
             android:clickable="true"
-
-            android:background="@null"
+            android:background="@drawable/corners_circle_solide"
             android:id="@+id/photowalls"
+            android:textColor="@color/white"
             android:layout_height="@dimen/line_height"
             android:layout_marginLeft="@dimen/left_margin"
             android:text="照片墙"/>
