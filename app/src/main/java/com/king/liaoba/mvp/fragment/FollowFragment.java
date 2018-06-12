@@ -93,7 +93,7 @@ public class FollowFragment extends BaseFragment<IFollowView,FollowPresenter> im
 
     private static int pageFans = 0;
     private static int pageFocus = 0;
-    private static int index = 0;
+    public static int index = 0;
     private boolean hasNetWork = true;
 
     public static FollowFragment newInstance() {
