@@ -67,6 +67,7 @@ public final class Constants {
         edit.putString("headimg_url",jsonBean.getHeadimg_url());
         edit.putString("voicelibrary",jsonBean.getVoicelibrary());
         edit.putString("password",jsonBean.getPassword());
+        edit.putString("nickname",jsonBean.getNickname());
         edit.putString("signin",(jsonBean.getSignin().length()>1 ?"1":"0"));
         edit.commit();
     }
