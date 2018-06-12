@@ -1,5 +1,6 @@
 package com.king.liaoba.mvp.adapter;
 
+import android.support.v4.content.Loader;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import com.king.liaoba.bean.Person;
 import com.king.liaoba.bean.Root;
 import com.king.liaoba.http.APIRetrofit;
 import com.king.liaoba.http.APIService;
+import com.king.liaoba.mvp.fragment.FollowFragment;
 import com.king.liaoba.util.MessageEvent;
 import com.liaoba.R;
 
@@ -59,11 +61,22 @@ public class PersonViewHolder extends BaseViewHolder<JsonBean> {
                 .placeholder(R.drawable.logo_bg)
                 .bitmapTransform(new CropCircleTransformation(getContext()))
                 .into(mImg_face);
-        iv_focus.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                EventBus.getDefault().post(new MessageEvent<>("FOCUS",""+person.getChatid()));
-            }
-        });
+        if(FollowFragment.index == 0 ){
+            //如果是关注页面1、可以取消关注
+            iv_focus.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    EventBus.getDefault().post(new MessageEvent<>("FOCUS",""+person.getChatid()));
+                }
+            });
+        }else{
+            //如果是粉丝页面，可以关注
+            iv_focus.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    EventBus.getDefault().post(new MessageEvent<>("FANS",""+person.getChatid()));
+                }
+            });
+        }
     }
 }
