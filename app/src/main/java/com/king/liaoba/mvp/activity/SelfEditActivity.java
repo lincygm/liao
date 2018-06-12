@@ -67,7 +67,6 @@ public class SelfEditActivity extends Activity implements View.OnClickListener{
         save.setOnClickListener(this);
         window_title.setText("个人信息");
 
-        //tv_sex.setText(Constants.getSharedPreference("sex",this)?"0");
         et_name.setText(Constants.getSharedPreference("nickname",this).replace("Null",""));
         et_ege.setText(Constants.getSharedPreference("age",this).replace("Null",""));
         et_sign.setText(Constants.getSharedPreference("sign",this).replace("Null",""));
