@@ -56,9 +56,7 @@ public class LiveListFragment extends BaseFragment<ILiveListView, LiveListPresen
     TextView tvEmpty;
     TextView tvTips;
 
-    @BindView(R.id.ivRight)
     ImageView tv_right;
-    @BindView(R.id.ivLeft)
     ImageView tv_left;
 
     @BindView(R.id.easyRecyclerView)
@@ -99,6 +97,8 @@ public class LiveListFragment extends BaseFragment<ILiveListView, LiveListPresen
     @Override
     public void initUI() {
 
+        tv_right =(ImageView) getActivity().findViewById(R.id.ivRight);
+        tv_left = (ImageView)getActivity().findViewById(R.id.ivLeft);
         tv_right.setVisibility(View.GONE);
         tv_left.setVisibility(View.GONE);
 
