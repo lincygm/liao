@@ -30,6 +30,11 @@ import com.king.liaoba.http.APIService;
 
 import com.king.liaoba.mvp.adapter.PersonViewHolder;
 
+import com.king.liaoba.mvp.base.BaseFragment;
+import com.king.liaoba.mvp.base.BasePresenter;
+import com.king.liaoba.mvp.base.BaseView;
+import com.king.liaoba.mvp.presenter.FollowPresenter;
+import com.king.liaoba.mvp.view.IFollowView;
 import com.liaoba.R;
 
 
@@ -50,7 +55,7 @@ import rx.schedulers.Schedulers;
  * @since 2017/3/9
  */
 
-public class FollowFragment extends SimpleFragment implements  RecyclerArrayAdapter.OnLoadMoreListener, SwipeRefreshLayout.OnRefreshListener{
+public class FollowFragment extends BaseFragment<IFollowView,FollowPresenter> implements  RecyclerArrayAdapter.OnLoadMoreListener, SwipeRefreshLayout.OnRefreshListener{
 
 
     @BindView(R.id.foll_fans)
@@ -67,8 +72,8 @@ public class FollowFragment extends SimpleFragment implements  RecyclerArrayAdap
     View view_focus_bg;
     @BindView(R.id.foll_fans_bg)
     View view_fans_bg;
-    RecyclerArrayAdapter fans_adapter;
-    RecyclerArrayAdapter  focus_adapter;
+    RecyclerArrayAdapter<JsonBean> fans_adapter;
+    RecyclerArrayAdapter<JsonBean>  focus_adapter;
     @BindView(R.id.foll_fans_recycleview)
     EasyRecyclerView recyclerView_fans = null;
     @BindView(R.id.foll_focus_recycleview)
@@ -96,14 +101,22 @@ public class FollowFragment extends SimpleFragment implements  RecyclerArrayAdap
         return R.layout.fragment_follow;
     }
 
+
+
     @Override
     public void initUI() {
+
         tvTitle.setText(R.string.tab_follw);
+        focusadapter();
+        fansadapter();
     }
 
+    @Override
+    public FollowPresenter createPresenter() {
+        return new FollowPresenter(getApp());
+    }
     private void fansadapter(){
 
-        recyclerView_fans = (EasyRecyclerView) getActivity().findViewById(R.id.foll_fans_recycleview);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView_fans.setLayoutManager(layoutManager);
         DividerDecoration itemDecoration = new DividerDecoration(Color.GRAY,Util.dip2px(getActivity(),16f), Util.dip2px(getActivity(),72),0);
@@ -118,12 +131,7 @@ public class FollowFragment extends SimpleFragment implements  RecyclerArrayAdap
         });
         //fans_adapter.setMore(R.layout.view_more, this);
         fans_adapter.setNoMore(R.layout.view_nomore);
-        fans_adapter.setMore(R.layout.view_more, new RecyclerArrayAdapter.OnLoadMoreListener() {
-            @Override
-            public void onLoadMore() {
-
-            }
-        });
+        fans_adapter.setMore(R.layout.view_more, this);
         fans_adapter.setOnItemLongClickListener(new RecyclerArrayAdapter.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(int position) {
@@ -148,8 +156,7 @@ public class FollowFragment extends SimpleFragment implements  RecyclerArrayAdap
 
     private void focusadapter(){
 
-        recyclerView_focus = (EasyRecyclerView) getActivity().findViewById(R.id.foll_focus_recycleview);
-        recyclerView_fans = (EasyRecyclerView) getActivity().findViewById(R.id.foll_fans_recycleview);
+
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView_focus.setLayoutManager(layoutManager);
         DividerDecoration itemDecoration = new DividerDecoration(Color.GRAY,Util.dip2px(getActivity(),16f), Util.dip2px(getActivity(),72),0);
@@ -206,20 +213,24 @@ public class FollowFragment extends SimpleFragment implements  RecyclerArrayAdap
 
                     @Override
                     public void onNext(FriendsRoot root) {
-                        if(root!=null&&focusList!=null){
+                        if(root!=null&&root.getData().getGetdata().size()>0){
                             for(int i=0;i<root.getData().getGetdata().size();i++){
-                                if(root.getData().getGetdata().size()==0||root.getData().getGetdata().size()<2){
+                                if(root.getData().getGetdata().size()==0){
                                     focus_adapter.setNoMore(R.layout.view_nomore);
-                                    focusList.add(root.getData().getGetdata().get(i).getFocus_id());
-                                    getUserinfoByChatid(root.getData().getGetdata().get(i).getFocus_id());
+                                    //focusList.add(root.getData().getGetdata().get(i).getFocus_id());
+                                    //getUserinfoByChatid(root.getData().getGetdata().get(i).getFocus_id());
                                     //focus_adapter.stopMore();
+                                    Log.d("DDS","AAA");
                                     focus_adapter.pauseMore();
                                     return;
                                 }
+                                Log.d("DDS","bbbbbb");
                                 focusList.add(root.getData().getGetdata().get(i).getFocus_id());
                                 getUserinfoByChatid(root.getData().getGetdata().get(i).getFocus_id());
 
                             }
+                        }else{
+                            focus_adapter.pauseMore();
                         }
                     }
                 });
@@ -264,11 +275,11 @@ public class FollowFragment extends SimpleFragment implements  RecyclerArrayAdap
     @Override
     public void onResume() {
         super.onResume();
-        if(index==0){
-            getFocus(pageFocus);
-        }else{
-            getFans(pageFans);
-        }
+//        if(index==0){
+//            getFocus(pageFocus);
+//        }else{
+//            getFans(pageFans);
+//        }
         Log.d("Follow","onresume");
 
     }
@@ -289,9 +300,9 @@ public class FollowFragment extends SimpleFragment implements  RecyclerArrayAdap
                     public void onCompleted() {
                         Log.d("DDS","getUserInfoByChatid completes");//最后走这个
                         if(index==0){
-                            focusadapter();
+                           // focusadapter();
                         }else{
-                            fansadapter();
+                          //  fansadapter();
                         }
 
                     }
@@ -305,9 +316,13 @@ public class FollowFragment extends SimpleFragment implements  RecyclerArrayAdap
                     public void onNext(Root root) {
                         if(root!=null){
                             if(index==0){
+                                userFocusList.clear();
                                 userFocusList.add(root.getData().getGetdata().get(0));
+                                Log.d("DDS","use> ======  "+userFocusList.size());
+                                focus_adapter.addAll(userFocusList);
+                                focus_adapter.notifyDataSetChanged();
                             }else{
-                                userFansList.add(root.getData().getGetdata().get(0));
+                                //userFansList.add(root.getData().getGetdata().get(0));
                             }
 
                         }
@@ -318,7 +333,7 @@ public class FollowFragment extends SimpleFragment implements  RecyclerArrayAdap
     //第四页会返回空,意为数据加载结束
     @Override
     public void onLoadMore() {
-        Log.i("Follow","onLoadMore");
+        Log.i("DDS","onLoadMore");
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -329,13 +344,13 @@ public class FollowFragment extends SimpleFragment implements  RecyclerArrayAdap
                 }
                 if(index==0){
                     pageFocus++;
-                    Log.d("Follow","page>>>>"+pageFocus);
+                    Log.d("DDS","page>>pageFocus>>"+pageFocus);
                     getFocus(pageFocus);
-
                 }else{
                     pageFans++;
                     Log.d("Follow","page>>>>"+pageFans);
                     getFans(pageFans);
+
                 }
             }
         }, 2000);
