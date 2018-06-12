@@ -425,6 +425,8 @@ public class FollowFragment extends BaseFragment<IFollowView,FollowPresenter> im
     public void onEventBusReceive(MessageEvent messageEvent){
             if(messageEvent.getMessage().equals("FOCUS")){
 
+            }else if(messageEvent.getMessage().equals("FANS")){
+
             }
     }
 }
