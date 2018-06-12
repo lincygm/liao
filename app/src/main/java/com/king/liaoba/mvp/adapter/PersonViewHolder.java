@@ -63,6 +63,7 @@ public class PersonViewHolder extends BaseViewHolder<JsonBean> {
                 .into(mImg_face);
         if(FollowFragment.index == 0 ){
             //如果是关注页面1、可以取消关注
+            iv_focus.setText("取消关注");
             iv_focus.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
