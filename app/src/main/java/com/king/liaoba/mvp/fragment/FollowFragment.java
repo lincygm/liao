@@ -115,6 +115,7 @@ public class FollowFragment extends BaseFragment<IFollowView,FollowPresenter> im
         EventBus.getDefault().register(this);
         tvTitle.setText(R.string.tab_follw);
         focusadapter();
+        //fansadapter();
     }
 
     @Override
@@ -124,7 +125,7 @@ public class FollowFragment extends BaseFragment<IFollowView,FollowPresenter> im
 
     private void fansadapter(){
 
-        if(recyclerView_fans!=null){
+        if(fans_adapter!=null){
             recyclerView_fans.clear();
             return;
         }
@@ -140,7 +141,7 @@ public class FollowFragment extends BaseFragment<IFollowView,FollowPresenter> im
                 return new PersonViewHolder(parent);
             }
         });
-        //fans_adapter.setMore(R.layout.view_more, this);
+        //
         fans_adapter.setNoMore(R.layout.view_nomore);
         fans_adapter.setMore(R.layout.view_more, this);
         fans_adapter.setOnItemClickListener(new RecyclerArrayAdapter.OnItemClickListener() {
@@ -276,11 +277,7 @@ public class FollowFragment extends BaseFragment<IFollowView,FollowPresenter> im
                             for(int i=0;i<root.getData().getGetdata().size();i++){
                                 fansList.add(root.getData().getGetdata().get(i).getChat_id());
                                 getUserinfoByChatid(root.getData().getGetdata().get(i).getChat_id());
-
                             }
-                        }else{
-                            fans_adapter.setNoMore(R.layout.view_empty);
-                            focus_adapter.pauseMore();
                         }
                     }
                 });
@@ -324,21 +321,18 @@ public class FollowFragment extends BaseFragment<IFollowView,FollowPresenter> im
                     @Override
                     public void onNext(Root root) {
                         if(root!=null){
-                            if(index==0){
+                            Log.d("DDS","===================index ==>>"+index);
+                            if(index == 0){
                                 List<JsonBean> userFocusList = new ArrayList<>();
                                 userFocusList.add(root.getData().getGetdata().get(0));
                                 focus_adapter.addAll(userFocusList);
-                              //  focus_adapter.notifyDataSetChanged();
                             }else{
-//                                userFansList.clear();
-//                                userFansList.add(root.getData().getGetdata().get(0));
-//                                fans_adapter.addAll(userFansList);
                                 List<JsonBean> userFansList = new ArrayList<>();
                                 userFansList.add(root.getData().getGetdata().get(0));
                                 fans_adapter.addAll(userFansList);
+                                Log.d("DDS","fans ==>>"+userFansList.size());
                                 fans_adapter.notifyDataSetChanged();
                             }
-
                         }
                     }
                 });
@@ -387,7 +381,6 @@ public class FollowFragment extends BaseFragment<IFollowView,FollowPresenter> im
                     return;
                 }
                 if(index==0){
-
                     pageFocus = 0;
                     Log.d("pages",">>+"+pageFocus);
                     getFocus(pageFocus);
