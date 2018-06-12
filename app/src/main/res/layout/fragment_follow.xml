@@ -62,25 +62,23 @@
         android:id="@+id/content"
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
         <com.jude.easyrecyclerview.EasyRecyclerView
             android:id="@+id/foll_fans_recycleview"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:recyclerPadding="2dp"
+            android:layout_height="match_parent"
             android:visibility="gone"
             app:scrollbarStyle="insideOverlay"
+            app:layout_progress="@layout/view_progress"
             app:scrollbars="none" />
         <com.jude.easyrecyclerview.EasyRecyclerView
             android:id="@+id/foll_focus_recycleview"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             app:recyclerPadding="2dp"
             app:scrollbarStyle="insideOverlay"
+            app:layout_progress="@layout/view_progress"
             app:scrollbars="none" />
     </LinearLayout>
-
-
-
 </LinearLayout>
