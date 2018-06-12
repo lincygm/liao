@@ -114,6 +114,8 @@ public class FollowFragment extends BaseFragment<IFollowView,FollowPresenter> im
     public void initUI() {
         EventBus.getDefault().register(this);
         tvTitle.setText(R.string.tab_follw);
+        ivRight.setVisibility(View.GONE);
+        ivLeft.setVisibility(View.GONE);
         focusadapter();
         //fansadapter();
     }
@@ -386,10 +388,10 @@ public class FollowFragment extends BaseFragment<IFollowView,FollowPresenter> im
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ivLeft:
-                startActivity(getFragmentIntent(Constants.SEARCH_FRAGMENT));
+                //startActivity(getFragmentIntent(Constants.SEARCH_FRAGMENT));
                 break;
             case R.id.ivRight:
-                startLogin();
+               // startLogin();
                 break;
             case R.id.foll_fans:
                 fansadapter();
