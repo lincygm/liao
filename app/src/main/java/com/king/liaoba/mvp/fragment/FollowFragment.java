@@ -124,7 +124,6 @@ public class FollowFragment extends BaseFragment<IFollowView,FollowPresenter> im
     }
 
     private void fansadapter(){
-
         if(fans_adapter!=null){
             recyclerView_fans.clear();
             return;
@@ -134,14 +133,12 @@ public class FollowFragment extends BaseFragment<IFollowView,FollowPresenter> im
         DividerDecoration itemDecoration = new DividerDecoration(R.color.zise,Util.dip2px(getActivity(),1f), 0,0);
         itemDecoration.setDrawLastItem(false);
         recyclerView_fans.addItemDecoration(itemDecoration);
-
         recyclerView_fans.setAdapterWithProgress(fans_adapter = new RecyclerArrayAdapter<JsonBean>(getActivity()) {
             @Override
             public BaseViewHolder OnCreateViewHolder(ViewGroup parent, int viewType) {
                 return new PersonViewHolder(parent);
             }
         });
-        //
         fans_adapter.setNoMore(R.layout.view_nomore);
         fans_adapter.setMore(R.layout.view_more, this);
         fans_adapter.setOnItemClickListener(new RecyclerArrayAdapter.OnItemClickListener() {
@@ -154,13 +151,6 @@ public class FollowFragment extends BaseFragment<IFollowView,FollowPresenter> im
                 startActivity(intent);
             }
         });
-//        fans_adapter.setOnItemLongClickListener(new RecyclerArrayAdapter.OnItemLongClickListener() {
-//            @Override
-//            public boolean onItemLongClick(int position) {
-//                fans_adapter.remove(position);
-//                return true;
-//            }
-//        });
         fans_adapter.setError(R.layout.view_error, new RecyclerArrayAdapter.OnErrorListener() {
             @Override
             public void onErrorShow() {
@@ -191,13 +181,6 @@ public class FollowFragment extends BaseFragment<IFollowView,FollowPresenter> im
         });
         focus_adapter.setMore(R.layout.view_more, this);
         focus_adapter.setNoMore(R.layout.view_nomore);
-        focus_adapter.setOnItemLongClickListener(new RecyclerArrayAdapter.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(int position) {
-               // focus_adapter.remove(position);
-                return true;
-            }
-        });
         focus_adapter.setError(R.layout.view_error, new RecyclerArrayAdapter.OnErrorListener() {
             @Override
             public void onErrorShow() {
@@ -347,7 +330,11 @@ public class FollowFragment extends BaseFragment<IFollowView,FollowPresenter> im
             public void run() {
                 //刷新
                 if (!hasNetWork) {
-                    focus_adapter.pauseMore();
+                    if(index==0){
+                        focus_adapter.pauseMore();
+                    }else{
+                        fans_adapter.pauseMore();
+                    }
                     return;
                 }
                 if(index==0){
