@@ -227,7 +227,6 @@
 
 
         <!-- Required  . Enable it you can get statistics data with channel -->
-        <activity android:name="com.king.liaoba.push.MainActivity"/>
 
     </application>
     <meta-data
