@@ -13,11 +13,12 @@
             android:layout_marginLeft="@dimen/left_margin"
             android:text="昵称"/>
         <EditText
-            android:layout_width="wrap_content"
+            android:layout_width="50dp"
             android:text="小白菜"
             android:maxLines="1"
             android:maxLength="15"
             android:clickable="true"
+            android:background="@null"
             android:id="@+id/et_name"
             android:gravity="center"
             android:layout_marginRight="@dimen/left_margin"
@@ -55,12 +56,13 @@
             android:layout_marginLeft="@dimen/left_margin"
             android:text="年龄"/>
         <EditText
-            android:layout_width="wrap_content"
+            android:layout_width="50dp"
             android:text="21"
             android:id="@+id/slef_age"
             android:gravity="center"
             android:numeric="integer"
             android:maxLength="2"
+            android:background="@null"
             android:layout_marginRight="@dimen/left_margin"
             android:layout_alignParentRight="true"
             android:layout_height="match_parent" />
@@ -76,17 +78,18 @@
             android:layout_marginLeft="@dimen/left_margin"
             android:text="个性签名"/>
         <EditText
-            android:layout_width="wrap_content"
+            android:layout_width="50dp"
             android:text="不个性不签名"
             android:id="@+id/sign"
             android:gravity="center"
             android:layout_marginRight="@dimen/left_margin"
+            android:background="@null"
             android:maxLength="25"
             android:layout_alignParentRight="true"
             android:layout_height="match_parent" />
     </RelativeLayout>
         <Button
-            android:layout_width="wrap_content"
+            android:layout_width="50dp"
             android:gravity="center_vertical"
             android:clickable="true"
 
