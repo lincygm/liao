@@ -424,9 +424,15 @@ public class FollowFragment extends BaseFragment<IFollowView,FollowPresenter> im
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventBusReceive(MessageEvent messageEvent){
             if(messageEvent.getMessage().equals("FOCUS")){
-
+                Log.d("onEventBusReceive","FOCUS");
             }else if(messageEvent.getMessage().equals("FANS")){
-
+                Log.d("onEventBusReceive","FANS");
             }
+    }
+    private void addFocus(String chatid){
+
+    }
+    private void deleteFocus(String chatid){
+
     }
 }
