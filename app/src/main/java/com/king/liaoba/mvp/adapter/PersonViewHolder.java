@@ -48,14 +48,11 @@ public class PersonViewHolder extends BaseViewHolder<JsonBean> {
 
     @Override
     public void setData(final JsonBean person){
-        Log.i("ViewHolder","position"+getDataPosition());
         mTv_name.setText(person.getChatid());
-        Log.d("ViewHolder",person.getHeadimg_url());
         if(person.getSex().equals("0")){
             iv_sex.setBackgroundResource(R.drawable.icon_girl);
         }else{
             iv_sex.setBackgroundResource(R.drawable.icon_male);
-
         }
         Glide.with(getContext())
                 .load(Constants.BASE_URL+person.getHeadimg_url())
