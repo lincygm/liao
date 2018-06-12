@@ -81,7 +81,7 @@ public class FollowFragment extends BaseFragment<IFollowView,FollowPresenter> im
     private Handler handler = new Handler();
     private List<String> focusList = new ArrayList<>();
     private List<String> fansList = new ArrayList<>();
-    private List<JsonBean> userFocusList = new ArrayList<>();
+   // private List<JsonBean> userFocusList = new ArrayList<>();
     private List<JsonBean> userFansList = new ArrayList<>();
 
     private static int pageFans = 0;
@@ -108,7 +108,7 @@ public class FollowFragment extends BaseFragment<IFollowView,FollowPresenter> im
 
         tvTitle.setText(R.string.tab_follw);
         focusadapter();
-        fansadapter();
+       // fansadapter();
     }
 
     @Override
@@ -155,7 +155,6 @@ public class FollowFragment extends BaseFragment<IFollowView,FollowPresenter> im
     }
 
     private void focusadapter(){
-
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView_focus.setLayoutManager(layoutManager);
@@ -215,22 +214,14 @@ public class FollowFragment extends BaseFragment<IFollowView,FollowPresenter> im
                     public void onNext(FriendsRoot root) {
                         if(root!=null&&root.getData().getGetdata().size()>0){
                             for(int i=0;i<root.getData().getGetdata().size();i++){
-                                if(root.getData().getGetdata().size()==0){
-                                    focus_adapter.setNoMore(R.layout.view_nomore);
-                                    //focusList.add(root.getData().getGetdata().get(i).getFocus_id());
-                                    //getUserinfoByChatid(root.getData().getGetdata().get(i).getFocus_id());
-                                    //focus_adapter.stopMore();
-                                    Log.d("DDS","AAA");
-                                    focus_adapter.pauseMore();
-                                    return;
-                                }
                                 Log.d("DDS","bbbbbb");
                                 focusList.add(root.getData().getGetdata().get(i).getFocus_id());
                                 getUserinfoByChatid(root.getData().getGetdata().get(i).getFocus_id());
-
                             }
                         }else{
-                            focus_adapter.pauseMore();
+                            //Log.d("DDS","CCCCCC");
+                            //focus_adapter.pauseMore();
+                           // focus_adapter.setNoMore(R.layout.view_nomore);
                         }
                     }
                 });
@@ -255,17 +246,15 @@ public class FollowFragment extends BaseFragment<IFollowView,FollowPresenter> im
 
                     @Override
                     public void onNext(FriendsRoot root) {
-                        if(root!=null&&fansList!=null){
+                        if(root!=null&&root.getData().getGetdata().size()>0){
                             for(int i=0;i<root.getData().getGetdata().size();i++){
-                                if(root.getData().getGetdata().size()==0){
-                                    fans_adapter.setNoMore(R.layout.view_empty);
-                                    focus_adapter.pauseMore();
-                                    return;
-                                }
                                 fansList.add(root.getData().getGetdata().get(i).getChat_id());
                                 getUserinfoByChatid(root.getData().getGetdata().get(i).getChat_id());
 
                             }
+                        }else{
+                            fans_adapter.setNoMore(R.layout.view_empty);
+                            focus_adapter.pauseMore();
                         }
                     }
                 });
@@ -299,12 +288,6 @@ public class FollowFragment extends BaseFragment<IFollowView,FollowPresenter> im
                     @Override
                     public void onCompleted() {
                         Log.d("DDS","getUserInfoByChatid completes");//最后走这个
-                        if(index==0){
-                           // focusadapter();
-                        }else{
-                          //  fansadapter();
-                        }
-
                     }
 
                     @Override
@@ -316,13 +299,15 @@ public class FollowFragment extends BaseFragment<IFollowView,FollowPresenter> im
                     public void onNext(Root root) {
                         if(root!=null){
                             if(index==0){
-                                userFocusList.clear();
+                                List<JsonBean> userFocusList = new ArrayList<>();
                                 userFocusList.add(root.getData().getGetdata().get(0));
-                                Log.d("DDS","use> ======  "+userFocusList.size());
                                 focus_adapter.addAll(userFocusList);
-                                focus_adapter.notifyDataSetChanged();
+                              //  focus_adapter.notifyDataSetChanged();
                             }else{
-                                //userFansList.add(root.getData().getGetdata().get(0));
+                                userFansList.clear();
+                                userFansList.add(root.getData().getGetdata().get(0));
+                                fans_adapter.addAll(userFansList);
+                                fans_adapter.notifyDataSetChanged();
                             }
 
                         }
@@ -359,13 +344,15 @@ public class FollowFragment extends BaseFragment<IFollowView,FollowPresenter> im
     @Override
     public void onRefresh() {
         Log.i("Follow","onRefresh");
-        if(index == 0){
-            pageFocus = 0;
-            //getFocus(pageFocus);
-        }else{
-            pageFans = 0;
-            //getFans(pageFans);
-        }
+//        if(index == 0){
+//            pageFocus = 0;
+//            focus_adapter.clear();
+//            getFocus(pageFocus);
+//        }else{
+//            pageFans = 0;
+//            focus_adapter.clear();
+//            getFans(pageFans);
+//        }
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -380,13 +367,16 @@ public class FollowFragment extends BaseFragment<IFollowView,FollowPresenter> im
                     return;
                 }
                 if(index==0){
-                    focus_adapter.addAll(userFocusList);
+                   // List<JsonBean> userFocusList = ArrayList<JsonBean>();
+                   // focus_adapter.addAll(userFocusList);
                     pageFocus = 0;
                     Log.d("pages",">>+"+pageFocus);
-
+                    getFocus(pageFocus);
+                    //pageFocus=1;
                 }else{
-                    fans_adapter.addAll(userFansList);
                     pageFans = 0;
+                    getFans(pageFans);
+                    //pageFans=1;
                     Log.d("pages",">>+"+pageFans);
 
                 }
