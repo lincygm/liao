@@ -1,5 +1,6 @@
 package com.king.liaoba.mvp.fragment;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -28,6 +29,7 @@ import com.king.liaoba.bean.Root;
 import com.king.liaoba.http.APIRetrofit;
 import com.king.liaoba.http.APIService;
 
+import com.king.liaoba.mvp.activity.SelfShowActivity;
 import com.king.liaoba.mvp.adapter.PersonViewHolder;
 
 import com.king.liaoba.mvp.base.BaseFragment;
@@ -35,8 +37,13 @@ import com.king.liaoba.mvp.base.BasePresenter;
 import com.king.liaoba.mvp.base.BaseView;
 import com.king.liaoba.mvp.presenter.FollowPresenter;
 import com.king.liaoba.mvp.view.IFollowView;
+import com.king.liaoba.util.MessageEvent;
 import com.liaoba.R;
 
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -82,7 +89,7 @@ public class FollowFragment extends BaseFragment<IFollowView,FollowPresenter> im
     private List<String> focusList = new ArrayList<>();
     private List<String> fansList = new ArrayList<>();
    // private List<JsonBean> userFocusList = new ArrayList<>();
-    private List<JsonBean> userFansList = new ArrayList<>();
+  //  private List<JsonBean> userFansList = new ArrayList<>();
 
     private static int pageFans = 0;
     private static int pageFocus = 0;
@@ -105,23 +112,27 @@ public class FollowFragment extends BaseFragment<IFollowView,FollowPresenter> im
 
     @Override
     public void initUI() {
-
+        EventBus.getDefault().register(this);
         tvTitle.setText(R.string.tab_follw);
         focusadapter();
-       // fansadapter();
     }
 
     @Override
     public FollowPresenter createPresenter() {
         return new FollowPresenter(getApp());
     }
+
     private void fansadapter(){
 
+        if(recyclerView_fans!=null){
+            recyclerView_fans.clear();
+            return;
+        }
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView_fans.setLayoutManager(layoutManager);
-        DividerDecoration itemDecoration = new DividerDecoration(Color.GRAY,Util.dip2px(getActivity(),16f), Util.dip2px(getActivity(),72),0);
+        DividerDecoration itemDecoration = new DividerDecoration(R.color.zise,Util.dip2px(getActivity(),1f), 0,0);
         itemDecoration.setDrawLastItem(false);
-       // recyclerView_fans.addItemDecoration(itemDecoration);
+        recyclerView_fans.addItemDecoration(itemDecoration);
 
         recyclerView_fans.setAdapterWithProgress(fans_adapter = new RecyclerArrayAdapter<JsonBean>(getActivity()) {
             @Override
@@ -132,13 +143,23 @@ public class FollowFragment extends BaseFragment<IFollowView,FollowPresenter> im
         //fans_adapter.setMore(R.layout.view_more, this);
         fans_adapter.setNoMore(R.layout.view_nomore);
         fans_adapter.setMore(R.layout.view_more, this);
-        fans_adapter.setOnItemLongClickListener(new RecyclerArrayAdapter.OnItemLongClickListener() {
+        fans_adapter.setOnItemClickListener(new RecyclerArrayAdapter.OnItemClickListener() {
             @Override
-            public boolean onItemLongClick(int position) {
-                fans_adapter.remove(position);
-                return true;
+            public void onItemClick(int position) {
+                Intent intent = new Intent();
+                intent.setClass(getActivity(), SelfShowActivity.class);
+                intent.putExtra("chatid",fans_adapter.getItem(position).getChatid());
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
             }
         });
+//        fans_adapter.setOnItemLongClickListener(new RecyclerArrayAdapter.OnItemLongClickListener() {
+//            @Override
+//            public boolean onItemLongClick(int position) {
+//                fans_adapter.remove(position);
+//                return true;
+//            }
+//        });
         fans_adapter.setError(R.layout.view_error, new RecyclerArrayAdapter.OnErrorListener() {
             @Override
             public void onErrorShow() {
@@ -158,10 +179,9 @@ public class FollowFragment extends BaseFragment<IFollowView,FollowPresenter> im
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView_focus.setLayoutManager(layoutManager);
-        DividerDecoration itemDecoration = new DividerDecoration(Color.GRAY,Util.dip2px(getActivity(),16f), Util.dip2px(getActivity(),72),0);
+        DividerDecoration itemDecoration = new DividerDecoration(R.color.zise,Util.dip2px(getActivity(),1f), 0,0);
         itemDecoration.setDrawLastItem(false);
-        //recyclerView_focus.addItemDecoration(itemDecoration);
-
+        recyclerView_focus.addItemDecoration(itemDecoration);
         recyclerView_focus.setAdapterWithProgress(focus_adapter = new RecyclerArrayAdapter<JsonBean>(getActivity()) {
             @Override
             public BaseViewHolder OnCreateViewHolder(ViewGroup parent, int viewType) {
@@ -173,7 +193,7 @@ public class FollowFragment extends BaseFragment<IFollowView,FollowPresenter> im
         focus_adapter.setOnItemLongClickListener(new RecyclerArrayAdapter.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(int position) {
-                focus_adapter.remove(position);
+               // focus_adapter.remove(position);
                 return true;
             }
         });
@@ -186,6 +206,16 @@ public class FollowFragment extends BaseFragment<IFollowView,FollowPresenter> im
             @Override
             public void onErrorClick() {
                 focus_adapter.resumeMore();
+            }
+        });
+        focus_adapter.setOnItemClickListener(new RecyclerArrayAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                Intent intent = new Intent();
+                intent.setClass(getActivity(), SelfShowActivity.class);
+                intent.putExtra("chatid",focus_adapter.getItem(position).getChatid());
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
             }
         });
         recyclerView_focus.setRefreshListener(this);
@@ -218,10 +248,6 @@ public class FollowFragment extends BaseFragment<IFollowView,FollowPresenter> im
                                 focusList.add(root.getData().getGetdata().get(i).getFocus_id());
                                 getUserinfoByChatid(root.getData().getGetdata().get(i).getFocus_id());
                             }
-                        }else{
-                            //Log.d("DDS","CCCCCC");
-                            //focus_adapter.pauseMore();
-                           // focus_adapter.setNoMore(R.layout.view_nomore);
                         }
                     }
                 });
@@ -304,7 +330,10 @@ public class FollowFragment extends BaseFragment<IFollowView,FollowPresenter> im
                                 focus_adapter.addAll(userFocusList);
                               //  focus_adapter.notifyDataSetChanged();
                             }else{
-                                userFansList.clear();
+//                                userFansList.clear();
+//                                userFansList.add(root.getData().getGetdata().get(0));
+//                                fans_adapter.addAll(userFansList);
+                                List<JsonBean> userFansList = new ArrayList<>();
                                 userFansList.add(root.getData().getGetdata().get(0));
                                 fans_adapter.addAll(userFansList);
                                 fans_adapter.notifyDataSetChanged();
@@ -383,7 +412,9 @@ public class FollowFragment extends BaseFragment<IFollowView,FollowPresenter> im
                 startLogin();
                 break;
             case R.id.foll_fans:
+                fansadapter();
                 index = 1;
+                pageFans = 0;
                 getFans(pageFans);
                 recyclerView_fans.setVisibility(View.VISIBLE);
                 recyclerView_focus.setVisibility(View.GONE);
@@ -391,7 +422,9 @@ public class FollowFragment extends BaseFragment<IFollowView,FollowPresenter> im
                 view_focus_bg.setVisibility(View.GONE);
                 break;
             case R.id.foll_focus:
+                focus_adapter.clear();
                 index = 0;
+                pageFocus=0;
                 getFocus(pageFocus);
                 recyclerView_fans.setVisibility(View.GONE);
                 recyclerView_focus.setVisibility(View.VISIBLE);
@@ -401,5 +434,17 @@ public class FollowFragment extends BaseFragment<IFollowView,FollowPresenter> im
                 default:
                     break;
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventBusReceive(MessageEvent messageEvent){
+            if(messageEvent.getMessage().equals("FOCUS")){
+
+            }
     }
 }
