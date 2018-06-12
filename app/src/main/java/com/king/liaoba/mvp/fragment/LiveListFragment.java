@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jude.easyrecyclerview.EasyRecyclerView;
@@ -55,6 +56,11 @@ public class LiveListFragment extends BaseFragment<ILiveListView, LiveListPresen
     TextView tvEmpty;
     TextView tvTips;
 
+    @BindView(R.id.ivRight)
+    ImageView tv_right;
+    @BindView(R.id.ivLeft)
+    ImageView tv_left;
+
     @BindView(R.id.easyRecyclerView)
     EasyRecyclerView easyRecyclerView;
 
@@ -93,6 +99,8 @@ public class LiveListFragment extends BaseFragment<ILiveListView, LiveListPresen
     @Override
     public void initUI() {
 
+        tv_right.setVisibility(View.GONE);
+        tv_left.setVisibility(View.GONE);
 
         PictureList pictureList = new PictureList();
         pictureList.setPicurl("http://i2.hdslb.com/52_52/user/61175/6117592/myface.jpg");
