@@ -344,15 +344,6 @@ public class FollowFragment extends BaseFragment<IFollowView,FollowPresenter> im
     @Override
     public void onRefresh() {
         Log.i("Follow","onRefresh");
-//        if(index == 0){
-//            pageFocus = 0;
-//            focus_adapter.clear();
-//            getFocus(pageFocus);
-//        }else{
-//            pageFans = 0;
-//            focus_adapter.clear();
-//            getFans(pageFans);
-//        }
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -363,20 +354,17 @@ public class FollowFragment extends BaseFragment<IFollowView,FollowPresenter> im
                 }
                 //刷新
                 if (!hasNetWork) {
-                    //adapter.pauseMore();
+                    focus_adapter.pauseMore();
                     return;
                 }
                 if(index==0){
-                   // List<JsonBean> userFocusList = ArrayList<JsonBean>();
-                   // focus_adapter.addAll(userFocusList);
+
                     pageFocus = 0;
                     Log.d("pages",">>+"+pageFocus);
                     getFocus(pageFocus);
-                    //pageFocus=1;
                 }else{
                     pageFans = 0;
                     getFans(pageFans);
-                    //pageFans=1;
                     Log.d("pages",">>+"+pageFans);
 
                 }
