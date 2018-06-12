@@ -219,7 +219,9 @@ public class MineFragment extends SimpleFragment implements View.OnClickListener
             btnLogin.setText(Constants.getSharedPreference("username",getActivity()));
             btnLogin.setClickable(false);
             Log.d("DDS","resume "+Constants.BASE_URL+Constants.getSharedPreference("headimg_url",getActivity()));
-            if(Constants.getSharedPreference("signin",getActivity()).equals("1")){
+             Glide.with(getActivity()).load(Constants.BASE_URL+Constants.getSharedPreference("headimg_url",getActivity())).into(headImage1);
+
+                if(Constants.getSharedPreference("signin",getActivity()).equals("1")){
                 tv_sign.setText("已签到");
                 tv_sign.setClickable(false);
             }else {
