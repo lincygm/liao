@@ -23,6 +23,9 @@ import com.liaoba.R;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 import retrofit2.Retrofit;
 import rx.Observer;
@@ -67,7 +70,10 @@ public class PersonViewHolder extends BaseViewHolder<JsonBean> {
             iv_focus.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    EventBus.getDefault().post(new MessageEvent<>("FOCUS",""+person.getChatid()));
+                    List<String> list = new ArrayList<>();
+                    list.add(person.getChatid());
+                    list.add(getDataPosition()+"");
+                    EventBus.getDefault().post(new MessageEvent<>("FOCUS",list));
                 }
             });
         }else{
@@ -75,7 +81,10 @@ public class PersonViewHolder extends BaseViewHolder<JsonBean> {
             iv_focus.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    EventBus.getDefault().post(new MessageEvent<>("FANS",""+person.getChatid()));
+                    List<String> list = new ArrayList<>();
+                    list.add(person.getChatid());
+                    list.add(getDataPosition()+"");
+                    EventBus.getDefault().post(new MessageEvent<>("FANS",""+list));
                 }
             });
         }
