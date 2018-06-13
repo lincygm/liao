@@ -104,8 +104,8 @@ public class SearchFragment extends BaseFragment<BaseView, BasePresenter<BaseVie
                 return new PersonViewHolder(parent);
             }
         });
-        //adapter.setMore(R.layout.view_more, this);
-        adapter.setNoMore(R.layout.view_nomore);
+        //adapter.setMore(R.layout.view_more, this)
+        // adapter.setNoMore(R.layout.view_nomore);
 //            adapter.setError(R.layout.view_error, new RecyclerArrayAdapter.OnErrorListener() {
 //                @Override
 //                public void onErrorShow() {
