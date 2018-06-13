@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:fitsSystemWindows="true">
     <LinearLayout
         android:orientation="horizontal"
@@ -43,8 +44,12 @@
             android:textColor="@color/bg_red_color"/>
     </LinearLayout>
     <include layout="@layout/line_h"/>
-    <FrameLayout
-        android:id="@+id/fragment"
+    <com.jude.easyrecyclerview.EasyRecyclerView
+        android:id="@+id/search_recycleview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        app:recyclerPadding="2dp"
+        app:scrollbarStyle="insideOverlay"
+        app:layout_progress="@layout/view_progress"
+        app:scrollbars="none" />
 </LinearLayout>
