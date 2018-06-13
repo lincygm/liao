@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.jude.easyrecyclerview.EasyRecyclerView;
 import com.jude.easyrecyclerview.adapter.BaseViewHolder;
@@ -272,13 +273,7 @@ public class FollowFragment extends BaseFragment<IFollowView,FollowPresenter> im
     @Override
     public void onResume() {
         super.onResume();
-//        if(index==0){
-//            getFocus(pageFocus);
-//        }else{
-//            getFans(pageFans);
-//        }
         Log.d("Follow","onresume");
-
     }
 
     @Override
@@ -427,14 +422,62 @@ public class FollowFragment extends BaseFragment<IFollowView,FollowPresenter> im
     public void onEventBusReceive(MessageEvent messageEvent){
             if(messageEvent.getMessage().equals("FOCUS")){
                 Log.d("onEventBusReceive","FOCUS");
+                deleteFocus(messageEvent.getData().toString());
             }else if(messageEvent.getMessage().equals("FANS")){
                 Log.d("onEventBusReceive","FANS");
+                addFocus(messageEvent.getData().toString());
             }
     }
     private void addFocus(String chatid){
+        Retrofit retrofit = APIRetrofit.getInstance();
+        APIService service = retrofit.create(APIService.class);
+        service.deleteFocus(Constants.getSharedPreference("chatid",getActivity()),chatid)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<Root>() {
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.d("aa","error");
+                    }
 
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onNext(Root root) {
+                        if(root.getStatus()==1){
+                            Toast.makeText(getActivity(),"关注成功",Toast.LENGTH_LONG).show();
+
+                        }
+                    }
+                });
     }
     private void deleteFocus(String chatid){
+        Retrofit retrofit = APIRetrofit.getInstance();
+        APIService service = retrofit.create(APIService.class);
+        service.deleteFocus(Constants.getSharedPreference("chatid",getActivity()),chatid)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<Root>() {
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.d("aa","error");
+                    }
 
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onNext(Root root) {
+                        if(root.getStatus()==1){
+                            Toast.makeText(getActivity(),"删除成功",Toast.LENGTH_LONG).show();
+
+                        }
+                    }
+                });
     }
 }
