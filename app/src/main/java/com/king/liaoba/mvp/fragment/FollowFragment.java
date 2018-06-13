@@ -301,7 +301,6 @@ public class FollowFragment extends BaseFragment<IFollowView,FollowPresenter> im
                     @Override
                     public void onNext(Root root) {
                         if(root!=null){
-                            Log.d("DDS","===================index ==>>"+index);
                             if(index == 0){
                                 List<JsonBean> userFocusList = new ArrayList<>();
                                 userFocusList.add(root.getData().getGetdata().get(0));
