@@ -139,7 +139,7 @@ public class FollowFragment extends BaseFragment<IFollowView,FollowPresenter> im
         recyclerView_fans.setAdapterWithProgress(fans_adapter = new RecyclerArrayAdapter<JsonBean>(getActivity()) {
             @Override
             public BaseViewHolder OnCreateViewHolder(ViewGroup parent, int viewType) {
-                return new PersonViewHolder(parent);
+                return new PersonViewHolder(parent,getActivity());
             }
         });
         fans_adapter.setNoMore(R.layout.view_nomore);
@@ -179,7 +179,7 @@ public class FollowFragment extends BaseFragment<IFollowView,FollowPresenter> im
         recyclerView_focus.setAdapterWithProgress(focus_adapter = new RecyclerArrayAdapter<JsonBean>(getActivity()) {
             @Override
             public BaseViewHolder OnCreateViewHolder(ViewGroup parent, int viewType) {
-                return new PersonViewHolder(parent);
+                return new PersonViewHolder(parent,getActivity());
             }
         });
         focus_adapter.setMore(R.layout.view_more, this);
