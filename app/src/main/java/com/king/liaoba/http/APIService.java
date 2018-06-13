@@ -214,4 +214,8 @@ public interface APIService {
     Observable<Root> deleteFocus(@Path("chatid")String chatid,@Path("focus_id")String focus_id);
 
 
+    /**随机匹配**/
+    @POST("index.php/Home/Heart/getRandOne/chatid/{chatid}")
+    Observable<Root> getRandOne(@Path("chatid")String chatid);
+
 }
