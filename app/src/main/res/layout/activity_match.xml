@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_height="match_parent">
+<include layout="@layout/back_title"/>
+
+<com.king.liaoba.view.IndicatorView
+    android:layout_width="wrap_content"
+    android:layout_gravity="center_horizontal"
+    android:id="@+id/match_progress"
+    app:IndicatorSwitchAnimation="translation"
+    app:dotNum="5"
+    app:dotSize="10dp"
+    app:duration="1200"
+    app:indicatorPos="2"
+    app:indicatorSize="30dp"
+    app:lineLength="50dp"
+    android:layout_height="wrap_content" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:text="匹配对象中，请耐心等待"
+        android:layout_height="wrap_content" />
+</LinearLayout>
