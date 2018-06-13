@@ -1,5 +1,6 @@
 package com.king.liaoba.mvp.adapter;
 
+import android.content.Context;
 import android.support.v4.content.Loader;
 import android.util.Log;
 import android.view.View;
@@ -41,14 +42,15 @@ public class PersonViewHolder extends BaseViewHolder<JsonBean> {
     private ImageView mImg_face;
     private Button iv_focus;
     private ImageView iv_sex;
+    private Context mContext;
 
-
-    public PersonViewHolder(ViewGroup parent) {
+    public PersonViewHolder(ViewGroup parent,Context context) {
         super(parent, R.layout.item_person);
         mTv_name = $(R.id.person_name);
         iv_focus = $(R.id.friends_focus);
         mImg_face = $(R.id.person_face);
         iv_sex =$(R.id.focus_sex);
+        this.mContext = context;
     }
 
     @Override
@@ -64,29 +66,63 @@ public class PersonViewHolder extends BaseViewHolder<JsonBean> {
                 .placeholder(R.drawable.logo_bg)
                 .bitmapTransform(new CropCircleTransformation(getContext()))
                 .into(mImg_face);
-        if(FollowFragment.index == 0 ){
-            //如果是关注页面1、可以取消关注
-            iv_focus.setText("取消关注");
-            iv_focus.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    List<String> list = new ArrayList<>();
-                    list.add(person.getChatid());
-                    list.add(getDataPosition()+"");
-                    EventBus.getDefault().post(new MessageEvent<>("FOCUS",list));
-                }
-            });
-        }else{
-            //如果是粉丝页面，可以关注
-            iv_focus.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    List<String> list = new ArrayList<>();
-                    list.add(person.getChatid());
-                    list.add(getDataPosition()+"");
-                    EventBus.getDefault().post(new MessageEvent<>("FANS",list));
-                }
-            });
-        }
+
+
+        focuStatus(person.getChatid(),person);
+//        if(FollowFragment.index == 0 ){
+//            //如果是关注页面1、可以取消关注
+//            iv_focus.setText("取消关注");
+//
+//        }else{
+//            //如果是粉丝页面，可以关注
+//
+//        }
+
+
+    }
+
+    private void focuStatus(String chatid,final JsonBean person){
+        Retrofit retrofit = APIRetrofit.getInstance();
+        APIService service = retrofit.create(APIService.class);
+        service.getFocusStatus(Constants.getSharedPreference("chatid",mContext),chatid)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<Root>() {
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.d("aa","error");
+                    }
+
+                    @Override
+                    public void onCompleted() {
+                    }
+
+                    @Override
+                    public void onNext(Root root) {
+                        if(root.getStatus()==1){
+                            iv_focus.setText("取消关注");
+                            iv_focus.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    List<String> list = new ArrayList<>();
+                                    list.add(person.getChatid());
+                                    list.add(getDataPosition()+"");
+                                    EventBus.getDefault().post(new MessageEvent<>("FOCUS",list));
+                                }
+                            });
+                        }else{
+                            iv_focus.setText("已关注");
+                            iv_focus.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    List<String> list = new ArrayList<>();
+                                    list.add(person.getChatid());
+                                    list.add(getDataPosition()+"");
+                                    EventBus.getDefault().post(new MessageEvent<>("FANS",list));
+                                }
+                            });
+                        }
+                    }
+                });
     }
 }
