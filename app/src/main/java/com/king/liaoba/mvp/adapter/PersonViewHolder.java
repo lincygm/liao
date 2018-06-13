@@ -84,7 +84,7 @@ public class PersonViewHolder extends BaseViewHolder<JsonBean> {
                     List<String> list = new ArrayList<>();
                     list.add(person.getChatid());
                     list.add(getDataPosition()+"");
-                    EventBus.getDefault().post(new MessageEvent<>("FANS",""+list));
+                    EventBus.getDefault().post(new MessageEvent<>("FANS",list));
                 }
             });
         }
