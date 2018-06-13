@@ -1,6 +1,7 @@
 package com.king.liaoba.mvp.fragment;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -13,6 +14,7 @@ import android.widget.ImageView;
 import com.king.base.adapter.ViewPagerFragmentAdapter;
 import com.king.liaoba.Constants;
 import com.king.liaoba.bean.LiveCategory;
+import com.king.liaoba.mvp.activity.MatchActivity;
 import com.king.liaoba.mvp.base.BaseFragment;
 import com.king.liaoba.mvp.presenter.CategoryPresenter;
 import com.king.liaoba.mvp.view.ICategoryView;
@@ -36,13 +38,10 @@ public class HomeFragment extends BaseFragment<ICategoryView, CategoryPresenter>
     ImageView ivTitle;
     @BindView(R.id.ivRight)
     ImageView ivRight;
-    //@BindView(R.id.tabLayout)
-   // TabLayout tabLayout;
-    //@BindView(R.id.viewPager)
-    //ViewPager viewPager;
 
-    @BindView(R.id.fab)
-    FloatingActionButton fab;
+
+    @BindView(R.id.floatbutton)
+    FloatingActionButton floatbutton;
 
     private ViewPagerFragmentAdapter viewPagerFragmentAdapter;
 
@@ -101,7 +100,7 @@ public class HomeFragment extends BaseFragment<ICategoryView, CategoryPresenter>
     public void initData(){
 //        getPresenter().getAllCategoriesByDB();
         getPresenter().getAllCategories();
-        ivLeft.setVisibility(View.GONE);
+        ivRight.setVisibility(View.GONE);
 
     }
 
@@ -165,7 +164,7 @@ public class HomeFragment extends BaseFragment<ICategoryView, CategoryPresenter>
     }
 
 
-    @OnClick({R.id.ivLeft, R.id.ivRight,R.id.fab})
+    @OnClick({R.id.ivLeft, R.id.ivRight,R.id.floatbutton})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ivLeft:
@@ -174,8 +173,10 @@ public class HomeFragment extends BaseFragment<ICategoryView, CategoryPresenter>
             case R.id.ivRight:
                // startLogin();
                 break;
-            case R.id.fab:
-              //  startAbout();
+            case R.id.floatbutton:
+                Intent  intent = new Intent();
+                intent.setClass(getActivity(), MatchActivity.class);
+                startActivity(intent);
                 break;
 
         }
