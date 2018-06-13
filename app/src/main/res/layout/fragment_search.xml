@@ -27,6 +27,7 @@
             android:layout_marginBottom="8dp"
             android:layout_marginRight="4dp"
             android:padding="6dp"
+            android:text="0VNBs5pE"
             android:drawablePadding="6dp"
             android:drawableLeft="@drawable/ic_top_search"
             android:textSize="@dimen/list_live_name_size"
