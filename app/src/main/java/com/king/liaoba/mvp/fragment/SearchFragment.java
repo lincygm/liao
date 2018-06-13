@@ -101,7 +101,7 @@ public class SearchFragment extends BaseFragment<BaseView, BasePresenter<BaseVie
         easyRecyclerView.setAdapterWithProgress(adapter = new RecyclerArrayAdapter<JsonBean>(getActivity()) {
             @Override
             public BaseViewHolder OnCreateViewHolder(ViewGroup parent, int viewType) {
-                return new PersonViewHolder(parent);
+                return new PersonViewHolder(parent,getActivity());
             }
         });
         //adapter.setMore(R.layout.view_more, this)
