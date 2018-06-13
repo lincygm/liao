@@ -118,7 +118,7 @@ public class FollowFragment extends BaseFragment<IFollowView,FollowPresenter> im
         ivRight.setVisibility(View.GONE);
         ivLeft.setVisibility(View.GONE);
         focusadapter();
-        //fansadapter();
+        fansadapter();
     }
 
     @Override
@@ -131,11 +131,11 @@ public class FollowFragment extends BaseFragment<IFollowView,FollowPresenter> im
             recyclerView_fans.clear();
             return;
         }
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        recyclerView_fans.setLayoutManager(layoutManager);
-        DividerDecoration itemDecoration = new DividerDecoration(R.color.zise,Util.dip2px(getActivity(),1f), 0,0);
-        itemDecoration.setDrawLastItem(false);
-        recyclerView_fans.addItemDecoration(itemDecoration);
+        LinearLayoutManager layoutManager2 = new LinearLayoutManager(getActivity());
+        recyclerView_fans.setLayoutManager(layoutManager2);
+        DividerDecoration itemDecoration2 = new DividerDecoration(R.color.zise,Util.dip2px(getActivity(),1f), 0,0);
+        itemDecoration2.setDrawLastItem(false);
+        recyclerView_fans.addItemDecoration(itemDecoration2);
         recyclerView_fans.setAdapterWithProgress(fans_adapter = new RecyclerArrayAdapter<JsonBean>(getActivity()) {
             @Override
             public BaseViewHolder OnCreateViewHolder(ViewGroup parent, int viewType) {
@@ -166,7 +166,7 @@ public class FollowFragment extends BaseFragment<IFollowView,FollowPresenter> im
             }
         });
         recyclerView_fans.setRefreshListener(this);
-        onRefresh();
+        //onRefresh();
     }
 
     private void focusadapter(){
@@ -305,12 +305,14 @@ public class FollowFragment extends BaseFragment<IFollowView,FollowPresenter> im
                                 List<JsonBean> userFocusList = new ArrayList<>();
                                 userFocusList.add(root.getData().getGetdata().get(0));
                                 focus_adapter.addAll(userFocusList);
+                                fans_adapter.notifyDataSetChanged();
+
                             }else{
                                 List<JsonBean> userFansList = new ArrayList<>();
                                 userFansList.add(root.getData().getGetdata().get(0));
                                 fans_adapter.addAll(userFansList);
+                                fans_adapter.notifyDataSetChanged();
                                 Log.d("DDS","fans ==>>"+userFansList.size());
-                               // fans_adapter.notifyDataSetChanged();
                             }
                         }
                     }
@@ -388,8 +390,8 @@ public class FollowFragment extends BaseFragment<IFollowView,FollowPresenter> im
                // startLogin();
                 break;
             case R.id.foll_fans:
-                fansadapter();
-                //fans_adapter.clear();
+                //fansadapter();
+                fans_adapter.clear();
                 index = 1;
                 pageFans = 0;
                 getFans(pageFans);
