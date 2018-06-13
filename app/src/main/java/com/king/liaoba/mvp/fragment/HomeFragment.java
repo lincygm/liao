@@ -74,6 +74,17 @@ public class HomeFragment extends BaseFragment<ICategoryView, CategoryPresenter>
         listTitle = new ArrayList<>();
         listData = new ArrayList<>();
 
+
+
+
+
+
+
+
+
+
+
+
 //        listTitle.add(getText(R.string.recommend));
 //        listData.add(RecommendFragment.newInstance());
 //        listTitle.add(getText(R.string.tab_all));
@@ -91,7 +102,7 @@ public class HomeFragment extends BaseFragment<ICategoryView, CategoryPresenter>
 //        getPresenter().getAllCategoriesByDB();
         getPresenter().getAllCategories();
         ivLeft.setVisibility(View.GONE);
-        ivRight.setVisibility(View.GONE);
+
     }
 
     @NonNull
@@ -158,7 +169,7 @@ public class HomeFragment extends BaseFragment<ICategoryView, CategoryPresenter>
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ivLeft:
-                //startActivity(getFragmentIntent(Constants.SEARCH_FRAGMENT));
+                startActivity(getFragmentIntent(Constants.SEARCH_FRAGMENT));
                 break;
             case R.id.ivRight:
                // startLogin();
