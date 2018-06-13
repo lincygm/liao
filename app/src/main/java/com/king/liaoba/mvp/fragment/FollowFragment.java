@@ -310,7 +310,7 @@ public class FollowFragment extends BaseFragment<IFollowView,FollowPresenter> im
                                 userFansList.add(root.getData().getGetdata().get(0));
                                 fans_adapter.addAll(userFansList);
                                 Log.d("DDS","fans ==>>"+userFansList.size());
-                                fans_adapter.notifyDataSetChanged();
+                               // fans_adapter.notifyDataSetChanged();
                             }
                         }
                     }
@@ -389,6 +389,7 @@ public class FollowFragment extends BaseFragment<IFollowView,FollowPresenter> im
                 break;
             case R.id.foll_fans:
                 fansadapter();
+                //fans_adapter.clear();
                 index = 1;
                 pageFans = 0;
                 getFans(pageFans);
@@ -420,17 +421,18 @@ public class FollowFragment extends BaseFragment<IFollowView,FollowPresenter> im
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventBusReceive(MessageEvent messageEvent){
             if(messageEvent.getMessage().equals("FOCUS")){
-                Log.d("onEventBusReceive","FOCUS");
-                deleteFocus(messageEvent.getData().toString());
+                List<String> list = (List<String>)messageEvent.getData();
+                deleteFocus(messageEvent.getData().toString(),list.get(0));
+                focus_adapter.remove(Integer.valueOf(list.get(0)));
             }else if(messageEvent.getMessage().equals("FANS")){
-                Log.d("onEventBusReceive","FANS");
-                addFocus(messageEvent.getData().toString());
+                List<String> list = (List<String>)messageEvent.getData();
+                addFocus(messageEvent.getData().toString(),list.get(0).toString());
             }
     }
-    private void addFocus(String chatid){
+    private void addFocus(String chatid,String position){
         Retrofit retrofit = APIRetrofit.getInstance();
         APIService service = retrofit.create(APIService.class);
-        service.deleteFocus(Constants.getSharedPreference("chatid",getActivity()),chatid)
+        service.focus(Constants.getSharedPreference("chatid",getActivity()),chatid)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<Root>() {
@@ -448,12 +450,11 @@ public class FollowFragment extends BaseFragment<IFollowView,FollowPresenter> im
                     public void onNext(Root root) {
                         if(root.getStatus()==1){
                             Toast.makeText(getActivity(),"关注成功",Toast.LENGTH_LONG).show();
-
                         }
                     }
                 });
     }
-    private void deleteFocus(String chatid){
+    private void deleteFocus(String chatid,String position){
         Retrofit retrofit = APIRetrofit.getInstance();
         APIService service = retrofit.create(APIService.class);
         service.deleteFocus(Constants.getSharedPreference("chatid",getActivity()),chatid)
@@ -474,7 +475,6 @@ public class FollowFragment extends BaseFragment<IFollowView,FollowPresenter> im
                     public void onNext(Root root) {
                         if(root.getStatus()==1){
                             Toast.makeText(getActivity(),"删除成功",Toast.LENGTH_LONG).show();
-
                         }
                     }
                 });
