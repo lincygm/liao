@@ -3,9 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
+    <include layout="@layout/back_title"/>
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginTop="30dp"
     android:orientation="vertical">
     <com.jude.easyrecyclerview.EasyRecyclerView
         android:id="@+id/photowall_recyclerView"
@@ -16,20 +18,27 @@
         app:recyclerPaddingBottom="8dp"
         app:recyclerPaddingLeft="8dp"
         app:scrollbarStyle="insideOverlay"
+        app:layout_empty="@layout/view_empty"
         app:scrollbars="none" />
         app:recyclerPaddingRight="8dp"
         />
 </LinearLayout>
-    <Button
+    <LinearLayout
         android:layout_width="match_parent"
-        android:text="添加图片"
-        android:background="@drawable/corners_circle_solide"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="20dp"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:textColor="@color/white"
-        android:id="@+id/add_pic"
-        />
+        android:layout_height="wrap_content">
+        <Button
+            android:layout_width="match_parent"
+            android:text="添加图片"
+            android:background="@drawable/corners_circle_solide"
+            android:layout_marginBottom="20dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:textColor="@color/white"
+            android:id="@+id/add_pic"
+            />
+    </LinearLayout>
+
+
 </RelativeLayout>
