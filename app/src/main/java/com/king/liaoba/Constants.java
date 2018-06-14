@@ -69,6 +69,7 @@ public final class Constants {
         edit.putString("password",jsonBean.getPassword());
         edit.putString("nickname",jsonBean.getNickname());
         edit.putString("signin",(jsonBean.getSignin().length()>1 ?"1":"0"));
+        edit.putString("price",jsonBean.getChatprice());
         edit.commit();
     }
     public static void clearSharedPreference(){
