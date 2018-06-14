@@ -46,12 +46,11 @@ public class CustomDialog extends ProgressDialog {
 
     @Override
     public void show() {
-
         super.show();
     }
 
     public void hide(){
-        avLoadingIndicatorView.hide();
+        //avLoadingIndicatorView.hide();
         super.cancel();
     }
 }
