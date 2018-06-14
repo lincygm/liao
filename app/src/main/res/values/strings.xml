@@ -12,19 +12,19 @@
 
     <string name="search">搜索</string>
 
-    <string name="press_again_to_exit">再按一次退出KingTV</string>
+    <string name="press_again_to_exit">再按一次退出</string>
 
     <string name="scoll_aware_fab_behavior">com.king.liaoba.view.ScollAwareFABBehavior</string>
     
     <!-- 房间内 -->
     <string name="room_chat">聊天</string>
     <string name="room_ranking">排行</string>
-    <string name="room_anchor">主播</string>
+    <string name="room_anchor"></string>
     <string name="room_follow">关注</string>
-    <string name="hint_room_chat">和主播说点什么…</string>
-    <string name="tips_notice_desc">&#160;全民直播提倡绿色直播。封页和直播内容含吸烟，低俗，引诱，暴露等都将被封停账号。网警在线24小时巡查哦。</string>
+    <string name="hint_room_chat">…</string>
+    <string name="tips_notice_desc">&#160;提倡绿色直播。封页和直播内容含吸烟，低俗，引诱，暴露等都将被封停账号。网警在线24小时巡查哦。</string>
 
-    <string name="account_">全民号：</string>
+    <string name="account_"></string>
     <string name="fans_">粉丝：</string>
     <string name="zhandouli_">战斗力：</string>
     <string name="l">|</string>
@@ -80,9 +80,9 @@
     <string name="recommend_more">更多</string>
 
     <!-- 搜索 -->
-    <string name="hint_search">请输入主播昵称或全民号</string>
+    <string name="hint_search">请输入主播昵称或</string>
     <string name="tips_search_keywords_cannot_be_empty">搜索关键字不能为空</string>
-    <string name="islive">正在直播</string>
+    <string name="islive"></string>
 
     <string name="can_not_find_relevant_content">找不到你想要的内容，换个关键词试试！</string>
     <string name="no_more">没有更多了</string>
