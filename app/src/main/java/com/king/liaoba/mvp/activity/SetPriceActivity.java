@@ -48,7 +48,7 @@ import rx.schedulers.Schedulers;
  * Created by gaomou on 2018/4/15.
  */
 
-public class SetPriceActivity extends BaseActivity implements View.OnClickListener{
+public class SetPriceActivity extends Activity implements View.OnClickListener{
 
     @BindView(R.id.price_set)
     RelativeLayout rl_price;
@@ -56,9 +56,7 @@ public class SetPriceActivity extends BaseActivity implements View.OnClickListen
     TextView textView;
     //@BindView(R.id.save)
     TextView title_right;
-    @BindView(R.id.title_close)
     ImageView title_close;
-    @BindView(R.id.title_name)
     TextView title_name;
 
     private static String price = "0";
@@ -71,14 +69,9 @@ public class SetPriceActivity extends BaseActivity implements View.OnClickListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_price);
         ButterKnife.bind(this);
-        //title_name = (TextView) this.findViewById(R.id.title_name);
-        //title_close = (TextView) this.findViewById(R.id.title_close);
-        //title_right = (TextView) this.findViewById(R.id.title_right);
-    }
-
-    @Override
-    public void initData() {
-
+        title_name = (TextView) this.findViewById(R.id.title_name);
+        title_close = (ImageView) this.findViewById(R.id.title_close);
+        title_right = (TextView) this.findViewById(R.id.title_right);
         title_close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -87,21 +80,6 @@ public class SetPriceActivity extends BaseActivity implements View.OnClickListen
         });
         title_right.setVisibility(View.GONE);
         title_name.setText("设置收费");
-    }
-
-    @Override
-    public void initUI() {
-
-    }
-
-    @Override
-    public void addListeners() {
-
-    }
-
-    @Override
-    public void onEventMessage(EventMessage em) {
-
     }
 
     @OnClick({R.id.price_set})

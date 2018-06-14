@@ -9,7 +9,9 @@ import android.util.Log;
 import android.view.View;
 
 import com.jude.easyrecyclerview.EasyRecyclerView;
+import com.jude.easyrecyclerview.decoration.DividerDecoration;
 import com.jude.easyrecyclerview.decoration.SpaceDecoration;
+import com.jude.rollviewpager.Util;
 import com.king.liaoba.bean.Charge;
 import com.king.liaoba.mvp.adapter.ChargeAdapter;
 import com.king.liaoba.util.RecycleViewUtils;
@@ -88,16 +90,11 @@ public class ChargeActivity extends Activity {
 
 
         recyclerView = (EasyRecyclerView) findViewById(R.id.charge_recycle);
-        //recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL));
         recyclerView.setAdapter(adapter = new ChargeAdapter(ChargeActivity.this,list,myItemOnClickListener));
-        //GridLayoutManager gridLayoutManager = new GridLayoutManager(this,2);
-        //gridLayoutManager.setSpanSizeLookup(adapter.obtainGridSpanSizeLookUp(2));
+        DividerDecoration itemDecoration2 = new DividerDecoration(R.color.zise, Util.dip2px(ChargeActivity.this,1f), 20,20);
+        itemDecoration2.setDrawLastItem(false);
+        recyclerView.addItemDecoration(itemDecoration2);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        SpaceDecoration itemDecoration = new SpaceDecoration((int) RecycleViewUtils.convertDpToPixel(1,this));
-        itemDecoration.setPaddingEdgeSide(true);
-        itemDecoration.setPaddingStart(true);
-        itemDecoration.setPaddingHeaderFooter(false);
-        recyclerView.addItemDecoration(itemDecoration);
 
     }
 

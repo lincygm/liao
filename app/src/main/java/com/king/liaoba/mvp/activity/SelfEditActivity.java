@@ -9,13 +9,16 @@ import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.king.liaoba.App;
 import com.king.liaoba.Constants;
 import com.king.liaoba.bean.Root;
 import com.king.liaoba.http.APIRetrofit;
 import com.king.liaoba.http.APIService;
+import com.king.liaoba.util.CustomDialog;
 import com.liaoba.R;
 import com.king.liaoba.mvp.presenter.SelfEditPresenter;
 import com.king.liaoba.mvp.view.ISelfEditView;
@@ -48,8 +51,10 @@ public class SelfEditActivity extends Activity implements View.OnClickListener{
     @BindView(R.id.et_name)
     EditText et_name;
     ISelfEditView editView;
-
     private int sex=0;
+    CustomDialog customDialog;
+    @BindView(R.id.title_close)
+    ImageView iv_close;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -73,7 +78,7 @@ public class SelfEditActivity extends Activity implements View.OnClickListener{
     }
 
     @Override
-    @OnClick({R.id.male,R.id.title_right,R.id.photowalls})
+    @OnClick({R.id.male,R.id.title_right,R.id.photowalls,R.id.title_close})
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.male:
@@ -87,11 +92,17 @@ public class SelfEditActivity extends Activity implements View.OnClickListener{
                 intent.setClass(this,PhotoWallActivity.class);
                 startActivity(intent);
                 break;
+            case R.id.title_close:
+                finish();
+                break;
             default:
                 break;
         }
     }
     private void updateUserInfo(){
+        if(customDialog==null)
+        customDialog = new CustomDialog(this,R.style.CustomDialog);
+        customDialog.show();
         Retrofit retrofit = APIRetrofit.getInstance();
         APIService service =retrofit.create(APIService.class);
         service.updateUser(Constants.getSharedPreference("chatid",this),sex+"",
@@ -105,6 +116,7 @@ public class SelfEditActivity extends Activity implements View.OnClickListener{
                         Constants.EditSharedPreference("sex",tv_sex.getText().toString());
                         Constants.EditSharedPreference("sign",et_sign.getText().toString());
                         Constants.EditSharedPreference("nickname",et_name.getText().toString());
+                        customDialog.hide();
                     }
 
                     @Override
@@ -115,7 +127,11 @@ public class SelfEditActivity extends Activity implements View.OnClickListener{
                     @Override
                     public void onNext(Root root) {
                         if(root!=null){
-
+                            if(root.getData().getInfo().equals("1")){
+                                Toast.makeText(SelfEditActivity.this,"保存成功!",Toast.LENGTH_SHORT).show();
+                            }else{
+                                Toast.makeText(SelfEditActivity.this,"保存失败!",Toast.LENGTH_SHORT).show();
+                            }
                         }
                     }
                 });
@@ -124,7 +140,7 @@ public class SelfEditActivity extends Activity implements View.OnClickListener{
     private void change_sex(){
         
         AlertDialog.Builder builder = new AlertDialog.Builder(SelfEditActivity.this); //定义一个AlertDialog
-        String[] strarr = {"icon_male", "icon_girl"};
+        String[] strarr = {"女", "男"};
         builder.setItems(strarr, new DialogInterface.OnClickListener()
         {
             public void onClick(DialogInterface arg0, int arg1)
@@ -133,7 +149,7 @@ public class SelfEditActivity extends Activity implements View.OnClickListener{
                 if (arg1 == 0) {//icon_male
                     tv_sex.setText("女");
                     sex=0;
-                }else {//icon_girl
+                }else {
                     tv_sex.setText("男");
                     sex=1;
                 }

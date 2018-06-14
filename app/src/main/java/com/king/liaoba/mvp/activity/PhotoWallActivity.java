@@ -23,10 +23,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.jude.easyrecyclerview.EasyRecyclerView;
+import com.jude.easyrecyclerview.adapter.BaseViewHolder;
 import com.jude.easyrecyclerview.adapter.RecyclerArrayAdapter;
 import com.jude.easyrecyclerview.decoration.SpaceDecoration;
 import com.jude.rollviewpager.RollPagerView;
@@ -34,6 +36,7 @@ import com.jude.rollviewpager.hintview.ColorPointHintView;
 import com.king.liaoba.App;
 import com.king.liaoba.Constants;
 import com.king.liaoba.bean.FriendsRoot;
+import com.king.liaoba.bean.P;
 import com.king.liaoba.bean.PictureBean;
 import com.king.liaoba.bean.PictureList;
 import com.king.liaoba.bean.PictureRoot;
@@ -43,6 +46,7 @@ import com.king.liaoba.http.APIRetrofit;
 import com.king.liaoba.http.APIService;
 import com.king.liaoba.mvp.adapter.BannerAdapter;
 import com.king.liaoba.mvp.adapter.ImageAdapter;
+import com.king.liaoba.mvp.adapter.ImageViewHolder;
 import com.king.liaoba.util.DensityUtil;
 import com.king.liaoba.util.MessageEvent;
 import com.king.liaoba.util.RecycleViewUtils;
@@ -78,6 +82,14 @@ public class PhotoWallActivity extends Activity implements View.OnClickListener{
     @BindView(R.id.add_pic)
     Button btn_add;
 
+
+    @BindView(R.id.title_close)
+    ImageView imageViewclose;
+    @BindView(R.id.title_name)
+    TextView tv_title;
+    @BindView(R.id.title_right)
+    TextView tv_right;
+
     private File tempFile;
     //请求相机
     private static final int REQUEST_CAPTURE = 100;
@@ -90,13 +102,22 @@ public class PhotoWallActivity extends Activity implements View.OnClickListener{
     //请求写入外部存储
     private static final int WRITE_EXTERNAL_STORAGE_REQUEST_CODE = 104;
     List<PictureList> list  = new ArrayList<>();
+    RecyclerArrayAdapter<PictureList> adapter;
     private EasyRecyclerView recyclerView;
-    private ImageAdapter adapter;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.photowall);
         ButterKnife.bind(this);
+        imageViewclose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+        tv_title.setText("照片墙");
+        tv_right.setVisibility(View.GONE);
+        pictureWall();
         getPicture();
     }
 
@@ -136,7 +157,6 @@ public class PhotoWallActivity extends Activity implements View.OnClickListener{
                 .subscribe(new Observer<PictureRoot>() {
                     @Override
                     public void onCompleted() {
-                        pictureWall();
                         Log.d("pic","fetch");
                     }
 
@@ -159,7 +179,13 @@ public class PhotoWallActivity extends Activity implements View.OnClickListener{
         if(recyclerView==null) {
             recyclerView = (EasyRecyclerView) findViewById(R.id.photowall_recyclerView);
             recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL));
-            recyclerView.setAdapter(adapter = new ImageAdapter(this,list,myItemOnClickListener));
+            //recyclerView.setAdapter(adapter = new ImageAdapter(this,list,myItemOnClickListener));
+            recyclerView.setAdapter(adapter = new RecyclerArrayAdapter<PictureList>(this){
+                @Override
+                public BaseViewHolder OnCreateViewHolder(ViewGroup parent, int viewType) {
+                    return new ImageViewHolder(parent,myItemOnClickListener);
+                }
+            });
             GridLayoutManager gridLayoutManager = new GridLayoutManager(this,2);
             gridLayoutManager.setSpanSizeLookup(adapter.obtainGridSpanSizeLookUp(2));
             recyclerView.setLayoutManager(new GridLayoutManager(this,2));
@@ -171,7 +197,6 @@ public class PhotoWallActivity extends Activity implements View.OnClickListener{
 
         }
 
-        adapter.notifyDataSetChanged();
 
     }
 
@@ -308,7 +333,7 @@ public class PhotoWallActivity extends Activity implements View.OnClickListener{
                                        PictureList pictureList = new PictureList();
                                        pictureList.setId(result[0]);
                                        pictureList.setPicurl(result[1]);
-                                       adapter.insert(pictureList,0);
+                                       adapter.add(pictureList);
                                     }
                                 }
 
