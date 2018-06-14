@@ -36,11 +36,11 @@
             android:layout_marginLeft="@dimen/left_margin"
             android:text="性别"/>
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="200dp"
             android:text="女"
             android:clickable="true"
             android:id="@+id/male"
-            android:gravity="center"
+            android:gravity="center_vertical|right"
             android:layout_marginRight="@dimen/left_margin"
             android:layout_alignParentRight="true"
             android:layout_height="match_parent" />
@@ -98,6 +98,7 @@
             android:textColor="@color/white"
             android:layout_height="@dimen/line_height"
             android:layout_marginLeft="@dimen/left_margin"
+            android:layout_marginRight="10dp"
             android:text="照片墙"/>
 
 </LinearLayout>
