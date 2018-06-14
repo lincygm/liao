@@ -424,11 +424,11 @@ public class FollowFragment extends BaseFragment<IFollowView,FollowPresenter> im
     public void onEventBusReceive(MessageEvent messageEvent){
             if(messageEvent.getMessage().equals("FOCUS")){
                 List<String> list = (List<String>)messageEvent.getData();
-                deleteFocus(messageEvent.getData().toString(),list.get(0));
+                deleteFocus(((List<String>) messageEvent.getData()).get(0).toString(),list.get(0));
                 focus_adapter.remove(Integer.valueOf(list.get(0)));
             }else if(messageEvent.getMessage().equals("FANS")){
                 List<String> list = (List<String>)messageEvent.getData();
-                addFocus(messageEvent.getData().toString(),list.get(0).toString());
+                addFocus(((List<String>) messageEvent.getData()).get(0).toString(),list.get(0).toString());
             }
     }
     private void addFocus(String chatid,String position){
@@ -450,7 +450,7 @@ public class FollowFragment extends BaseFragment<IFollowView,FollowPresenter> im
 
                     @Override
                     public void onNext(Root root) {
-                        if(root.getStatus()==1){
+                        if(root.getData().getInfo().equals("1")){
                             Toast.makeText(getActivity(),"关注成功",Toast.LENGTH_LONG).show();
                         }
                     }
@@ -475,7 +475,7 @@ public class FollowFragment extends BaseFragment<IFollowView,FollowPresenter> im
 
                     @Override
                     public void onNext(Root root) {
-                        if(root.getStatus()==1){
+                        if(root.getData().getInfo().equals("1")){
                             Toast.makeText(getActivity(),"删除成功",Toast.LENGTH_LONG).show();
                         }
                     }
