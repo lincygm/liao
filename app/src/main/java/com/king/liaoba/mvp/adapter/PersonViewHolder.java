@@ -66,19 +66,7 @@ public class PersonViewHolder extends BaseViewHolder<JsonBean> {
                 .placeholder(R.drawable.logo_bg)
                 .bitmapTransform(new CropCircleTransformation(getContext()))
                 .into(mImg_face);
-
-
         focuStatus(person.getChatid(),person);
-//        if(FollowFragment.index == 0 ){
-//            //如果是关注页面1、可以取消关注
-//            iv_focus.setText("取消关注");
-//
-//        }else{
-//            //如果是粉丝页面，可以关注
-//
-//        }
-
-
     }
 
     private void focuStatus(String chatid,final JsonBean person){
@@ -99,7 +87,7 @@ public class PersonViewHolder extends BaseViewHolder<JsonBean> {
 
                     @Override
                     public void onNext(Root root) {
-                        if(root.getStatus()==1){
+                        if(root.getData().getInfo().equals("1")){
                             iv_focus.setText("取消关注");
                             iv_focus.setOnClickListener(new View.OnClickListener() {
                                 @Override
@@ -111,7 +99,7 @@ public class PersonViewHolder extends BaseViewHolder<JsonBean> {
                                 }
                             });
                         }else{
-                            iv_focus.setText("已关注");
+                            iv_focus.setText("关注");
                             iv_focus.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {

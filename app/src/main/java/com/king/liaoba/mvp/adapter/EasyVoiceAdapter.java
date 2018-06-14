@@ -117,6 +117,9 @@ public class EasyVoiceAdapter extends RecyclerArrayAdapter <VoiceListInfo>{
                             Constants.BASE_URL+data.getVoice_url()));
                if(data.getVoice_url().length()<5){
                    Toast.makeText(mContext,"对方还未上传语音!",Toast.LENGTH_LONG).show();
+               }else{
+                   Toast.makeText(mContext,"开始播放录音!",Toast.LENGTH_LONG).show();
+
                }
 
                 }

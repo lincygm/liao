@@ -25,6 +25,7 @@ public class ImageAdapter extends RecyclerArrayAdapter<PictureList> {
         super(context);
     }
 
+
     public BaseViewHolder OnCreateViewHolder(ViewGroup parent, int viewType) {
         return new ImageViewHolder(parent,OnClickListener);
     }
