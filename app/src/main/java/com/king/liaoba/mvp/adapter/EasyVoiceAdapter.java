@@ -3,6 +3,8 @@ package com.king.liaoba.mvp.adapter;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
 import android.os.Parcelable;
 import android.util.Log;
@@ -22,8 +24,10 @@ import com.king.liaoba.Constants;
 import com.king.liaoba.bean.VoiceListInfo;
 import com.king.liaoba.mvp.activity.SelfShowActivity;
 import com.king.liaoba.mvp.activity.VoiceChatViewActivity;
+import com.king.liaoba.push.OnlineService;
 import com.king.liaoba.util.MessageEvent;
 import com.liaoba.R;
+import com.sunfusheng.glideimageview.GlideImageView;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -53,7 +57,7 @@ public class EasyVoiceAdapter extends RecyclerArrayAdapter <VoiceListInfo>{
     public class LiveViewHolder extends BaseViewHolder<VoiceListInfo>{
 
 
-        ImageView iv;//头像
+        GlideImageView iv;//头像
         TextView tvTitle;//
         TextView username;
         ImageView sex;
@@ -74,21 +78,26 @@ public class EasyVoiceAdapter extends RecyclerArrayAdapter <VoiceListInfo>{
         @Override
         public void setData(final VoiceListInfo data) {
             super.setData(data);
+            Toast.makeText(mContext,data.getSex().toString(),Toast.LENGTH_SHORT).show();
+            Bitmap bitmap;
             if(data.getSex().equals("0")){
-                sex.setBackgroundResource(R.drawable.icon_girl);
+                 bitmap= BitmapFactory.decodeResource(mContext.getResources(), R.drawable.icon_girl);
             }else {
-                sex.setBackgroundResource(R.drawable.icon_male);
-
+                 bitmap= BitmapFactory.decodeResource(mContext.getResources(), R.drawable.icon_male);
             }
-            Glide.with(getContext()).load(Constants.BASE_URL+data.getHeadimage_url())
-                    .placeholder(R.mipmap.live_default).error(R.mipmap.live_default).
-                    crossFade().centerCrop().diskCacheStrategy(DiskCacheStrategy.SOURCE).into(iv);
+            sex.setImageBitmap(bitmap);
+            iv.setAdjustViewBounds(true);
+            iv.loadImage(Constants.BASE_URL+data.getHeadimage_url(),R.drawable.logo_bg);
             username.setText(data.getChatid());
             charge.setText(data.getCharge()+"聊币/分钟");
             chatid = data.getChatid();
             answer.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+
+                    OnlineService.mAgoraAPI.messageInstantSend(data.getChatid(),0,
+                            Constants.getSharedPreference("nickname",mContext)
+                            +"#"+Constants.getSharedPreference("headimg_url",mContext),"");
                     Intent intent = new Intent();
                     intent.setClass(mContext, VoiceChatViewActivity.class);
                     intent.putExtra("channel",Constants.getSharedPreference("chatid",mContext));

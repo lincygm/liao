@@ -26,10 +26,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.king.liaoba.util.FileUtil;
-import com.king.liaoba.util.uploadimg.CircleImageView;
 import com.king.liaoba.util.uploadimg.ClipImageActivity;
 import com.liaoba.BuildConfig;
 import com.liaoba.R;
+import com.sunfusheng.glideimageview.GlideImageView;
 
 import java.io.File;
 
@@ -50,7 +50,7 @@ public class HeadImageActivity extends AppCompatActivity implements View.OnClick
     //请求写入外部存储
     private static final int WRITE_EXTERNAL_STORAGE_REQUEST_CODE = 104;
     //头像1
-    private CircleImageView headImage1;
+    private GlideImageView headImage1;
     //头像2
     private ImageView headImage2;
     //调用照相机返回图片文件
@@ -63,7 +63,7 @@ public class HeadImageActivity extends AppCompatActivity implements View.OnClick
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_upload);
-        headImage1 = (CircleImageView) findViewById(R.id.head_image1);
+        headImage1 = (GlideImageView) findViewById(R.id.head_image1);
         headImage2 = (ImageView) findViewById(R.id.head_image2);
         RelativeLayout qqLayout = (RelativeLayout) findViewById(R.id.qqLayout);
         RelativeLayout weixinLayout = (RelativeLayout) findViewById(R.id.weixinLayout);

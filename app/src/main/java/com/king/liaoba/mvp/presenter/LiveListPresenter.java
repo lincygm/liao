@@ -85,7 +85,6 @@ public class LiveListPresenter extends BasePresenter<ILiveListView> {
                 if(chatidList == null ||chatidList.size()==0){
                     return ;
                 }
-
                 userinfoList.clear();
                 for(int i=0;i<chatidList.size();i++){
                     getAppComponent().getAPIService().getUserInfoByChatid(chatidList.get(i).getChatid().toString())

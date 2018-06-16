@@ -141,7 +141,7 @@ public class LiveListFragment extends BaseFragment<ILiveListView, LiveListPresen
             @Override
             public View onCreateView(ViewGroup parent) {
                 RollPagerView header = new RollPagerView(getContext());
-                header.setHintView(new ColorPointHintView(getContext(), R.color.white, Color.GRAY));
+                header.setHintView(new ColorPointHintView(getContext(),Color.rgb(138,43,226), Color.GRAY));
                 header.setHintPadding(0, 0, 0, (int) RecycleViewUtils.convertDpToPixel(18, getContext()));
                 header.setPlayDelay(2000);
                 header.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
@@ -210,10 +210,7 @@ public class LiveListFragment extends BaseFragment<ILiveListView, LiveListPresen
 
     @Override
     public void initData() {
-        //if(!isSearch){
-          //  easyRecyclerView.showProgress();
             getPresenter().getLiveList(slug);
-
         MarqueeTextView marqueeTv = (com.king.liaoba.mvp.view.MarqueeTextView) getActivity().findViewById(R.id.live_marquee);
         marqueeTv.setTextArraysAndClickListener(textArrays, new MarqueeTextViewClickListener() {
             @Override

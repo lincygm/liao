@@ -12,7 +12,7 @@
         android:orientation="vertical">
 
 
-        <com.king.liaoba.util.uploadimg.CircleImageView
+        <com.sunfusheng.glideimageview.GlideImageView
             android:id="@+id/ivAvatar"
             android:layout_width="80dp"
             android:layout_height="80dp"
@@ -22,8 +22,10 @@
             android:scaleType="centerCrop"
             android:clickable="true"
             android:layout_centerHorizontal="true"
-            app:civ_border_width="2dp"
-            app:civ_border_color="@color/white"/>
+            app:siv_shape_type="circle"
+            app:siv_border_width="2dp"
+            app:siv_border_color="@color/white"
+            app:siv_radius="15dp"/>
          <TextView
             android:id="@+id/callname"
             android:layout_width="wrap_content"
@@ -32,13 +34,13 @@
             android:layout_width="wrap_content"
             android:layout_gravity="center_horizontal"
             android:id="@+id/time"
-            android:textSize="20sp"
+            android:textSize="14dp"
             android:layout_height="wrap_content" />
         <TextView
             android:layout_width="wrap_content"
             android:layout_gravity="center_horizontal"
             android:id="@+id/calling"
-            android:textSize="20sp"
+            android:textSize="14dp"
             android:text="正在呼叫对方..."
             android:layout_height="wrap_content" />
     </LinearLayout>
@@ -58,8 +60,8 @@
             android:orientation="horizontal">
 
             <ImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
                 android:onClick="onLocalAudioMuteClicked"
                 android:layout_marginLeft="40dp"
                 android:id="@+id/btn_mute"
@@ -68,16 +70,16 @@
 
             <ImageView
                 android:id="@+id/btn_speaker"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
                 android:onClick="onSwitchSpeakerphoneClicked"
                 android:layout_marginLeft="40dp"
                 android:scaleType="centerInside"
                 android:src="@drawable/btn_speaker" />
 
             <ImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
                 android:onClick="onEncCallClicked"
                 android:id="@+id/btn_end_call"
                 android:layout_marginLeft="40dp"
@@ -94,24 +96,24 @@
         android:orientation="horizontal">
 
         <ImageView
-            android:layout_width="40dp"
-            android:layout_marginLeft="40dp"
-            android:layout_height="40dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:id="@+id/btn_answer"
             android:src="@drawable/answer_icon"
            />
         <ImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:id="@+id/btn_end_call2"
             android:layout_marginLeft="40dp"
+            android:onClick="onEncCallClicked"
             android:scaleType="centerInside"
             android:src="@drawable/btn_end_call" />
 
     </LinearLayout>
         <ImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:id="@+id/btn_refuse"
             android:layout_marginLeft="40dp"
             android:clickable="true"

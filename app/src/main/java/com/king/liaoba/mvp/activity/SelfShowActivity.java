@@ -15,15 +15,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.hannesdorfmann.mosby.mvp.MvpPresenter;
 import com.jude.easyrecyclerview.EasyRecyclerView;
 import com.jude.easyrecyclerview.adapter.RecyclerArrayAdapter;
 import com.jude.easyrecyclerview.decoration.SpaceDecoration;
 import com.jude.rollviewpager.RollPagerView;
 import com.jude.rollviewpager.hintview.ColorPointHintView;
-import com.king.liaoba.App;
 import com.king.liaoba.Constants;
 import com.king.liaoba.bean.PictureList;
 import com.king.liaoba.bean.PictureRoot;
@@ -46,8 +43,8 @@ import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-import com.king.liaoba.util.uploadimg.CircleImageView;
 import com.liaoba.R;
+import com.sunfusheng.glideimageview.GlideImageView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -81,7 +78,7 @@ public class SelfShowActivity extends BaseActivity implements View.OnClickListen
     SelfShowPresenter selfShowPresenter = null;
     private EasyRecyclerView recyclerView;
     private ImageAdapter adapter;
-    CircleImageView circleImageView =null;
+    GlideImageView circleImageView =null;
     //被邀请的chatid
     private String chatid = null;
     List<PictureList> list  = new ArrayList<>();
@@ -182,7 +179,7 @@ public class SelfShowActivity extends BaseActivity implements View.OnClickListen
         tv_title=(TextView)this.findViewById(R.id.title_name);
         iv_close=(ImageView)this.findViewById(R.id.title_close);
         iv_close.setOnClickListener(this);
-        circleImageView=(CircleImageView)this.findViewById(R.id.head_image_d);
+        circleImageView=(GlideImageView)this.findViewById(R.id.head_image_d);
 
     }
 
@@ -211,18 +208,11 @@ public class SelfShowActivity extends BaseActivity implements View.OnClickListen
         tv_age.setText(root.getData().getGetdata().get(0).getAge().toString()+"岁");
         tv_focus.setText(root.getData().getGetdata().get(0).getFollowcount().toString()+"关注");
         tv_fances.setText(root.getData().getGetdata().get(0).getFanscount().toString()+"粉丝");
-       // tv_chatid.setText("id "+root.getData().getGetdata().get(0).getChatid().toString());
         tv_title.setText(root.getData().getGetdata().get(0).getChatid().toString());
         tv_sign.setText(root.getData().getGetdata().get(0).getSign().toString()=="无个性不签名"?
                 "":root.getData().getGetdata().get(0).getSign().toString());
-        this.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Glide.with(getApplicationContext()).load(Constants.BASE_URL+root.getData().getGetdata().get(0).
-                        getHeadimg_url()).diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                        .into(circleImageView);
-            }
-        });
+        tv_chatid.setText(root.getData().getGetdata().get(0).getChatid().toString());
+        circleImageView.loadImage(Constants.BASE_URL+root.getData().getGetdata().get(0).getHeadimg_url(),R.drawable.logo_bg);
     }
 
     @Override
@@ -292,7 +282,8 @@ public class SelfShowActivity extends BaseActivity implements View.OnClickListen
             @Override
             public View onCreateView(ViewGroup parent) {
                 RollPagerView header = new RollPagerView(SelfShowActivity.this);
-                header.setHintView(new ColorPointHintView(SelfShowActivity.this, Color.YELLOW, Color.GRAY));
+                header.setHintView(new ColorPointHintView(SelfShowActivity.this,
+                        Color.rgb(138,43,226), Color.GRAY));
                 header.setHintPadding(0, 0, 0, (int) RecycleViewUtils.convertDpToPixel(8, SelfShowActivity.this));
                 header.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                         (int) RecycleViewUtils.convertDpToPixel(200, SelfShowActivity.this)));

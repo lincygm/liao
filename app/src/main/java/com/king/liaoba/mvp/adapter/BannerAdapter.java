@@ -17,6 +17,7 @@ import com.king.liaoba.bean.PictureRoot;
 import com.king.liaoba.http.APIRetrofit;
 import com.king.liaoba.http.APIService;
 import com.liaoba.R;
+import com.sunfusheng.glideimageview.GlideImageView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,13 +47,11 @@ public class BannerAdapter extends StaticPagerAdapter {
 
         @Override
         public View getView(ViewGroup container, final int position) {
-            ImageView imageView = new ImageView(ctx);
+            GlideImageView imageView = new GlideImageView(ctx);
             imageView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             //加载图片
-            Glide.with(ctx)
-                    .load(list.get(position).getImage()).placeholder(R.drawable.logo_bg)
-                    .into(imageView);
+            imageView.loadImage(list.get(position).getImage().toString(),R.drawable.logo_bg);
             return imageView;
         }
 

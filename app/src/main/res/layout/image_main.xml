@@ -1,17 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_marginBottom="6dp"
-    android:background="@drawable/corner_image"
     android:layout_height="wrap_content">
 
-    <ImageView
+    <com.sunfusheng.glideimageview.GlideImageView
         android:layout_width="match_parent"
         android:id="@+id/iv"
+        android:background="@drawable/corner_image"
         android:src="@drawable/logo_bg"
-        android:minHeight="150dp"
+        app:siv_shape_type="rectangle"
+        app:siv_pressed_color="@color/zise"
+        app:siv_radius="15dp"
         android:scaleType="centerCrop"
         android:layout_height="match_parent" />
+
     <LinearLayout
         android:layout_width="40dp"
         android:layout_height="22dp"

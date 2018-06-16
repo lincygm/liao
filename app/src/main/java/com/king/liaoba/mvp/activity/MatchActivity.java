@@ -11,11 +11,9 @@ import android.util.Log;
 import android.view.View;
 
 import com.king.liaoba.Constants;
-import com.king.liaoba.bean.FriendsRoot;
 import com.king.liaoba.bean.Root;
 import com.king.liaoba.http.APIRetrofit;
 import com.king.liaoba.http.APIService;
-import com.king.liaoba.view.IndicatorView;
 import com.liaoba.R;
 
 import butterknife.ButterKnife;
@@ -26,14 +24,11 @@ import rx.schedulers.Schedulers;
 
 
 public class MatchActivity extends AppCompatActivity {
-     IndicatorView indicator2;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_match);
         ButterKnife.bind(this);
-        indicator2 = (IndicatorView) findViewById(R.id.match_progress);
-        execuInV4();
         getChatid();
     }
 
@@ -67,40 +62,7 @@ public class MatchActivity extends AppCompatActivity {
 
 
 
-    private void execuInV4() {
-        indicator2.setOnDotClickListener(new IndicatorView.OnDotClickListener() {
-            @Override
-            public void onDotClickChange(View v, int position) {
-              //  Toast.makeText(MainActivity.this, "点击了 " + position, Toast.LENGTH_SHORT).show();
-            }
-        });
-        indicator2.setOnIndicatorSwitchAnimator(new IndicatorView.OnIndicatorSwitchAnimator() {
-            @Override
-            public AnimatorSet onIndicatorSwitch(IndicatorView view, IndicatorView.IndicatorHolder target) {
 
-                int terminalColor = indicator2.getIndicatorColor();
-                int centerColor = indicator2.getDotColor();
-                ValueAnimator colorAnim = null;
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-                    colorAnim = ObjectAnimator.ofArgb(target, "color", terminalColor, centerColor, terminalColor);
-                } else {
-                    colorAnim = ObjectAnimator.ofInt(target, "color", terminalColor, centerColor, terminalColor);
-                    colorAnim.setEvaluator(new ArgbEvaluator());
-                }
-
-                int terminalSize = indicator2.getIndicatorPixeSize();
-                int centerSize = indicator2.getIndicatorPixeSize() * 3 / 2;
-                ValueAnimator animatorH = ObjectAnimator.ofInt(target, "height", terminalSize, centerSize, terminalSize);
-                ValueAnimator animatorW = ObjectAnimator.ofInt(target, "width", terminalSize, centerSize, terminalSize);
-
-                AnimatorSet set = new AnimatorSet();
-                set.play(colorAnim).with(animatorH).with(animatorW);
-                set.setDuration(500);
-
-                return set;
-
-            }
-        });
     }
 
-}
+

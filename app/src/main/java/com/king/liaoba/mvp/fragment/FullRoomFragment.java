@@ -106,7 +106,8 @@ public class FullRoomFragment extends BaseFragment<IRoomView, RoomPresenter> imp
 
         tvAccount.setText(String.format(getString(R.string.qm_account),uid));
 
-        Glide.with(this).load(coverUrl).centerCrop().bitmapTransform(new BlurTransformation(context,18,3)).diskCacheStrategy(DiskCacheStrategy.SOURCE).into(ivCover);
+        Glide.with(this).load(coverUrl).
+                into(ivCover);
     }
 
     @Override
@@ -157,7 +158,8 @@ public class FullRoomFragment extends BaseFragment<IRoomView, RoomPresenter> imp
     private void updateAnchorInfo(Room room){
         if(room!=null){
             rlAnchorInfo.setVisibility(View.VISIBLE);
-            Glide.with(this).load(room.getAvatar()).placeholder(R.drawable.logo_bg).error(R.drawable.logo_bg).centerCrop().crossFade().diskCacheStrategy(DiskCacheStrategy.SOURCE).into(civAvatar);
+            Glide.with(this).load(room.getAvatar()).
+                    into(civAvatar);
             tvName.setText(room.getNick());
             tvFans.setText(String.format(getString(R.string.fans_num),room.getFollow()));
 

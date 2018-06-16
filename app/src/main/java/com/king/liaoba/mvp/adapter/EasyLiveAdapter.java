@@ -58,7 +58,8 @@ public class EasyLiveAdapter extends RecyclerArrayAdapter<LiveInfo> {
         public void setData(LiveInfo data) {
             super.setData(data);
 
-            Glide.with(getContext()).load(data.getThumb()).placeholder(R.mipmap.live_default).error(R.mipmap.live_default).crossFade().centerCrop().diskCacheStrategy(DiskCacheStrategy.SOURCE).into(iv);
+            Glide.with(getContext()).load(data.getThumb()).
+                    into(iv);
 
             tvTitle.setText(data.getTitle());
             tvName.setText(data.getNick());

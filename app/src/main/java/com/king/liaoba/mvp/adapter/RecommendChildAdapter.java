@@ -35,7 +35,8 @@ public class RecommendChildAdapter extends ViewHolderRecyclerAdapter<Recommend.R
     @Override
     public void bindViewDatas(ViewHolder holder, Recommend.RoomBean.ListBean data, int position) {
         ImageView iv = holder.getView(R.id.iv);
-        Glide.with(context).load(data.getThumb()).placeholder(R.mipmap.live_default).error(R.mipmap.live_default).crossFade().centerCrop().diskCacheStrategy(DiskCacheStrategy.SOURCE).into(iv);
+        Glide.with(context).load(data.getThumb())
+                .into(iv);
 
         holder.setText(R.id.tvTitle,data.getTitle());
         holder.setText(R.id.tvName,data.getNick());

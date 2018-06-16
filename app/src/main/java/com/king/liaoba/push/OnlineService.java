@@ -16,7 +16,6 @@ import com.king.liaoba.http.APIService;
 
 import com.king.liaoba.mvp.activity.VoiceChatViewActivity;
 import com.king.liaoba.util.MessageEvent;
-import com.king.liaoba.util.Player;
 import com.liaoba.R;
 
 import org.greenrobot.eventbus.EventBus;
@@ -47,6 +46,7 @@ public class OnlineService extends Service {
     public static String account;
     int time = 0;
     boolean inCall = false;
+    Timer timer;
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d("OnlineService","====1===");
@@ -96,7 +96,7 @@ public class OnlineService extends Service {
                                             Log.d("OnlineService","=====");
                                         }
                                     });
-                            status=false;
+
                         }
                     }
                 },0,50000);
@@ -146,27 +146,27 @@ public class OnlineService extends Service {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
-        }else if(messageEvent.getMessage().equals("count")){
-            time = 0;
-            inCall = true;
-            counttime();
         }
     }
 
     private void counttime(){
 
-        Timer timer = new Timer(true);
+        if(timer!=null){
+            timer.cancel();
+            time=0;
+            timer=null;
+        }
+        timer = new Timer(true);
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
                 if(inCall){
                 time = time+1;
                 if(time == 60){
-                    Log.d(TAG," timer end");
                     mAgoraAPI.channelInviteEnd(Constants.getSharedPreference("chatid",OnlineService.this),account
                             ,0);
                     time = 0;
+                    EventBus.getDefault().post(new MessageEvent("stop.activity",4));
                 }
                 }
             }
@@ -246,11 +246,24 @@ public class OnlineService extends Service {
                 Intent intent = new Intent();
                 intent.setClass(OnlineService.this, VoiceChatViewActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.putExtra("call_head_url","");
+                intent.putExtra("call_head_url",headurl);
                 intent.putExtra("channelID",channelID);
                 intent.putExtra("account",account);
+                intent.putExtra("nickname",nickname);
                 startActivity(intent);
                 //收到通话邀请
+            }
+            String headurl = "";
+            String nickname="";
+            @Override
+            public void onMessageInstantReceive(String account, int uid, String msg) {
+                super.onMessageInstantReceive(account, uid, msg);
+                Log.i(TAG, "onMessageInstantReceive  channelID = " + account + "  account = " + account+ " s2=  "+msg);
+                if(msg!=null){
+                    String[] info = msg.split("#");
+                    headurl=info[1];
+                    nickname=info[0];
+                }
             }
 
             /**
@@ -259,16 +272,7 @@ public class OnlineService extends Service {
             @Override
             public void onInviteReceivedByPeer(final String channelID, String account, int uid) {
                 Log.i(TAG, "onInviteReceivedByPeer  channelID = " + channelID + "  account = " + account);
-
-               /* runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        // mCallHangupBtn.setVisibility(View.VISIBLE);
-
-                        //  mCallTitle.setText(String.format(Locale.US, "%s is being called ...", mSubscriber));
-                    }
-                });*/
-                //EventBus.getDefault().post(new MessageEvent("startcounttime",null));
+                counttime();
                 time = 0;
                 inCall =true;
             }
@@ -284,6 +288,7 @@ public class OnlineService extends Service {
             public void onInviteAcceptedByPeer(String channelID, String account, int uid, String s2) {
 
                 Log.d("OnlineService","start");
+                timer.cancel();
                 EventBus.getDefault().post(new MessageEvent("startcounttime",null));
                 inCall = false;
                 time = 0;
@@ -302,7 +307,7 @@ public class OnlineService extends Service {
             @Override
             public void onInviteRefusedByPeer(String channelID, final String account, int uid, final String s2) {
                 Log.i(TAG, "onInviteRefusedByPeer channelID = " + channelID + " account = " + account + " s2 = " + s2);
-                EventBus.getDefault().post(new MessageEvent("stop.activity",null));
+                EventBus.getDefault().post(new MessageEvent("stop.activity",1));
                 inCall=false;
                 time=0;
             }
@@ -318,7 +323,7 @@ public class OnlineService extends Service {
             @Override
             public void onInviteEndByPeer(final String channelID, String account, int uid, String s2) {
                 Log.i(TAG, "onInviteEndByPeer channelID = " + channelID + " account = " + account);
-                EventBus.getDefault().post(new MessageEvent("stop.activity",null));
+                EventBus.getDefault().post(new MessageEvent("stop.activity",2));
                 inCall = false;
                 time = 0;
             }
@@ -332,7 +337,7 @@ public class OnlineService extends Service {
             @Override
             public void onInviteEndByMyself(String channelID, String account, int uid) {
                 Log.i(TAG, "onInviteEndByMyself channelID = " + channelID + "  account = " + account);
-                EventBus.getDefault().post(new MessageEvent("stop.activity",null));
+                EventBus.getDefault().post(new MessageEvent("stop.activity",3));
                 inCall=false;
                 time=0;
 

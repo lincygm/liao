@@ -88,9 +88,6 @@
         <activity android:name="com.king.liaoba.VoiceConnect"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:windowSoftInputMode="stateHidden|stateUnchanged" />
-        <activity android:name="com.king.liaoba.util.uploadimg.ClipImageActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:windowSoftInputMode="stateHidden|stateUnchanged" />
         <activity android:name="com.king.liaoba.mvp.activity.SelfEditActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:windowSoftInputMode="stateHidden|stateUnchanged" />

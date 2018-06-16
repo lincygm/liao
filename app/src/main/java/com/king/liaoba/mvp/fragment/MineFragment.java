@@ -15,12 +15,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v4.app.DialogFragment;
 import android.content.DialogInterface;
-import android.support.v4.app.FragmentManager;
-import android.app.Dialog;
-import android.os.Bundle;
-import android.app.AlertDialog;
 
 import android.util.Log;
 import android.view.Gravity;
@@ -33,10 +28,6 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-
-
 import com.king.liaoba.Constants;
 import com.king.liaoba.bean.FriendsRoot;
 import com.king.liaoba.bean.Root;
@@ -48,11 +39,11 @@ import com.king.liaoba.mvp.activity.RecordActivity;
 import com.king.liaoba.mvp.activity.SelfEditActivity;
 import com.king.liaoba.mvp.activity.SetPriceActivity;
 import com.king.liaoba.util.CustomDialog;
-import com.king.liaoba.util.uploadimg.CircleImageView;
 import com.king.liaoba.util.uploadimg.ClipImageActivity;
 import com.king.liaoba.view.ButtonDialogFragment;
 import com.liaoba.BuildConfig;
 import com.liaoba.R;
+import com.sunfusheng.glideimageview.GlideImageView;
 
 import java.io.File;
 
@@ -125,7 +116,7 @@ public class MineFragment extends SimpleFragment implements View.OnClickListener
     //请求写入外部存储
     private static final int WRITE_EXTERNAL_STORAGE_REQUEST_CODE = 104;
     //头像1
-    private CircleImageView headImage1;
+    private GlideImageView headImage1;
     //头像2
     private ImageView headImage2;
     //调用照相机返回图片文件
@@ -148,7 +139,7 @@ public class MineFragment extends SimpleFragment implements View.OnClickListener
 
     @Override
     public void initUI() {
-        headImage1 =(CircleImageView)this.findView(R.id.ivAvatar);
+        headImage1 =(GlideImageView)this.findView(R.id.ivAvatar);
         srl.setColorSchemeColors(getResources().getColor(R.color.progress_color));
         srl.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -203,9 +194,7 @@ public class MineFragment extends SimpleFragment implements View.OnClickListener
         loadimg();
     }
     private void loadimg(){
-        Glide.with(getActivity()).load(Constants.BASE_URL+Constants.getSharedPreference("headimg_url",getActivity())).
-                diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                .placeholder(R.drawable.logo_bg).into(headImage1);
+        headImage1.loadImage(Constants.BASE_URL+Constants.getSharedPreference("headimg_url",getActivity()),R.drawable.logo_bg);
     }
 
     @Override
@@ -219,7 +208,7 @@ public class MineFragment extends SimpleFragment implements View.OnClickListener
             btnLogin.setText(Constants.getSharedPreference("username",getActivity()));
             btnLogin.setClickable(false);
             Log.d("DDS","resume "+Constants.BASE_URL+Constants.getSharedPreference("headimg_url",getActivity()));
-             Glide.with(getActivity()).load(Constants.BASE_URL+Constants.getSharedPreference("headimg_url",getActivity())).into(headImage1);
+                headImage1.loadImage(Constants.BASE_URL+Constants.getSharedPreference("headimg_url",getActivity()),R.drawable.logo_bg);
 
                 if(Constants.getSharedPreference("signin",getActivity()).equals("1")){
                 tv_sign.setText("已签到");
@@ -610,7 +599,7 @@ public class MineFragment extends SimpleFragment implements View.OnClickListener
                                 public void onCompleted() {
                                     Log.d("DDS",Constants.getSharedPreference("headimg_url",getActivity()));
 
-                                    Glide.with(getActivity()).load(Constants.BASE_URL+Constants.getSharedPreference("headimg_url",getActivity())).into(headImage1);
+                                    headImage1.loadImage(Constants.BASE_URL+Constants.getSharedPreference("headimg_url",getActivity()),R.drawable.logo_bg);
                                     customDialog.cancel();
 
                                 }

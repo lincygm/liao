@@ -62,7 +62,7 @@ public class MarqueeTextView extends LinearLayout {
         while (i < textArrays.length) {
             TextView textView = new TextView(mContext);
             textView.setText(textArrays[i]);
-            textView.setTextColor(getResources().getColor(R.color.white));
+            //textView.setTextColor(getResources().getColor(R.color.white));
             textView.setOnClickListener(marqueeTextViewClickListener);
             LayoutParams lp = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
             viewFlipper.addView(textView, lp);

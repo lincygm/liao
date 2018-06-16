@@ -193,7 +193,8 @@ public class RecommendFragment extends BaseFragment<IRecommendView, RecommendPre
 
         @Override
         public void UpdateUI(Context context, int position, Banner data) {
-            Glide.with(context).load(data.getThumb()).placeholder(R.mipmap.live_default).error(R.mipmap.live_default).centerCrop().diskCacheStrategy(DiskCacheStrategy.SOURCE).into(iv);
+            Glide.with(context).load(data.getThumb())
+                    .into(iv);
         }
     }
 

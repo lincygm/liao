@@ -21,6 +21,7 @@ import com.king.liaoba.http.APIService;
 import com.king.liaoba.mvp.fragment.FollowFragment;
 import com.king.liaoba.util.MessageEvent;
 import com.liaoba.R;
+import com.sunfusheng.glideimageview.GlideImageView;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -39,7 +40,7 @@ import rx.schedulers.Schedulers;
  */
 public class PersonViewHolder extends BaseViewHolder<JsonBean> {
     private TextView mTv_name;
-    private ImageView mImg_face;
+    private GlideImageView mImg_face;
     private Button iv_focus;
     private ImageView iv_sex;
     private Context mContext;
@@ -61,11 +62,7 @@ public class PersonViewHolder extends BaseViewHolder<JsonBean> {
         }else{
             iv_sex.setBackgroundResource(R.drawable.icon_male);
         }
-        Glide.with(getContext())
-                .load(Constants.BASE_URL+person.getHeadimg_url())
-                .placeholder(R.drawable.logo_bg)
-                .bitmapTransform(new CropCircleTransformation(getContext()))
-                .into(mImg_face);
+        mImg_face.loadImage(Constants.BASE_URL+person.getHeadimg_url(),R.drawable.logo_bg);
         focuStatus(person.getChatid(),person);
     }
 
