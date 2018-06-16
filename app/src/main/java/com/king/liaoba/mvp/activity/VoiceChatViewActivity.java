@@ -60,14 +60,12 @@ public class VoiceChatViewActivity extends AppCompatActivity implements View.OnC
     GlideImageView circleImageView;
      @BindView(R.id.calling)
      TextView tv_callinfo;
-     @BindView(R.id.btn_refuse)
-     ImageView btn_refuse;
     private int time;
     private int timeout;
     private String url;
     private String user;//被呼叫的chatid
     private String call_url;
-
+    Vibrator vibrator;
 
 
     @Override
@@ -90,7 +88,7 @@ public class VoiceChatViewActivity extends AppCompatActivity implements View.OnC
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    tv_callinfo.setText("");
+                    tv_callinfo.setText("语音通话中...");
                 }
             });
         }else if(messageEvent.getMessage().equals("stop.activity")){
@@ -184,26 +182,28 @@ public class VoiceChatViewActivity extends AppCompatActivity implements View.OnC
         });
     }
 
-    @OnClick({R.id.btn_answer,R.id.btn_end_call2,R.id.btn_refuse})
+    @OnClick({R.id.btn_answer,R.id.btn_end_call2})
     @Override
     public void onClick(View v) {
         if(v.getId()==R.id.btn_answer){
+            vibrator.cancel();
             OnlineService.mAgoraAPI.channelJoin(getIntent().getStringExtra("channelID"));
-            btn_accept.setVisibility(View.GONE);
             call_send.setVisibility(View.VISIBLE);
-            btn_refuse.setVisibility(View.GONE);
+            call_receive.setVisibility(View.GONE);
             counttime();
             OnlineService.mAgoraAPI.channelInviteAccept(getIntent().getStringExtra("channelID"),
                           getIntent().getStringExtra("account"),0,null);
         }else if(v.getId()==R.id.btn_end_call2){
+
             call_receive.setVisibility(View.VISIBLE);
             OnlineService.mAgoraAPI.channelInviteRefuse(getIntent().getStringExtra("channelID"),
                     getIntent().getStringExtra("account"),0,null);
             EventBus.getDefault().post(new MessageEvent("stop.activity",3));
             Toast.makeText(getApplicationContext(),"call2 end",Toast.LENGTH_SHORT).show();
-        }else if(v.getId()==R.id.btn_refuse){
-            OnlineService.mAgoraAPI.channelLeave(channel);
         }
+//        else if(v.getId()==R.id.btn_refuse){
+//            OnlineService.mAgoraAPI.channelLeave(channel);
+//        }
     }
 
     private String nickname;
@@ -236,18 +236,16 @@ public class VoiceChatViewActivity extends AppCompatActivity implements View.OnC
             call_send.setVisibility(View.VISIBLE);
             call_receive.setVisibility(View.GONE);
             tv_callinfo.setVisibility(View.VISIBLE);
-            btn_refuse.setVisibility(View.GONE);
             counttimeout();
             circleImageView.loadImage(Constants.BASE_URL+url,R.drawable.logo_bg);
             OnlineService.account = user;
         }else{
-            Vibrator vibrator = (Vibrator)this.getSystemService(this.VIBRATOR_SERVICE);
+            vibrator = (Vibrator)this.getSystemService(this.VIBRATOR_SERVICE);
             vibrator.vibrate(10000);
             //接收到别人的来电。
             call_receive.setVisibility(View.VISIBLE);
             call_send.setVisibility(View.GONE);
             tv_callinfo.setText("来自"+nickname+"的呼叫");
-            btn_refuse.setVisibility(View.GONE);
             circleImageView.loadImage(Constants.BASE_URL+call_url,R.drawable.logo_bg);
 
         }

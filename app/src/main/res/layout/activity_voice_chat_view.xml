@@ -111,14 +111,5 @@
             android:src="@drawable/btn_end_call" />
 
     </LinearLayout>
-        <ImageView
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:id="@+id/btn_refuse"
-            android:layout_marginLeft="40dp"
-            android:clickable="true"
-            android:onClick="onEncCallClicked"
-            android:visibility="gone"
-            android:src="@drawable/btn_end_call" />
     </RelativeLayout>
 </RelativeLayout>
