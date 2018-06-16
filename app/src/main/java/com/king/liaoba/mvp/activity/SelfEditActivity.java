@@ -75,6 +75,12 @@ public class SelfEditActivity extends Activity implements View.OnClickListener{
         et_name.setText(Constants.getSharedPreference("nickname",this).replace("Null",""));
         et_ege.setText(Constants.getSharedPreference("age",this).replace("Null",""));
         et_sign.setText(Constants.getSharedPreference("sign",this).replace("Null",""));
+        sex = Integer.valueOf(Constants.getSharedPreference("sex",this));
+        if(sex==0){
+            tv_sex.setText("女");
+        }else{
+            tv_sex.setText("男");
+        }
     }
 
     @Override
@@ -85,6 +91,10 @@ public class SelfEditActivity extends Activity implements View.OnClickListener{
                 change_sex();
                 break;
             case R.id.title_right:
+                if(et_name.getText().toString().trim().length()<4&&!et_name.getText().toString().trim().equals("null")){
+                    Toast.makeText(SelfEditActivity.this,"昵称不合法",Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 updateUserInfo();
                 break;
             case R.id.photowalls:
@@ -106,7 +116,8 @@ public class SelfEditActivity extends Activity implements View.OnClickListener{
         Retrofit retrofit = APIRetrofit.getInstance();
         APIService service =retrofit.create(APIService.class);
         service.updateUser(Constants.getSharedPreference("chatid",this),sex+"",
-                et_ege.getText().toString(),et_sign.getText().toString(),et_name.getText().toString())
+                et_ege.getText().toString(),(et_sign.getText().toString().equals("")?"无个性，不签名":et_sign.getText().toString().trim()),
+                et_name.getText().toString().trim())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<Root>() {

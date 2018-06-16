@@ -6,6 +6,7 @@ import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -240,6 +241,8 @@ public class VoiceChatViewActivity extends AppCompatActivity implements View.OnC
             circleImageView.loadImage(Constants.BASE_URL+url,R.drawable.logo_bg);
             OnlineService.account = user;
         }else{
+            Vibrator vibrator = (Vibrator)this.getSystemService(this.VIBRATOR_SERVICE);
+            vibrator.vibrate(10000);
             //接收到别人的来电。
             call_receive.setVisibility(View.VISIBLE);
             call_send.setVisibility(View.GONE);

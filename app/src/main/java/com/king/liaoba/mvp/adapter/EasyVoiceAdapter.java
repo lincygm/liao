@@ -78,7 +78,6 @@ public class EasyVoiceAdapter extends RecyclerArrayAdapter <VoiceListInfo>{
         @Override
         public void setData(final VoiceListInfo data) {
             super.setData(data);
-            Toast.makeText(mContext,data.getSex().toString(),Toast.LENGTH_SHORT).show();
             Bitmap bitmap;
             if(data.getSex().equals("0")){
                  bitmap= BitmapFactory.decodeResource(mContext.getResources(), R.drawable.icon_girl);
@@ -88,7 +87,7 @@ public class EasyVoiceAdapter extends RecyclerArrayAdapter <VoiceListInfo>{
             sex.setImageBitmap(bitmap);
             iv.setAdjustViewBounds(true);
             iv.loadImage(Constants.BASE_URL+data.getHeadimage_url(),R.drawable.logo_bg);
-            username.setText(data.getChatid());
+            username.setText(data.getNickname());
             charge.setText(data.getCharge()+"聊币/分钟");
             chatid = data.getChatid();
             answer.setOnClickListener(new View.OnClickListener() {

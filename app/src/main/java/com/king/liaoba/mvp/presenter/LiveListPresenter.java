@@ -123,6 +123,7 @@ public class LiveListPresenter extends BasePresenter<ILiveListView> {
                                         voiceListInfo.setSex(jsonBean.getData().getGetdata().get(i).getSex());
                                         voiceListInfo.setChatid(jsonBean.getData().getGetdata().get(i).getChatid());
                                         voiceListInfo.setVoice_url(jsonBean.getData().getGetdata().get(i).getVoicelibrary());
+                                        voiceListInfo.setNickname(jsonBean.getData().getGetdata().get(i).getNickname());
                                         userinfoList.add(voiceListInfo);
                                     }
                                 }

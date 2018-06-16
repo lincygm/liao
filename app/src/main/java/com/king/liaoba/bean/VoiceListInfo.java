@@ -20,6 +20,15 @@ public class VoiceListInfo {
     private String sex;//性别
     @SerializedName("")
     private String voice_url;
+    private String nickname;
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
 
     public String getHeadimage_url() {
         return headimage_url;

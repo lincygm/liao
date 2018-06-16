@@ -13,9 +13,11 @@
             android:layout_marginLeft="@dimen/left_margin"
             android:text="昵称"/>
         <EditText
-            android:layout_width="50dp"
+            android:layout_width="wrap_content"
             android:text="小白菜"
             android:maxLines="1"
+            android:hint="请输入昵称"
+            android:minWidth="100dp"
             android:maxLength="15"
             android:clickable="true"
             android:background="@null"
