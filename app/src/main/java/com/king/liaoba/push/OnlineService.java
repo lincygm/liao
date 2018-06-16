@@ -146,6 +146,8 @@ public class OnlineService extends Service {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }else if(messageEvent.getMessage().equals("login")){
+            login();
         }
     }
 
@@ -207,6 +209,11 @@ public class OnlineService extends Service {
             throw new RuntimeException("NEED TO check rtc sdk init fatal error\n" + Log.getStackTraceString(e));
         }
     }
+
+    private void login(){
+        mAgoraAPI.login(this.getResources().getString(R.string.agora_app_id),Constants.getSharedPreference("chatid",OnlineService.this),
+                "_no_need_token",0,null);
+    }
     private void addSignalingCallback() {
         initializeAgoraEngine();
         mAgoraAPI = AgoraAPIOnlySignal.getInstance(this, this.getResources().getString(R.string.agora_app_id));
@@ -219,8 +226,7 @@ public class OnlineService extends Service {
         Log.d("OnlineService","======4===4=");
         mAgoraAPI.logout();
         if(!Constants.getSharedPreference("chatid",OnlineService.this).equals("Null")||Constants.getSharedPreference("chatid",OnlineService.this)!=null){
-            mAgoraAPI.login(this.getResources().getString(R.string.agora_app_id),Constants.getSharedPreference("chatid",OnlineService.this),
-                    "_no_need_token",0,null);
+            login();
         }
 
         mAgoraAPI.callbackSet(new AgoraAPI.CallBack() {
@@ -286,7 +292,6 @@ public class OnlineService extends Service {
              */
             @Override
             public void onInviteAcceptedByPeer(String channelID, String account, int uid, String s2) {
-
                 Log.d("OnlineService","start");
                 timer.cancel();
                 EventBus.getDefault().post(new MessageEvent("startcounttime",null));
@@ -294,7 +299,13 @@ public class OnlineService extends Service {
                 time = 0;
             }
 
+            @Override
+            public void onQueryUserStatusResult(String name, String status) {
+                super.onQueryUserStatusResult(name, status);
+                Log.d("OnlineService","online ==== >>>>"+status);
+                EventBus.getDefault().post(new MessageEvent("online",status));
 
+            }
 
             /**
              * other receiver call refuse callback
@@ -342,6 +353,19 @@ public class OnlineService extends Service {
                 time=0;
 
             }
+
+            @Override
+            public void onChannelUserLeaved(String account, int uid) {
+                super.onChannelUserLeaved(account, uid);
+                Log.d(TAG,"onChannelUserLeaved >>>> "+account);
+                if(account.equals(OnlineService.account)) {
+                    EventBus.getDefault().post(new MessageEvent("stop.activity", 5));
+                    OnlineService.mAgoraAPI.channelLeave(Constants.getSharedPreference("chatid",OnlineService.this));
+                }else{
+
+                }
+            }
+
 
             @Override
             public void onChannelJoined(String channelID) {

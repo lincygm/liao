@@ -80,7 +80,6 @@
             <ImageView
                 android:layout_width="60dp"
                 android:layout_height="60dp"
-                android:onClick="onEncCallClicked"
                 android:id="@+id/btn_end_call"
                 android:layout_marginLeft="40dp"
                 android:scaleType="centerInside"

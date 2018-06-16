@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,8 @@ import com.king.liaoba.App;
 import com.king.liaoba.Constants;
 import com.king.liaoba.bean.VoiceListInfo;
 import com.king.liaoba.mvp.activity.ContentActivity;
+import com.king.liaoba.push.OnlineService;
+import com.king.liaoba.util.MessageEvent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -148,6 +151,21 @@ public abstract class BaseFragment<V extends BaseView, P extends BasePresenter<V
         intent.putExtra(Constants.KEY_TITLE,title);
         intent.putExtra(Constants.KEY_URL,url);
         startActivity(intent);
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d("OnlineService","BASE onResume");
+        if(OnlineService.mAgoraAPI == null){
+            Intent intent = new Intent();
+            intent.setClass(getContext(),OnlineService.class);
+            getApp().startService(intent);
+        }
+        if(OnlineService.mAgoraAPI!=null&&OnlineService.mAgoraAPI.getStatus()==0){
+            EventBus.getDefault().post(new MessageEvent("login",null));
+        }
     }
 
     protected void startRoom(VoiceListInfo liveInfo){

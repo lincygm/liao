@@ -35,7 +35,7 @@ import java.util.TimerTask;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-public class VoiceChatViewActivity extends AppCompatActivity implements View.OnClickListener{
+public class VoiceChatViewActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String LOG_TAG = VoiceChatViewActivity.class.getSimpleName();
 
@@ -55,11 +55,13 @@ public class VoiceChatViewActivity extends AppCompatActivity implements View.OnC
     LinearLayout call_send;
     @BindView(R.id.call_receive)
     LinearLayout call_receive;
-    @BindView(R.id.btn_answer) ImageView btn_accept;
-    @BindView(R.id.btn_end_call2)  ImageView btn_end2;
+    @BindView(R.id.btn_answer)
+    ImageView btn_accept;
+    @BindView(R.id.btn_end_call2)
+    ImageView btn_end2;
     GlideImageView circleImageView;
-     @BindView(R.id.calling)
-     TextView tv_callinfo;
+    @BindView(R.id.calling)
+    TextView tv_callinfo;
     private int time;
     private int timeout;
     private String url;
@@ -82,7 +84,7 @@ public class VoiceChatViewActivity extends AppCompatActivity implements View.OnC
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMessage(final MessageEvent messageEvent) {
-        Log.d("MessageEvent","======>>"+messageEvent.getData());
+        Log.d("MessageEvent", "======>>" + messageEvent.getData());
         if (messageEvent.getMessage().equals("startcounttime")) {
             counttime();
             runOnUiThread(new Runnable() {
@@ -91,23 +93,28 @@ public class VoiceChatViewActivity extends AppCompatActivity implements View.OnC
                     tv_callinfo.setText("语音通话中...");
                 }
             });
-        }else if(messageEvent.getMessage().equals("stop.activity")){
-            if(vibrator!=null){
+        } else if (messageEvent.getMessage().equals("stop.activity")) {
+            if (vibrator != null) {
                 vibrator.cancel();
             }
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     tv_callinfo.setVisibility(View.VISIBLE);
-                    if(messageEvent.getData().toString().equals("1")){
+                    if (messageEvent.getData().toString().equals("1")) {
                         tv_callinfo.setText("对方已拒绝!");
-                    }else if(messageEvent.getData().toString().equals("2")){
+                    } else if (messageEvent.getData().toString().equals("2")) {
                         tv_callinfo.setText("对方已取消!");
-                    }else if(messageEvent.getData().toString().equals("3")){
+                    } else if (messageEvent.getData().toString().equals("3")) {
                         tv_callinfo.setText("您已取消!");
-                    }else if(messageEvent.getData().toString().equals("4")){
+                    } else if (messageEvent.getData().toString().equals("4")) {
                         tv_callinfo.setText("呼叫超时!");
-
+                    } else if (messageEvent.getData().toString().equals("5")) {
+                        tv_callinfo.setText("对方已挂断!");
+                    }else if (messageEvent.getData().toString().equals("6")) {
+                        tv_callinfo.setText("您已挂断!");
+                    }else if (messageEvent.getData().toString().equals("7")) {
+                        tv_callinfo.setText("您已拒绝!");
                     }
 
                 }
@@ -117,19 +124,24 @@ public class VoiceChatViewActivity extends AppCompatActivity implements View.OnC
                 @Override
                 public void run() {
                     Message message = new Message();
-                    message.what=2;
+                    message.what = 2;
                     handler.sendMessage(message);
                 }
             }, 2000);
+        } else if (messageEvent.getMessage().equals("online")) {
+            if (messageEvent.getData().toString().equals("0")) {
+                Toast.makeText(VoiceChatViewActivity.this, "该用户不在线,请稍后再试", Toast.LENGTH_LONG).show();
+            }
         }
 
     }
-    private Handler handler = new Handler(){
+
+    private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            if(msg.what==1){
-                 OnlineService.mAgoraAPI.channelInviteEnd(channel,user,0);
+            if (msg.what == 1) {
+                OnlineService.mAgoraAPI.channelInviteEnd(channel, user, 0);
                 tv_callinfo.setText("对方暂时无人接听!");
                 Timer timer = new Timer(true);
                 timer.schedule(new TimerTask() {
@@ -138,12 +150,13 @@ public class VoiceChatViewActivity extends AppCompatActivity implements View.OnC
                         finish();
                     }
                 }, 2000);
-            }else if(msg.what==2){
+            } else if (msg.what == 2) {
                 finish();
             }
         }
     };
-    private void counttime(){
+
+    private void counttime() {
         Timer timer = new Timer(true);
         timer.schedule(new TimerTask() {
             @Override
@@ -156,58 +169,67 @@ public class VoiceChatViewActivity extends AppCompatActivity implements View.OnC
 
     /**
      * @j计算呼叫超时
-     * */
-    private void counttimeout(){
+     */
+    private void counttimeout() {
         final Timer timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
                 timeout++;
-                if(timeout==60){
+                if (timeout == 60) {
                     Message message = new Message();
-                    message.what=1;
+                    message.what = 1;
                     handler.sendMessage(message);
                 }
             }
-        },1000);
+        }, 1000);
     }
 
 
-    private void timeshow(int t){
-        final int h = t/3600;
-        final int m = t%3600/60;
-        final int s = t%3600%60;
+    private void timeshow(int t) {
+        final int h = t / 3600;
+        final int m = t % 3600 / 60;
+        final int s = t % 3600 % 60;
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                tv_time.setText((h<1?"":":"+h)+""+(m<10?"0"+m:m)+":"+(s<10?"0"+s:s));
+                tv_time.setText((h < 1 ? "" : ":" + h) + "" + (m < 10 ? "0" + m : m) + ":" + (s < 10 ? "0" + s : s));
             }
         });
     }
 
-    @OnClick({R.id.btn_answer,R.id.btn_end_call2})
+    @OnClick({R.id.btn_answer, R.id.btn_end_call2, R.id.btn_end_call})
     @Override
     public void onClick(View v) {
-        if(v.getId()==R.id.btn_answer){
+        if (v.getId() == R.id.btn_answer) {
             vibrator.cancel();
             OnlineService.mAgoraAPI.channelJoin(getIntent().getStringExtra("channelID"));
             call_send.setVisibility(View.VISIBLE);
             call_receive.setVisibility(View.GONE);
             counttime();
             OnlineService.mAgoraAPI.channelInviteAccept(getIntent().getStringExtra("channelID"),
-                          getIntent().getStringExtra("account"),0,null);
-        }else if(v.getId()==R.id.btn_end_call2){
+                    getIntent().getStringExtra("account"), 0, null);
+        } else if (v.getId() == R.id.btn_end_call2) {//接收END
 
             call_receive.setVisibility(View.VISIBLE);
             OnlineService.mAgoraAPI.channelInviteRefuse(getIntent().getStringExtra("channelID"),
-                    getIntent().getStringExtra("account"),0,null);
-            EventBus.getDefault().post(new MessageEvent("stop.activity",3));
-            Toast.makeText(getApplicationContext(),"call2 end",Toast.LENGTH_SHORT).show();
+                    getIntent().getStringExtra("account"), 0, null);
+            EventBus.getDefault().post(new MessageEvent("stop.activity", 7));
+
+        }else if(v.getId()==R.id.btn_end_call){    //发送END
+            if(time>0){
+                OnlineService.mAgoraAPI.channelLeave(channel);
+                EventBus.getDefault().post(new MessageEvent("stop.activity", 6));
+
+            }else{
+                OnlineService.mAgoraAPI.channelInviteEnd(channel, user, 0);
+                EventBus.getDefault().post(new MessageEvent("stop.activity", 3));
+            }
+
+
         }
-//        else if(v.getId()==R.id.btn_refuse){
-//            OnlineService.mAgoraAPI.channelLeave(channel);
-//        }
     }
+
 
     private String nickname;
     @Override
@@ -227,15 +249,16 @@ public class VoiceChatViewActivity extends AppCompatActivity implements View.OnC
         call_url = getIntent().getStringExtra("call_head_url");
         nickname = getIntent().getStringExtra("nickname");
 
-        if (checkSelfPermission(Manifest.permission.RECORD_AUDIO, PERMISSION_REQ_ID_RECORD_AUDIO)) {
-            initAgoraEngineAndJoinChannel();
-        }
+
         if(channel!=null&&!channel.equals("")){//呼叫别人
-            OnlineService.mAgoraAPI.channelJoin(Constants.getSharedPreference("chatid",this));//加入频道
-            //"{/\"headimage_url/\":/\"+call_url+/\"}"
-            OnlineService.mAgoraAPI.channelInviteUser(Constants.getSharedPreference("chatid",this),user,0);//邀请某人加入通话
-            OnlineService.mRtcEngine.joinChannel(null,Constants.getSharedPreference("chatid",
-                    this),"",0);
+            if (checkSelfPermission(Manifest.permission.RECORD_AUDIO, PERMISSION_REQ_ID_RECORD_AUDIO)) {
+                Log.d("OnlineService","send invate");
+                OnlineService.mAgoraAPI.channelJoin(Constants.getSharedPreference("chatid",this));//加入频道
+                //"{/\"headimage_url/\":/\"+call_url+/\"}"
+                OnlineService.mAgoraAPI.channelInviteUser(Constants.getSharedPreference("chatid",this),user,0);//邀请某人加入通话
+                OnlineService.mRtcEngine.joinChannel(null,Constants.getSharedPreference("chatid",
+                        this),"",0);
+            }
             call_send.setVisibility(View.VISIBLE);
             call_receive.setVisibility(View.GONE);
             tv_callinfo.setVisibility(View.VISIBLE);
@@ -244,7 +267,7 @@ public class VoiceChatViewActivity extends AppCompatActivity implements View.OnC
             OnlineService.account = user;
         }else{
             vibrator = (Vibrator)this.getSystemService(this.VIBRATOR_SERVICE);
-            vibrator.vibrate(10000);
+            vibrator.vibrate(5000);
             //接收到别人的来电。
             call_receive.setVisibility(View.VISIBLE);
             call_send.setVisibility(View.GONE);
@@ -307,8 +330,6 @@ public class VoiceChatViewActivity extends AppCompatActivity implements View.OnC
     protected void onDestroy() {
         super.onDestroy();
         leaveChannel();
-        //RtcEngine.destroy();
-       // mRtcEngine = null;
     }
 
     // Tutorial Step 7
@@ -341,7 +362,7 @@ public class VoiceChatViewActivity extends AppCompatActivity implements View.OnC
 
     // Tutorial Step 3
     public void onEncCallClicked(View view) {
-        OnlineService.mAgoraAPI.channelInviteEnd(channel,user,0);
+        OnlineService.mAgoraAPI.channelLeave(channel);
         finish();
     }
 

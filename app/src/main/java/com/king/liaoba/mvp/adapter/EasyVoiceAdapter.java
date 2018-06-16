@@ -94,9 +94,11 @@ public class EasyVoiceAdapter extends RecyclerArrayAdapter <VoiceListInfo>{
                 @Override
                 public void onClick(View view) {
                     Log.d("OnlineService","LOGINGIGNGINGNIG  "+OnlineService.mAgoraAPI.getStatus());
+
                     OnlineService.mAgoraAPI.messageInstantSend(data.getChatid(),0,
                             Constants.getSharedPreference("nickname",mContext)
                             +"#"+Constants.getSharedPreference("headimg_url",mContext),"");
+                    OnlineService.mAgoraAPI.queryUserStatus(data.getChatid());
                     Intent intent = new Intent();
                     intent.setClass(mContext, VoiceChatViewActivity.class);
                     intent.putExtra("channel",Constants.getSharedPreference("chatid",mContext));
