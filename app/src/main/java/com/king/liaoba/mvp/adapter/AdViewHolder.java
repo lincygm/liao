@@ -11,6 +11,7 @@ import com.bumptech.glide.Glide;
 import com.jude.easyrecyclerview.adapter.BaseViewHolder;
 import com.king.liaoba.util.RecycleViewUtils;
 import com.liaoba.R;
+import com.sunfusheng.glideimageview.GlideImageView;
 
 /**
  * Created by Mr.Jude on 2016/1/6.
@@ -18,18 +19,15 @@ import com.liaoba.R;
 public class AdViewHolder extends BaseViewHolder<Ad> {
     public AdViewHolder(ViewGroup parent) {
         super(new ImageView(parent.getContext()));
-        ImageView imageView = (ImageView) itemView;
+        GlideImageView imageView = (GlideImageView) itemView;
         imageView.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int) RecycleViewUtils.convertDpToPixel(156,getContext())));
         imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
     }
 
     @Override
     public void setData(final Ad data) {
-        ImageView imageView = (ImageView) itemView;
-        Glide.with(getContext())
-                .load(data.getImage())
-                .placeholder(R.drawable.logo_bg)
-                .into(imageView);
+        GlideImageView imageView = (GlideImageView) itemView;
+        imageView.loadImage(data.getImage(),R.drawable.logo_bg);
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
