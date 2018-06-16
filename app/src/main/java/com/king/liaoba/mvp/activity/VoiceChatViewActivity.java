@@ -92,6 +92,9 @@ public class VoiceChatViewActivity extends AppCompatActivity implements View.OnC
                 }
             });
         }else if(messageEvent.getMessage().equals("stop.activity")){
+            if(vibrator!=null){
+                vibrator.cancel();
+            }
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
