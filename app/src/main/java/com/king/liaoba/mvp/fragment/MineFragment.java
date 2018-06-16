@@ -44,6 +44,7 @@ import com.king.liaoba.view.ButtonDialogFragment;
 import com.liaoba.BuildConfig;
 import com.liaoba.R;
 import com.sunfusheng.glideimageview.GlideImageView;
+import com.tencent.bugly.beta.Beta;
 
 import java.io.File;
 
@@ -258,6 +259,7 @@ public class MineFragment extends SimpleFragment implements View.OnClickListener
             case R.id.tvContribution:
                 break;
             case R.id.tvSetting:
+                Beta.checkUpgrade();
                 break;
             case R.id.fab:
                 startAbout();

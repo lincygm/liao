@@ -295,12 +295,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:drawablePadding="6dp"
-                    android:visibility="gone"
                     android:gravity="center_vertical"
                     android:padding="16dp"
                     android:background="?android:attr/selectableItemBackground"
                     android:drawableRight="@drawable/ic_triangle"
-                    android:text="@string/mine_setting"
+                    android:text="版本更新"
                     android:drawableLeft="@drawable/mine_setting"/>
 
                 </LinearLayout>

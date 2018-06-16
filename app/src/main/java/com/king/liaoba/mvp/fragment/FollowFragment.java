@@ -133,9 +133,9 @@ public class FollowFragment extends BaseFragment<IFollowView,FollowPresenter> im
         }
         LinearLayoutManager layoutManager2 = new LinearLayoutManager(getActivity());
         recyclerView_fans.setLayoutManager(layoutManager2);
-        DividerDecoration itemDecoration2 = new DividerDecoration(R.color.zise,Util.dip2px(getActivity(),1f), 20,20);
+        DividerDecoration itemDecoration2 = new DividerDecoration(Color.rgb(220,220,220),Util.dip2px(getActivity(),20f), 20,20);
         itemDecoration2.setDrawLastItem(false);
-        //recyclerView_fans.addItemDecoration(itemDecoration2);
+        recyclerView_fans.addItemDecoration(itemDecoration2);
         recyclerView_fans.setAdapterWithProgress(fans_adapter = new RecyclerArrayAdapter<JsonBean>(getActivity()) {
             @Override
             public BaseViewHolder OnCreateViewHolder(ViewGroup parent, int viewType) {
@@ -173,9 +173,9 @@ public class FollowFragment extends BaseFragment<IFollowView,FollowPresenter> im
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView_focus.setLayoutManager(layoutManager);
-        DividerDecoration itemDecoration = new DividerDecoration(R.color.zise,Util.dip2px(getActivity(),1f), 20,20);
+        DividerDecoration itemDecoration = new DividerDecoration(Color.rgb(220,220,220),Util.dip2px(getActivity(),20f), 20,20);
         itemDecoration.setDrawLastItem(false);
-        //ecyclerView_focus.addItemDecoration(itemDecoration);
+        recyclerView_focus.addItemDecoration(itemDecoration);
         recyclerView_focus.setAdapterWithProgress(focus_adapter = new RecyclerArrayAdapter<JsonBean>(getActivity()) {
             @Override
             public BaseViewHolder OnCreateViewHolder(ViewGroup parent, int viewType) {

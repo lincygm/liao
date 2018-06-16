@@ -104,6 +104,7 @@ public class App extends Application {
          * 不设置会默认所有activity都可以显示弹窗;
          */
         Beta.canShowUpgradeActs.add(MainActivity.class);
+        Beta.enableNotification = true;
 
         Bugly.init(getApplicationContext(), BUGLY_ID, true);
         mAppComponent = DaggerAppComponent.builder().appModule(new AppModule(this,Constants.BASE_URL)).build();
