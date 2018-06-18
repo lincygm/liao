@@ -1,42 +1,27 @@
 package com.king.liaoba.mvp.fragment;
 
-import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jude.easyrecyclerview.EasyRecyclerView;
 import com.jude.easyrecyclerview.adapter.RecyclerArrayAdapter;
 import com.jude.easyrecyclerview.decoration.SpaceDecoration;
-import com.jude.rollviewpager.RollPagerView;
-import com.jude.rollviewpager.hintview.ColorPointHintView;
 import com.king.base.util.LogUtils;
-import com.king.base.util.StringUtils;
 import com.king.base.util.SystemUtils;
-import com.king.liaoba.bean.P;
-import com.king.liaoba.bean.PictureList;
+import com.king.liaoba.Constants;
 import com.king.liaoba.bean.VoiceListInfo;
-import com.king.liaoba.mvp.activity.SelfShowActivity;
-import com.king.liaoba.mvp.adapter.BannerAdapter;
-import com.king.liaoba.mvp.adapter.EasyLiveAdapter;
+
 import com.king.liaoba.mvp.adapter.EasyVoiceAdapter;
-import com.king.liaoba.mvp.adapter.ImageAdapter;
 import com.king.liaoba.mvp.base.BaseFragment;
 import com.king.liaoba.mvp.presenter.LiveListPresenter;
 import com.king.liaoba.mvp.view.ILiveListView;
-import com.king.liaoba.mvp.view.MarqueeTextView;
-import com.king.liaoba.mvp.view.MarqueeTextViewClickListener;
 import com.king.liaoba.util.DensityUtil;
-import com.king.liaoba.util.RecycleViewUtils;
 import com.liaoba.R;
 
 import java.util.ArrayList;
@@ -53,17 +38,16 @@ public class LiveListFragment extends BaseFragment<ILiveListView, LiveListPresen
         implements ILiveListView, RecyclerArrayAdapter.OnLoadMoreListener{
 
 
-    View loadMore;
     TextView tvEmpty;
     TextView tvTips;
 
-    ImageView tv_right;
+    TextView tv_title;
     ImageView tv_left;
 
     @BindView(R.id.easyRecyclerView)
     EasyRecyclerView easyRecyclerView;
-
     EasyVoiceAdapter easyVoiceAdapter;
+
 
     List<VoiceListInfo>  rootList;
     private String slug;
@@ -92,16 +76,17 @@ public class LiveListFragment extends BaseFragment<ILiveListView, LiveListPresen
     @Override
     public void initUI() {
 
-        tv_right =(ImageView) getActivity().findViewById(R.id.ivRight);
+        tv_title =(TextView) getActivity().findViewById(R.id.tvTitle);
+        tv_title.setText("语音");
         tv_left = (ImageView)getActivity().findViewById(R.id.ivLeft);
-        tv_right.setVisibility(View.GONE);
-        tv_left.setVisibility(View.GONE);
+        tv_left.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(getFragmentIntent(Constants.SEARCH_FRAGMENT));
 
+            }
+        });
 
-
-        tvTips = (TextView) easyRecyclerView.findViewById(R.id.tvTips);
-        tvTips = (TextView) easyRecyclerView.findViewById(R.id.tvTips);
-        tvEmpty = (TextView) easyRecyclerView.findViewById(R.id.tvEmpty);
 
         SpaceDecoration spaceDecoration = new SpaceDecoration(DensityUtil.dp2px(context,6));
         easyRecyclerView.addItemDecoration(spaceDecoration);
@@ -194,6 +179,7 @@ public class LiveListFragment extends BaseFragment<ILiveListView, LiveListPresen
 
     @Override
     public void onCompleted() {
+
         easyRecyclerView.setRefreshing(false);
     }
 
@@ -205,6 +191,7 @@ public class LiveListFragment extends BaseFragment<ILiveListView, LiveListPresen
         }else{
             tvTips.setText(R.string.network_unavailable);
         }
+        if(easyRecyclerView!=null)
         easyRecyclerView.showError();
     }
 

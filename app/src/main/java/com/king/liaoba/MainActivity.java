@@ -23,6 +23,7 @@ import com.king.liaoba.mvp.base.PureActivity;
 import com.king.liaoba.mvp.fragment.FollowFragment;
 import com.king.liaoba.mvp.fragment.HomeFragment;
 import com.king.liaoba.mvp.fragment.LiveFragment;
+import com.king.liaoba.mvp.fragment.LiveListFragment;
 import com.king.liaoba.mvp.fragment.MineFragment;
 import com.king.liaoba.push.OnlineService;
 import com.liaoba.R;
@@ -56,7 +57,7 @@ public class MainActivity extends PureActivity {
 
     private HomeFragment homeFragment;
 
-    private LiveFragment liveFragment;
+    private LiveListFragment liveFragment;
 
     private FollowFragment followFragment;
 
@@ -176,7 +177,6 @@ public class MainActivity extends PureActivity {
     @Override
     public void initUI() {
         showHomeFragment();
-       // showLiveFragment();
     }
 
 
@@ -215,7 +215,7 @@ public class MainActivity extends PureActivity {
 
         hideAllFragment(fragmentTransaction);
         if(liveFragment == null){
-            liveFragment = LiveFragment.newInstance(getString(R.string.tab_live),null,true);
+            liveFragment = LiveListFragment.newInstance("");
             fragmentTransaction.add(com.liaoba.R.id.fragmentContent,liveFragment);
         }
 

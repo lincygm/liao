@@ -222,6 +222,9 @@ public class HomeFragment extends BaseFragment<ILiveListView, LiveListPresenter>
     @Override
     public void onError(Throwable e) {
 
+        if(easyRecyclerView!=null){
+            easyRecyclerView.showError();
+        }
     }
 
     @Override

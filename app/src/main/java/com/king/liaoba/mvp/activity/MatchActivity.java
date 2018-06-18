@@ -17,13 +17,14 @@ import com.liaoba.R;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import retrofit2.Retrofit;
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 
-public class MatchActivity extends AppCompatActivity {
+public class MatchActivity extends AppCompatActivity implements View.OnClickListener{
 
     @BindView(R.id.title_close)
     ImageView iv_close;
@@ -32,12 +33,13 @@ public class MatchActivity extends AppCompatActivity {
     @BindView(R.id.title_right)
     TextView tv_right;
 
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_match);
         ButterKnife.bind(this);
-        tv_title.setText("");
+        tv_title.setText("对象匹配");
         tv_right.setVisibility(View.GONE);
 
         new Thread(){
@@ -67,16 +69,24 @@ public class MatchActivity extends AppCompatActivity {
 
                     @Override
                     public void onNext(Root root) {
+                        Log.d("MATCH",">>>>");
                         if(root!=null&&root.getData().getGetdata().size()>0){
-                           Log.d("MATCH",">>>>");
                         }
                     }
                 });
     }
 
-
-
-
+    @OnClick({R.id.title_close})
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.title_close:
+                finish();
+                break;
+                default:
+                    break;
+        }
     }
+}
 
 
