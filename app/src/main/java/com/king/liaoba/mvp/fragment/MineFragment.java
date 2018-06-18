@@ -205,7 +205,7 @@ public class MineFragment extends SimpleFragment implements View.OnClickListener
                 loadimg();
             getFocus();
             getFans();
-            getSignStatus();
+           // getSignStatus();
             btnLogin.setText(Constants.getSharedPreference("username",getActivity()));
             btnLogin.setClickable(false);
             Log.d("DDS","resume "+Constants.BASE_URL+Constants.getSharedPreference("headimg_url",getActivity()));
