@@ -55,7 +55,7 @@ public class HomeFragment extends BaseFragment<ILiveListView, LiveListPresenter>
 
     @BindView(R.id.ivLeft)
     ImageView ivLeft;
-    @BindView(R.id.ivTitle)
+    @BindView(R.id.tvTitle)
     TextView ivTitle;
     @BindView(R.id.ivRight)
     ImageView ivRight;
@@ -86,6 +86,7 @@ public class HomeFragment extends BaseFragment<ILiveListView, LiveListPresenter>
     @Override
     public void initUI() {
         ivTitle.setText("大厅");
+        ivLeft.setVisibility(View.VISIBLE);
     }
 
     private void initAdpater(){
@@ -240,7 +241,7 @@ public class HomeFragment extends BaseFragment<ILiveListView, LiveListPresenter>
     }
 
 
-    @OnClick({R.id.floatbutton})
+    @OnClick({R.id.ivLeft,R.id.floatbutton})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ivLeft:

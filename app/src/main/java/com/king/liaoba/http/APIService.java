@@ -213,9 +213,12 @@ public interface APIService {
     @POST("index.php/Home/User/deleteFocus/chatid/{chatid}/focus_id/{focus_id}")
     Observable<Root> deleteFocus(@Path("chatid")String chatid,@Path("focus_id")String focus_id);
 
-
     /**随机匹配**/
     @POST("index.php/Home/Heart/getRandOne/chatid/{chatid}")
     Observable<Root> getRandOne(@Path("chatid")String chatid);
+
+    /**充值**/
+    @POST("index.php/Home/Charge/charge/chatid/{chatid}/coin/{coin}/money/{money}/channel/{channel}")
+    Observable<Root> charge(@Path("chatid")String chatid,@Path("coin")int coin,@Path("money")String money,@Path("channel")String channel);
 
 }

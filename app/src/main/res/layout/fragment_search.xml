@@ -42,7 +42,7 @@
             android:text="@string/search"
             android:textSize="18sp"
             android:padding="10dp"
-            android:textColor="@color/bg_red_color"/>
+            android:textColor="@color/zise"/>
     </LinearLayout>
     <include layout="@layout/line_h"/>
     <com.jude.easyrecyclerview.EasyRecyclerView

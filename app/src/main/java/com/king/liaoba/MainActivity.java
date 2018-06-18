@@ -79,8 +79,6 @@ public class MainActivity extends PureActivity {
                 Constants.getSharedPreference("jpush_id",this));
         JPushInterface.resumePush(getApplicationContext());
         requestPermissions();
-        //loginAI();
-        Beta.checkUpgrade();
         getUserInfo();
         getSignStatus();
     }
@@ -130,8 +128,7 @@ public class MainActivity extends PureActivity {
 
                     @Override
                     public void onNext( FriendsRoot jsonBean) {
-                        Constants.EditSharedPreference("signin",jsonBean.getStatus()+"");
-
+                        Constants.EditSharedPreference("signin",jsonBean.getData().getInfo()+"");
                     }
                 });
     }

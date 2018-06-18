@@ -104,19 +104,6 @@ public class SearchFragment extends BaseFragment<BaseView, BasePresenter<BaseVie
                 return new PersonViewHolder(parent,getActivity());
             }
         });
-        //adapter.setMore(R.layout.view_more, this)
-        // adapter.setNoMore(R.layout.view_nomore);
-//            adapter.setError(R.layout.view_error, new RecyclerArrayAdapter.OnErrorListener() {
-//                @Override
-//                public void onErrorShow() {
-//                    focus_adapter.resumeMore();
-//                }
-//
-//                @Override
-//                public void onErrorClick() {
-//                    focus_adapter.resumeMore();
-//                }
-//            });
         adapter.setOnItemClickListener(new RecyclerArrayAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
