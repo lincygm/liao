@@ -37,23 +37,14 @@ public class LiveListPresenter extends BasePresenter<ILiveListView> {
         super(app);
     }
 
-
-    public void getLiveList(String slug){
-        //if(StringUtils.isBlank(slug)){
-            getLiveList();
-        //}else{
-          //  getLiveListBySlug(slug);
-        //}
-    }
-
-
-    public void getLiveList(){
+    public void getLiveList(String page){
         if(isViewAttached()){
             getView().showProgress();
         }
+        Log.d("home","=====getLiveList===");
         Retrofit retrofit = APIRetrofit.getInstance();
         APIService service =retrofit.create(APIService.class);
-        service.getFangList("0")
+        service.getFangList(page)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<Root>() {

@@ -142,6 +142,7 @@ public class FollowFragment extends BaseFragment<IFollowView,FollowPresenter> im
                 return new PersonViewHolder(parent,getActivity());
             }
         });
+        recyclerView_fans.setRefreshingColorResources(R.color.progress_color);
         fans_adapter.setNoMore(R.layout.view_nomore);
         fans_adapter.setMore(R.layout.view_more, this);
         fans_adapter.setOnItemClickListener(new RecyclerArrayAdapter.OnItemClickListener() {
@@ -171,6 +172,7 @@ public class FollowFragment extends BaseFragment<IFollowView,FollowPresenter> im
 
     private void focusadapter(){
 
+        recyclerView_focus.setRefreshingColorResources(R.color.progress_color);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView_focus.setLayoutManager(layoutManager);
         DividerDecoration itemDecoration = new DividerDecoration(Color.rgb(220,220,220),Util.dip2px(getActivity(),20f), 20,20);

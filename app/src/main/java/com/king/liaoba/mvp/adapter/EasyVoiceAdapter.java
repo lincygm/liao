@@ -49,6 +49,11 @@ public class EasyVoiceAdapter extends RecyclerArrayAdapter <VoiceListInfo>{
         this.isShowStatus = isShowStatus;
     }
 
+    public EasyVoiceAdapter(Context context) {
+        super(context);
+        this.mContext=context;
+    }
+
     @Override
     public BaseViewHolder OnCreateViewHolder(ViewGroup parent, int viewType) {
         return new LiveViewHolder(parent);

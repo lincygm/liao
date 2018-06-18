@@ -75,7 +75,7 @@ public class APIRetrofit {
                             .connectTimeout(DEFAULT_TIME_OUT, TimeUnit.SECONDS)
                             .readTimeout(DEFAULT_TIME_OUT, TimeUnit.SECONDS)
                             .writeTimeout(DEFAULT_TIME_OUT, TimeUnit.SECONDS)
-                            //.addInterceptor(new LoggingInterceptor())
+                            .addInterceptor(new LoggingInterceptor())
                             .build();
                 }
             }
